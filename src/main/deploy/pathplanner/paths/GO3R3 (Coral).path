@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.9269425675675675,
+        "y": 5.840772804054054
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8877315686152087,
+        "y": 5.487724293918592
+      },
+      "isLocked": false,
+      "linkedName": "Ground Objects 3"
+    },
+    {
+      "anchor": {
+        "x": 3.631545608108108,
+        "y": 5.42573902027027
+      },
+      "prevControl": {
+        "x": 2.1615846020918434,
+        "y": 5.186354497466801
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Reef Position 3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 120.65066795705286
+  },
+  "reversed": false,
+  "folder": "Starting Floor Objects",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

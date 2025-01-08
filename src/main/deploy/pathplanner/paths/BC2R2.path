@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.752238175675676,
+        "y": 6.1372255067567565
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.911181612766843,
+        "y": 6.000917103556481
+      },
+      "isLocked": false,
+      "linkedName": "Blue Cage Position 2"
+    },
+    {
+      "anchor": {
+        "x": 5.313914695945946,
+        "y": 5.403505067567567
+      },
+      "prevControl": {
+        "x": 5.660156963662704,
+        "y": 5.5061353101735895
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Reef Position 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.8083770390425
+  },
+  "reversed": false,
+  "folder": "Cage to Reef Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
