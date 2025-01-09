@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -15,12 +14,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 
 public class RobotContainer {
-  private final String ReefSomething = "Reef to _";
-
-
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
 //Add subsystems below this comment
 
 
@@ -32,30 +25,14 @@ public class RobotContainer {
     configureBindings();
 
     //Stuff for autonomous starts here!
-    m_chooser.addOption(ReefSomething, ReefSomething); //Adds the option to the sendable chooser on shuffleboard
 
-    ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
-    driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    //ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
+    //driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
     /**
      * Named Commands start here
      * Ex. NamedCommands.registerCommand("runIntake", new IntakeNoteCmd(intakeMotorSubsystem, pitchMotorSubsystem, 0, 8));
      */
-
-    //When swerve subsystem gets imported this should fix itself
-     AutoBuilder.configureHolonomic(
-      () -> swerveSubsystem.getPose(), // Robot pose supplier for auto (correct range -180-180)
-      swerveSubsystem ::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-      () -> swerveSubsystem.getChassisSpeedsRobotRelative(), // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-      swerveSubsystem :: runModulesRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-      AutoConstants.HOLONOMIC_PATH_FOLLOWER_CONFIG,
-      () -> SwerveSubsystem.isOnRed(),
-        // Boolean supplier that controls when the path will be mirrored for the red alliance
-        // This will flip the path being followed to the red side of the field.
-        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-      swerveSubsystem // Reference to this subsystem to set requirements
-  );
   }
 
   private void configureBindings() {
@@ -63,7 +40,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    m_autoSelected = m_chooser.getSelected();
+    //m_autoSelected = m_chooser.getSelected();
 
     //Once autos are all set up add the following
     /**
