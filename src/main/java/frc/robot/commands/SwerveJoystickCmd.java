@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCmd extends Command {
@@ -37,9 +37,9 @@ public class SwerveJoystickCmd extends Command {
         System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
         // 2. Apply deadband & square output for more precise movement at low speed
-        xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ?  xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ?  ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ?  turningSpeed : 0.0;
+        xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadband ?  xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadband ?  ySpeed : 0.0;
+        turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kDeadband ?  turningSpeed : 0.0;
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
