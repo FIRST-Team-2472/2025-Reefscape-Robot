@@ -18,7 +18,7 @@ public class RobotContainer {
 
 //Make sure this xbox controller is correct and add driver sticks
   private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+      new CommandXboxController(OperatorConstants.kXboxControllerPort);
 
   public RobotContainer() {
     configureBindings();
