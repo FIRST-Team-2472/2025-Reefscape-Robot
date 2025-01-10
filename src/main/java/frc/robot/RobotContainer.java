@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -24,15 +23,6 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    //Stuff for autonomous starts here!
-
-    //ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
-    //driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
-
-    /**
-     * Named Commands start here
-     * Ex. NamedCommands.registerCommand("runIntake", new IntakeNoteCmd(intakeMotorSubsystem, pitchMotorSubsystem, 0, 8));
-     */
   }
 
   private void configureBindings() {
@@ -40,16 +30,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //m_autoSelected = m_chooser.getSelected();
-
-    //Once autos are all set up add the following
-    /**
-     * if(m_autoSelected == NAME SPECIFIED IN THE CHOOSER ABOVE)
-        return AutoBuilder.buildAuto("NAME OF AUTO IN PATHPLANNER");
-     */
-
-    /*If we decide on an auto that should run by default delete return null and make something for if nothing 
-    is selected just run our default auto*/
     return null;
   }
 }
