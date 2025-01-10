@@ -8,6 +8,12 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class ElevatorConstants {
         public static final int kElevatorMotorID = 0; // change later
+        public static double kElevatorGearRatio = 0;// set later
+        public static double kGearDiameter = 0;// set later
+    }
+    public static final class CoralDispenserConstants {
+        public static final int kLeftMotorID = 0; // change later
+        public static final int kRightMotorID = 0; // change later
     }
 
     public static final class ModuleConstants {
@@ -158,15 +164,15 @@ public final class Constants {
         public static int kLeftLimitSwitchID = 0;// set later
         public static int kMiddleLimitSwitchID = 0;// set later
         public static int kRightLimitSwitchID = 0;// set later
-
-        public static double kElevatorGearRatio = 0;// set later
-        public static double kGearDiameter = 0;// set later
     }
 
     public static class SensorStatus {
         public static boolean kLeftLimitSwitchValue = false;
         public static boolean kMiddleLimitSwitchValue = false;
         public static boolean kRightLimitSwitchValue = false;
+
         public static double kElevatorHeight = 0;
+
+        public static double kTimeOfFlightDistance = 0;
     }
 }
