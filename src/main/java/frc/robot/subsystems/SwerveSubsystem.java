@@ -4,8 +4,6 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,10 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -29,9 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
-import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.extras.SwerveModule;
-import frc.robot.extras.AccelerationLimiter;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -77,9 +70,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
-    private static BooleanSubscriber isOnRed;
-    private final AccelerationLimiter xLimiter, yLimiter, turningLimiter;
-    private PIDController xController, yController, thetaController;
+
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
@@ -95,23 +86,10 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
 
-        // Gets the field infomation
-        NetworkTable firstInfo = NetworkTableInstance.getDefault().getTable("FMSInfo");
-        // Gets the team color from the field information
-        isOnRed = firstInfo.getBooleanTopic("IsRedAlliance").subscribe(false);
-
         // makes a team color choser
         colorChooser.addOption(red, red);
         colorChooser.addOption(blue, blue);
         driverBoard.add("Team Chooser", colorChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
-
-        xLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAccelerationUnitsPerSecond);
-        yLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAccelerationUnitsPerSecond);
-        turningLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAngularAccelerationUnitsPerSecond);
-
-        xController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
-        yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
-        thetaController = new PIDController(TargetPosConstants.kPAngleController, 0, 0);
 
         // zeros heading after pigeon boots up
         new Thread(() -> {
@@ -132,17 +110,17 @@ public class SwerveSubsystem extends SubsystemBase {
     // swerve
     public double getHeading() {
         // imu is backwards, so it is multiplied by negative one
-        return gyro.getYaw().getValue();
+        return gyro.getYaw().getValueAsDouble();
     }
 
     // Gets the roll of the robot based on the IMU.
     public double getRoll() {
-        return gyro.getRoll().getValue();
+        return gyro.getRoll().getValueAsDouble();
     }
 
     // Gets the pitch of the robot based on what the IMU percieves.
     public double getPitch() {
-        return -gyro.getPitch().getValue();
+        return -gyro.getPitch().getValueAsDouble();
     }
 
     public static boolean isOnRed() {
@@ -244,17 +222,6 @@ public class SwerveSubsystem extends SubsystemBase {
         setModuleStates(moduleStates);
     }
 
-    private void runModulesRobotRelative(double xSpeed, double ySpeed, double turningSpeed) {
-        // Makes the speeds usable for kinematics
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-
-        // Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-
-        // Output each module states to wheels
-        setModuleStates(moduleStates);
-    }
-
     public void stopModules() {
         // Stops all of the modules. Use in emergencies.
         frontLeft.stop();
@@ -307,10 +274,10 @@ public class SwerveSubsystem extends SubsystemBase {
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
-        SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValue());
-        SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValue());
-        SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValue());
-        SmartDashboard.putNumber("BackRight Encoder", backRight.absoluteEncoder.getAbsolutePosition().getValue());
+        SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("BackRight Encoder", backRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
 
         SmartDashboard.putNumber("read frontLeft Encoder", frontLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());

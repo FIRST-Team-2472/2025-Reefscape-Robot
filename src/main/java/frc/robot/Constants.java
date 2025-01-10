@@ -6,17 +6,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-    /*
-     * make all pistons IDs set to 40-59
-     * all Motor IDs set to 10-29
-     * all Sensor IDs set to 30-39
-     */
-
-    // Motors are all assumed to be TalonFX. TalonFX motors have an integrated
-    // encoder which is why you don't see encoder ids
-    // If Motors are diffents constants need to shifted accordingly
-
-    // All values of -1 are place holders
+    public static final class ElevatorConstants {
+        public static final int kElevatorMotorID = 0; // change later
+    }
 
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = .0977;
@@ -163,13 +155,18 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMeters = 16.53;
+        public static int kLeftLimitSwitchID = 0;// set later
+        public static int kMiddleLimitSwitchID = 0;// set later
+        public static int kRightLimitSwitchID = 0;// set later
+
+        public static double kElevatorGearRatio = 0;// set later
+        public static double kGearDiameter = 0;// set later
     }
-    public static final class PneumaticsConstants {
-        public static final int kCompressorPort = 1;
-        public static final double kPulseDuration = .1; //in seconds
-        public static final int kSolenoidOne = 2;
-        public static final int kSolenoidTwo = 1;
-        public static final int kSolenoidThree = 0;
+
+    public static class SensorStatus {
+        public static boolean kLeftLimitSwitchValue = false;
+        public static boolean kMiddleLimitSwitchValue = false;
+        public static boolean kRightLimitSwitchValue = false;
+        public static double kElevatorHeight = 0;
     }
 }

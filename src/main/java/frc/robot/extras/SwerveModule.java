@@ -52,7 +52,7 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        return driveMotor.getRotorPosition().getValue() * ModuleConstants.kDriveEncoderRot2Meter;
+        return driveMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kDriveEncoderRot2Meter;
     }
 
     public double getTurningPosition() {
@@ -60,21 +60,21 @@ public class SwerveModule {
         // Isn't currently bound to a certian range. Will count up indefintly
 
         // measured in revolutions not radians. easier to understand
-        return (turningMotor.getRotorPosition().getValue() * ModuleConstants.kTurningEncoderRot2Rad) / (2 * Math.PI);
+        return (turningMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kTurningEncoderRot2Rad) / (2 * Math.PI);
     }
 
     public double getDriveVelocity() {
-        return driveMotor.getRotorVelocity().getValue() * ModuleConstants.kDriveEncoderRPMS2MeterPerSec;
+        return driveMotor.getRotorVelocity().getValueAsDouble() * ModuleConstants.kDriveEncoderRPMS2MeterPerSec;
     }
 
     public double getTurningVelocity() {
         // measured in revolutions not radians. easier to understand
-        return (driveMotor.getRotorVelocity().getValue() * ModuleConstants.kTurningEncoderRPMS2RadPerSec) / (2 * Math.PI);
+        return (driveMotor.getRotorVelocity().getValueAsDouble() * ModuleConstants.kTurningEncoderRPMS2RadPerSec) / (2 * Math.PI);
     }
 
     public double getAbsolutePosition() {
         // converts from (-.5, .5) to (-180, 180)
-        double angle = 360 * absoluteEncoder.getAbsolutePosition().getValue();
+        double angle = 360 * absoluteEncoder.getAbsolutePosition().getValueAsDouble();
         angle -= absoluteEncoderOffset;
         angle *= absoluteEncoderReversed ? -1 : 1;
         
