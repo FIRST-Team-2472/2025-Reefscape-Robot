@@ -40,6 +40,6 @@ public class CoralDispenserSubsytem extends SubsystemBase{
         SensorStatus.kTimeOfFlightDistance = convertByteArrayToDouble(dataArray);
     }
     public double convertByteArrayToDouble(byte[] array){
-        
+        return 0.1;// put logic here
     }
 }

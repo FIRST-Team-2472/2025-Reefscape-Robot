@@ -8,8 +8,15 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class ElevatorConstants {
         public static final int kElevatorMotorID = 0; // change later
-        public static double kElevatorGearRatio = 0;// set later
-        public static double kGearDiameter = 0;// set later
+        public static final double kElevatorGearRatio = 0;// set later
+        public static final double kGearDiameter = 0;// set later
+
+        public static final double kElevatorL4Height = 0;// set later
+        public static final double kElevatorL3Height = 0;// set later
+        public static final double kElevatorL2Height = 0;// set later
+        public static final double kElevatorL1Height = 0;// set later
+
+        public static final double kElevatorMaxHeight = 0;// set later
     }
     public static final class CoralDispenserConstants {
         public static final int kLeftMotorID = 0; // change later
@@ -155,7 +162,8 @@ public final class Constants {
         public static final int kRightDriverRotAxis = 0;
 
         // area were joysticks will not activate
-        public static final double kDeadband = 0.1;
+        public static final double kXboxControllerDeadband = 0.1;
+        public static final double kFlightControllerDeadband = 0.05;
     }
 
     public static final class SensorConstants {

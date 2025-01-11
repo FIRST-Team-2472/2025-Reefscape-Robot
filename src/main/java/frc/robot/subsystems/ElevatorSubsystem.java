@@ -35,6 +35,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
+  public void runElevatorMotor(double powerPercent){
+    elevatorMotor.set(powerPercent);
+  }
 
   @Override
   public void periodic() {

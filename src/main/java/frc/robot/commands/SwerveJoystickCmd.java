@@ -37,9 +37,9 @@ public class SwerveJoystickCmd extends Command {
         System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
         // 2. Apply deadband & square output for more precise movement at low speed
-        xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadband ?  xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadband ?  ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kDeadband ?  turningSpeed : 0.0;
+        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
+        turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
