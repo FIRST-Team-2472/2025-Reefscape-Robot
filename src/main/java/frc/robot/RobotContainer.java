@@ -32,7 +32,7 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
       ()-> leftJoystick.getY(),
       ()-> -leftJoystick.getX(),
-      ()-> -rightJoystick.getX()
+      ()-> rightJoystick.getX()
     ));
 
   }
