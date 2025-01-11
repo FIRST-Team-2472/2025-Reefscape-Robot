@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 4.668380387316089,
-        "y": 1.5754379004275325
+        "y": 1.5754379004275323
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Reef to Processor",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -61.750264505025754

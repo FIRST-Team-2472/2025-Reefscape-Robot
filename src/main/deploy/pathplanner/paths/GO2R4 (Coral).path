@@ -45,7 +45,7 @@
     "rotation": -178.2100893917539
   },
   "reversed": false,
-  "folder": "Starting Floor Objects to reef",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

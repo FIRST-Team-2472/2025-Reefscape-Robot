@@ -45,7 +45,7 @@
     "rotation": -59.981632572391064
   },
   "reversed": false,
-  "folder": "Cage to Reef Paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

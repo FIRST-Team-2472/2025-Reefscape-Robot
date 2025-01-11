@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -114,6 +117,30 @@ public final class Constants {
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
+
+        public static final double TRANSLATION_KP = .7;
+        public static final double TRANSLATION_KI = 0;
+        public static final double TRANSLATION_KD = 0;
+                    
+        public static final double ROTATION_KP = .7;
+        public static final double ROTATION_KI = 0;
+        public static final double ROTATION_KD = 0;
+                    
+        public static final double MAX_MODULE_SPEED = 4.5;
+        public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth,
+            DriveConstants.kWheelBase) / 2;
+
+        public static final PPHolonomicDriveController HOLONOMIC_PATH_FOLLOWER_CONFIG = new PPHolonomicDriveController(
+        new PIDConstants(
+            TRANSLATION_KP,
+            TRANSLATION_KI,
+            TRANSLATION_KD), // Translation PID constants
+        new PIDConstants(
+            ROTATION_KP,
+            ROTATION_KI,
+            ROTATION_KD), // Rotation PID constants
+        .05 //Time between code runs
+    );
     }
 
     public static final class TargetPosConstants {

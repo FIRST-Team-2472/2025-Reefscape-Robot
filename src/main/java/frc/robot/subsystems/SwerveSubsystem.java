@@ -75,6 +75,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+
     public SwerveSubsystem() {
         // Gets tabs from Shuffleboard
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
@@ -144,6 +146,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
         return temp.vxMetersPerSecond;
     }
+    public ChassisSpeeds getChassisSpeedsRobotRelative() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
+    }
 
     // gets our current velocity relative to the x of the robot (front/back)
     public double getXSpeedRobotRel() {
@@ -192,6 +197,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public void zeroOdometry(){
         odometer.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d());
     }
+    public void setOdometry(Pose2d odometryPose){
+        odometer.resetPosition(new Rotation2d(0), getModulePositions(), odometryPose);
+    }
 
     // Gets our drive position aka where the odometer thinks we are
     public Pose2d getPose() {
@@ -217,6 +225,19 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         //System.out.println(" ModuleStates: " + moduleStates[0].speedMetersPerSecond);
+
+        // Output each module states to wheels
+        setModuleStates(moduleStates);
+    }
+
+    public void runModulesRobotRelative(ChassisSpeeds chassisSpeeds) {
+        // Converts robot speeds to speeds relative to field
+        this.chassisSpeeds = chassisSpeeds;
+        chassisSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+                chassisSpeeds, getRotation2d());
+
+        // Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // Output each module states to wheels
         setModuleStates(moduleStates);

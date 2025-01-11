@@ -61,7 +61,7 @@
     "rotation": 90.4896955931292
   },
   "reversed": false,
-  "folder": "Reef to Processor",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 121.48746936421396
