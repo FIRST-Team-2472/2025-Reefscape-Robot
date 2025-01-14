@@ -20,6 +20,7 @@ public final class Constants {
     }
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 0; // change later
+        public static final double kClimberGearRatio = 1; // change later
     }
     public static final class CoralDispenserConstants {
         public static final int kLeftMotorID = 0; // change later
@@ -185,5 +186,6 @@ public final class Constants {
         public static double kElevatorHeight = 0;
 
         public static double kTimeOfFlightDistance = 0;
+        public static double kClimberAngle = 0;
     }
 }
