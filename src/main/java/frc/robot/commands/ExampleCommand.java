@@ -21,6 +21,7 @@ public class ExampleCommand extends Command {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
+    System.out.println("Example Command Initialized");
   }
 
   // Called when the command is initially scheduled.
