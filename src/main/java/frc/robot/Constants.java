@@ -18,6 +18,9 @@ public final class Constants {
 
         public static final double kElevatorMaxHeight = 0;// set later
     }
+    public static final class ClimberConstants {
+        public static final int kClimberMotorID = 0; // change later
+    }
     public static final class CoralDispenserConstants {
         public static final int kLeftMotorID = 0; // change later
         public static final int kRightMotorID = 0; // change later
