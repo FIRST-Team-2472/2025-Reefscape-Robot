@@ -192,9 +192,11 @@ public class SwerveSubsystem extends SubsystemBase {
     public void zeroOdometry(){
         odometer.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d());
     }
-    
+
     public void setOdometry(Pose2d odometryPose){
-        odometer.resetPosition(getRotation2d(), getModulePositions(), odometryPose);
+        Rotation2d headingOffset = Rotation2d.fromDegrees(90);
+        Rotation2d adjustedHeading = gyro.getRotation2d().minus(headingOffset);
+        odometer.resetPosition(adjustedHeading, getModulePositions(), odometryPose);
     }
 
     // Gets our drive position aka where the odometer thinks we are
