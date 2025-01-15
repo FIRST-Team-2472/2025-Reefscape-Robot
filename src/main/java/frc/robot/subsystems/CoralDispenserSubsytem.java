@@ -31,6 +31,10 @@ public class CoralDispenserSubsytem extends SubsystemBase{
         leftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         rightMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
+    public void runMotors(double leftPower, double rightPower){
+        leftMotor.set(leftPower);
+        rightMotor.set(rightPower);
+    }
 
     public void periodic() {
         boolean sensorRead = timeOfFlightSensor.read(0, 32, dataArray);
