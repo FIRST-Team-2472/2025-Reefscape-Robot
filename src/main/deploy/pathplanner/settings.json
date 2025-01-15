@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.762,
-  "robotLength": 0.66,
+  "robotWidth": 0.66,
+  "robotLength": 0.762,
   "holonomicMode": true,
   "pathFolders": [
     "Cage to Reef Paths",
@@ -10,8 +10,8 @@
   "autoFolders": [
     "Red Cage Starting Points"
   ],
-  "defaultMaxVel": 1.18,
-  "defaultMaxAccel": 5.5,
+  "defaultMaxVel": 0.5,
+  "defaultMaxAccel": 1.0,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 57.2958,
   "defaultNominalVoltage": 12.0,

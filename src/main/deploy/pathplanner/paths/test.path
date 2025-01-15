@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.631545608108108,
-        "y": 5.42573902027027
+        "x": 7.58918918918919,
+        "y": 3.928652871621621
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8225232415684847,
-        "y": 4.99913346211804
-      },
-      "isLocked": false,
-      "linkedName": "Reef Position 3"
-    },
-    {
-      "anchor": {
-        "x": 2.0899915540540537,
-        "y": 4.180637668918918
-      },
-      "prevControl": {
-        "x": 2.1303164771665486,
-        "y": 4.747094401226463
-      },
-      "nextControl": {
-        "x": 2.022318969029659,
-        "y": 3.2300198271245613
+        "x": 7.33918918918919,
+        "y": 3.928652871621621
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.358910472972973,
-        "y": 0.5639146959459458
+        "x": 6.106925675675676,
+        "y": 3.928652871621621
       },
       "prevControl": {
-        "x": 3.8909417229729724,
-        "y": 1.9275971283783777
+        "x": 5.831109133566686,
+        "y": 3.928652871621621
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Processor Point"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 121.48746936421396
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

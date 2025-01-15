@@ -80,20 +80,15 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem() {
         // Gets tabs from Shuffleboard
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
-        ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
 
         // Sets up the different displays on suffle board
         headingShuffleBoard = programmerBoard.add("Robot Heading", 0).getEntry();
         odometerShuffleBoard = programmerBoard.add("Robot Location", "").getEntry();
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
+        programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
 
-        // makes a team color choser
-        colorChooser.addOption(red, red);
-        colorChooser.addOption(blue, blue);
-        driverBoard.add("Team Chooser", colorChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
-
-        // zeros heading after pigeon boots up
+        // zeros heading after pigeon boots up)()
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -109,7 +104,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     // Gets the yaw/heading of the robot. getting this right is very important for
-    // swerve
+    // swerve 
     public double getHeading() {
         // imu is backwards, so it is multiplied by negative one
         return gyro.getYaw().getValueAsDouble();
