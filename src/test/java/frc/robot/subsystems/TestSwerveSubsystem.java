@@ -23,6 +23,8 @@ public class TestSwerveSubsystem {
         when(pigeon.getYaw()).thenReturn(statusSignal);
         var swerveSubsystem = new SwerveSubsystem(pigeon);
         assertTrue(swerveSubsystem.isAtAngle(new Rotation2d()));
+        when(statusSignal.getValueAsDouble()).thenReturn(0.1);
+        assertFalse(swerveSubsystem.isAtAngle(new Rotation2d()));
         //swerveSubsystem.isAtAngle(new Rotation2d());
     }
 }
