@@ -182,7 +182,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Gets our heading and translates it to Rotation2d
     // (all of swerve methods use Rotation2d)
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());
+        return gyro.getRotation2d();
     }
 
     public void zeroOdometry(){
@@ -207,12 +207,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
         // Converts robot speeds to speeds relative to field
-        //System.out.print(" Heading :" + getHeading());
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, getRotation2d());
         
-        //System.out.print(" ChassisSpeeds: (" + chassisSpeeds.vxMetersPerSecond + ", " + chassisSpeeds.vyMetersPerSecond + ")");
-
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 

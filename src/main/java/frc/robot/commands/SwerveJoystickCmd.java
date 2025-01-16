@@ -27,12 +27,11 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
-        double slow = 1;
 
         // 1. Get real-time joystick inputs
-        double xSpeed = -ySpdFunction.get()*.3;
-        double ySpeed = -xSpdFunction.get()*.3;
-        double turningSpeed = -turningSpdFunction.get();
+        double xSpeed = ySpdFunction.get()*.3;
+        double ySpeed = xSpdFunction.get()*.3;
+        double turningSpeed = turningSpdFunction.get();
 
         System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
