@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +22,7 @@ public class TestSwerveSubsystem {
         when(statusSignal.getValueAsDouble()).thenReturn(0.0);
         when(pigeon.getYaw()).thenReturn(statusSignal);
         var swerveSubsystem = new SwerveSubsystem(pigeon);
-
-        swerveSubsystem.isAtAngle(new Rotation2d());
+        assertTrue(swerveSubsystem.isAtAngle(new Rotation2d()));
+        //swerveSubsystem.isAtAngle(new Rotation2d());
     }
 }
