@@ -3,12 +3,16 @@ package frc.robot;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public final class Constants {
+    private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
     public static final class ElevatorConstants {
         public static final int kElevatorMotorID = 0; // change later
     }
@@ -140,7 +144,10 @@ public final class Constants {
             ROTATION_KI,
             ROTATION_KD), // Rotation PID constants
         .05 //Time between code runs
-    );
+        );
+    
+        public static final Rotation2d kHeadingOffset = Rotation2d.fromDegrees(90);
+        public static final Rotation2d kAdjustedHeading = SwerveSubsystem.gyro.getRotation2d().minus(kHeadingOffset);
     }
 
     public static final class TargetPosConstants {

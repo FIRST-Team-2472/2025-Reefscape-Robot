@@ -64,7 +64,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
-    private final Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
+    public static final Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
