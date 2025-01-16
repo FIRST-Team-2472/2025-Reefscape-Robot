@@ -169,4 +169,10 @@ public final class Constants {
         public static boolean kRightLimitSwitchValue = false;
         public static double kElevatorHeight = 0;
     }
+
+    public static class LEDConstants {
+      public static int kChannel1 = 1;
+      public static int kChannel2 = 2;
+      public static int kChannel3 = 3;
+    }
 }
