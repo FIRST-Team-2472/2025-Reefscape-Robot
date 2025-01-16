@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
@@ -194,9 +195,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setOdometry(Pose2d odometryPose){
-        Rotation2d headingOffset = Rotation2d.fromDegrees(90);
-        Rotation2d adjustedHeading = gyro.getRotation2d().minus(headingOffset);
-        odometer.resetPosition(adjustedHeading, getModulePositions(), odometryPose);
+        odometer.resetPosition(AutoConstants.kAdjustedHeading, getModulePositions(), odometryPose);
     }
 
     // Gets our drive position aka where the odometer thinks we are
