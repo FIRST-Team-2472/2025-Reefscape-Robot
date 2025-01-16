@@ -21,7 +21,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 
 public class RobotContainer {
-  private final String RCthreeRone = "3 notes in speaker Speaker 2 Note 2 - 1 - TESTED";
+  private final String RCthreeRone = "RCthreeRone";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -84,7 +84,7 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     m_autoSelected = m_chooser.getSelected();
 
     if(m_autoSelected == RCthreeRone)
-        return AutoBuilder.buildAuto("RC3R1");
+        return AutoBuilder.buildAuto("test");
     return null;
   }
 }

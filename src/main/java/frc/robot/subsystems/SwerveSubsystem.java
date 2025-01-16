@@ -124,12 +124,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public static boolean isOnRed() {
         // gets the selected team color from the suffleboard
         Optional<Alliance> ally = DriverStation.getAlliance();
-        if (ally.isPresent()) {
             return ally.get() == Alliance.Red;
-        }
-
-        String choices = colorChooser.getSelected();
-        return choices == "Red";
         // if no team selected on suffleboard, it will default to the field info
     }
 
@@ -195,7 +190,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setOdometry(Pose2d odometryPose){
-        odometer.resetPosition(AutoConstants.kAdjustedHeading, getModulePositions(), odometryPose);
+        odometer.resetPosition(getRotation2d(), getModulePositions(), odometryPose);
     }
 
     // Gets our drive position aka where the odometer thinks we are
