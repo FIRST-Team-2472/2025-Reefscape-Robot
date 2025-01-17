@@ -82,9 +82,9 @@ public final class Constants {
 
         // To find set the motors forward record the value (don't inverse the value)
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 180; 
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180; 
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 0;
 
         // Max physical speed of our motors. Required for motor speed caculations
         // To find set the modules to 100% and see what speed cap out at

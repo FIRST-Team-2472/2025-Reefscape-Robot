@@ -39,8 +39,8 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
+      ()-> leftJoystick.getX(),
       ()-> leftJoystick.getY(),
-      ()-> -leftJoystick.getX(),
       ()-> rightJoystick.getX()
     ));
 
