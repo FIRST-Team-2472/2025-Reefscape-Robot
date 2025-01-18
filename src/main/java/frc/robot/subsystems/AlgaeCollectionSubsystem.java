@@ -8,13 +8,15 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.SensorStatus;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class AlgaeCollectionSubsystem extends SubsystemBase {
     private SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
     private SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
 
+    private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
     public AlgaeCollectionSubsystem() {
         
         SparkMaxConfig config = new SparkMaxConfig();
@@ -33,6 +35,6 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
      @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kPivotAngle = pivotmotor.getEncoder().getPosition()*AlgaeConstants.kPivotGearRatio;
+    SensorStatus.kPivotAngle = absoluteEncoder.get();
   }
 }

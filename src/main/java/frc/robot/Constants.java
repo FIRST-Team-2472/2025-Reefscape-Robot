@@ -181,6 +181,9 @@ public final class Constants {
         public static int kLeftLimitSwitchID = 0;// set later
         public static int kMiddleLimitSwitchID = 0;// set later
         public static int kRightLimitSwitchID = 0;// set later
+        public static int kAlgeaABSEncoderDIOPort = 0; // set later
+
+        public static int kClimberABSEncoderDIOPort = 0; // set later
     }
 
     public static class SensorStatus {

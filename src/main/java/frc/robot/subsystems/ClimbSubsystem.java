@@ -8,11 +8,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.SensorStatus;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class ClimbSubsystem extends SubsystemBase{
     private SparkMax climberMotor = new SparkMax(ClimberConstants.kClimberMotorID, MotorType.kBrushless);
-
+    private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kClimberABSEncoderDIOPort);
     public ClimbSubsystem() {
         
         SparkMaxConfig config = new SparkMaxConfig();
@@ -26,6 +28,6 @@ public class ClimbSubsystem extends SubsystemBase{
      @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kClimberAngle = climberMotor.getEncoder().getPosition()*ClimberConstants.kClimberGearRatio;
+    SensorStatus.kClimberAngle = absoluteEncoder.get();
   }
 }
