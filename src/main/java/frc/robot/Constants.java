@@ -121,11 +121,11 @@ public final class Constants {
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
 
-        public static final double TRANSLATION_KP = .05;
+        public static final double TRANSLATION_KP = 1.27;
         public static final double TRANSLATION_KI = 0;
-        public static final double TRANSLATION_KD = 0;
+        public static final double TRANSLATION_KD = 0.024;
                     
-        public static final double ROTATION_KP = .03;
+        public static final double ROTATION_KP = .045;
         public static final double ROTATION_KI = 0;
         public static final double ROTATION_KD = 0;
                     
@@ -142,7 +142,7 @@ public final class Constants {
             ROTATION_KP,
             ROTATION_KI,
             ROTATION_KD), // Rotation PID constants
-        .05 //Time between code runs
+        .02 //Time between code runs
         );
     
         public static final Rotation2d kHeadingOffset = Rotation2d.fromDegrees(90);
