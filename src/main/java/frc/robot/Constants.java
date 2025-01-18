@@ -26,6 +26,11 @@ public final class Constants {
         public static final int kLeftMotorID = 0; // change later
         public static final int kRightMotorID = 0; // change later
     }
+    public static final class AlgaeConstants {
+        public static final int kPivotMotorID = 0;
+        public static final double kPivotGearRatio = 1/2;
+        public static final int kSpinMotorID = 0;
+    }
 
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = .0977;
@@ -187,5 +192,6 @@ public final class Constants {
 
         public static double kTimeOfFlightDistance = 0;
         public static double kClimberAngle = 0;
+        public static double kPivotAngle = 0;
     }
 }
