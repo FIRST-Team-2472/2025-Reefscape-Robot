@@ -21,7 +21,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 
 public class RobotContainer {
-  private final String RCthreeRone = "RCthreeRone";
+  private final String testAuto = "testAuto";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -41,12 +41,13 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
       ()-> leftJoystick.getX(),
       ()-> leftJoystick.getY(),
-      ()-> rightJoystick.getX()
+      ()-> rightJoystick.getX(),
+      ()-> leftJoystick.getRawButton(1)
     ));
 
     configureBindings();
 
-    m_chooser.addOption(RCthreeRone, RCthreeRone);
+    m_chooser.addOption(testAuto, testAuto);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -83,7 +84,7 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public Command getAutonomousCommand() {
     m_autoSelected = m_chooser.getSelected();
 
-    if(m_autoSelected == RCthreeRone)
+    if(m_autoSelected == testAuto)
         return AutoBuilder.buildAuto("test");
     return null;
   }
