@@ -213,8 +213,6 @@ public class SwerveSubsystem extends SubsystemBase {
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-        //System.out.println(" ModuleStates: " + moduleStates[0].speedMetersPerSecond);
-
         // Output each module states to wheels
         setModuleStates(moduleStates);
     }
@@ -295,5 +293,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
+        SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
     }
 }

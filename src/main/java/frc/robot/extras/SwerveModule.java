@@ -32,7 +32,7 @@ public class SwerveModule {
 
         driveMotor = new TalonFX(driveMotorId);
         turningMotor = new TalonFX(turningMotorId);
-
+        TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         driveMotor.getConfigurator().apply(new TalonFXConfiguration());
         turningMotor.getConfigurator().apply(new TalonFXConfiguration());
 

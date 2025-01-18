@@ -30,7 +30,7 @@ public class SwerveJoystickCmd extends Command {
     @Override
     public void execute() {
 
-        // 1. Get real-time joystick inputs
+        // 1. Get real-time joystick inputs flipping the x and y of controller to the fields x and y
         double xSpeed = ySpdFunction.get();
         double ySpeed = xSpdFunction.get();
         double turningSpeed = turningSpdFunction.get();
@@ -47,7 +47,7 @@ public class SwerveJoystickCmd extends Command {
             xSpeed *= 0.3;
             ySpeed *= 0.3;
         }
-        swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
+        swerveSubsystem.runModulesFieldRelative(-xSpeed, -ySpeed, -turningSpeed);
     }
 
     @Override
