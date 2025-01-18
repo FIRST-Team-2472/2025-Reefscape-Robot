@@ -21,6 +21,8 @@ public final class Constants {
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 0; // change later
         public static final double kClimberGearRatio = 1; // change later
+        public static final double kClimberOutAngle = 90; // change later
+        public static final double kClimberInAngle = 270; // change later
     }
     public static final class CoralDispenserConstants {
         public static final int kLeftMotorID = 0; // change later
