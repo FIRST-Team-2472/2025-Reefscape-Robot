@@ -293,5 +293,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());
         SmartDashboard.putNumber("read BackLeft Encoder", backLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
+        SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
+        SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
     }
 }

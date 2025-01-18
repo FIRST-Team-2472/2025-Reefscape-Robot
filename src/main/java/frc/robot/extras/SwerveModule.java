@@ -86,7 +86,6 @@ public class SwerveModule {
         angle *= absoluteEncoderReversed ? -1 : 1;
         
         return angle;
-        // return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
 
     public void resetEncoders() {
@@ -99,7 +98,7 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsolutePosition()));
+        return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getAbsolutePosition()));
     }
 
     // a swerve module state is composed of a speed and direction

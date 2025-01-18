@@ -24,9 +24,8 @@ public final class Constants {
         public static final double kDriveMotorGearRatio = 1 / 6.75;
         public static final double kTurningMotorGearRatio = 1 / 12.8;
         // 2048 is pulses per rotation of the motor
-        public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters
-                * (1.0 / 2048.0) * 0.9402;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI * (1.0 / 2048.0);
+        public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
+        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
 
         // CTRE mesures their velcity in 100ms, so we multiply it by 10 to get 1s
         public static final double kDriveEncoderRPMS2MeterPerSec = kDriveEncoderRot2Meter * 10;
@@ -43,10 +42,10 @@ public final class Constants {
         // Distance between front and back wheels
         public static final double kWheelBase = Units.inchesToMeters(23.5);
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
-                new Translation2d(kTrackWidth / 2, kWheelBase / 2),
-                new Translation2d(-kTrackWidth / 2, -kWheelBase / 2),
-                new Translation2d(kTrackWidth / 2, -kWheelBase / 2));
+                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
         public static final int kFrontRightDriveMotorPort = 4;
         public static final int kFrontLeftDriveMotorPort = 8;
