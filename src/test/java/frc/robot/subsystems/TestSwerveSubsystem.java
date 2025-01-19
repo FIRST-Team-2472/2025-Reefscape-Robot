@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.extras.SwerveModule;
@@ -29,12 +31,10 @@ public class TestSwerveSubsystem {
     private GenericEntry odometerShuffleBoard;
     private GenericEntry rollSB;
     private GenericEntry pitchSB;
-    /*
     private SwerveModule frontLeft;
     private SwerveModule frontRight;
     private SwerveModule backLeft;
     private SwerveModule backRight;
-    */
 
     @BeforeEach
     public void setUp() {
@@ -51,15 +51,13 @@ public class TestSwerveSubsystem {
         rollStatusSignal = mock();
         when(pigeon.getRoll()).thenReturn(rollStatusSignal);
 
-        /*
         frontLeft = mock();
         frontRight = mock();
         backLeft = mock();
         backRight = mock();
-        */
 
         swerveSubsystem = new SwerveSubsystem(pigeon, 
-        //frontLeft, frontRight, backLeft, backRight, 
+        frontLeft, frontRight, backLeft, backRight, 
         headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB);
     }
     @Test
@@ -86,17 +84,71 @@ public class TestSwerveSubsystem {
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
         assertEquals(90.0, odometerPostUpdate.getRotation().getDegrees());
     }
-    //TODO: testOdometryTranslation
-    /*
     @Test
     public void testOdometryTranslation(){
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(0.0);
-        when(pitchStatusSignal.getValueAsDouble()).thenReturn(0.0);
-        when(rollStatusSignal.getValueAsDouble()).thenReturn(0.0);
+
+        double frontLeftDrivePosition;
+        double frontRightDrivePosition;
+        double backLeftDrivePosition;
+        double backRightDrivePosition;
+        when(frontLeft.getAbsolutePosition()).thenReturn(0.0);
+        when(frontRight.getAbsolutePosition()).thenReturn(0.0);
+        when(backLeft.getAbsolutePosition()).thenReturn(0.0);
+        when(backRight.getAbsolutePosition()).thenReturn(0.0);
+        StatusSignal<Angle> absEncodedrSignal = mock();
+        when(absEncodedrSignal.getValueAsDouble()).thenReturn(0.0);
+        frontLeft.absoluteEncoder = mock();
+        frontRight.absoluteEncoder = mock();
+        backLeft.absoluteEncoder = mock();
+        backRight.absoluteEncoder = mock();
+        when(frontLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+        when(frontRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+        when(backLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+        when(backRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+
+        when(frontLeft.getDrivePosition()).thenReturn(0.0);
+        when(frontRight.getDrivePosition()).thenReturn(0.0);
+        when(backLeft.getDrivePosition()).thenReturn(0.0);
+        when(backRight.getDrivePosition()).thenReturn(0.0);
+        frontLeftDrivePosition = frontLeft.getDrivePosition();
+        frontRightDrivePosition = frontRight.getDrivePosition();
+        backLeftDrivePosition = backLeft.getDrivePosition();
+        backRightDrivePosition = backRight.getDrivePosition();
+        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(frontLeftDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(frontRightDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(backLeftDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(backRightDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
         swerveSubsystem.periodic();
+
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
         assertEquals(0.0, odometerPostUpdate.getTranslation().getX());
         assertEquals(0.0, odometerPostUpdate.getTranslation().getY());
+        assertEquals(0.0, odometerPostUpdate.getRotation().getDegrees());
+        assertNotEquals(1.0, odometerPostUpdate.getTranslation().getX());
+        assertNotEquals(1.0, odometerPostUpdate.getTranslation().getY());
+        assertNotEquals(1.0, odometerPostUpdate.getRotation().getDegrees());
+
+        //when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
+        when(frontLeft.getDrivePosition()).thenReturn(1.0);
+        when(frontRight.getDrivePosition()).thenReturn(1.0);
+        when(backLeft.getDrivePosition()).thenReturn(1.0);
+        when(backRight.getDrivePosition()).thenReturn(1.0);
+        frontLeftDrivePosition = frontLeft.getDrivePosition();
+        frontRightDrivePosition = frontRight.getDrivePosition();
+        backLeftDrivePosition = backLeft.getDrivePosition();
+        backRightDrivePosition = backRight.getDrivePosition();
+        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(frontLeftDrivePosition, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(frontRightDrivePosition, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(backLeftDrivePosition, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(backRightDrivePosition, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
+        swerveSubsystem.periodic();
+
+        var odometerSecondPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
+        assertEquals(1.0, odometerSecondPostUpdate.getTranslation().getX());
+        assertEquals(0.0, odometerSecondPostUpdate.getTranslation().getY());
+        assertEquals(0.0, odometerSecondPostUpdate.getRotation().getDegrees());
+        assertNotEquals(0.0, odometerSecondPostUpdate.getTranslation().getX());
+        assertNotEquals(1.0, odometerSecondPostUpdate.getTranslation().getY());
+        assertNotEquals(90.0, odometerSecondPostUpdate.getRotation().getDegrees());
     }
-    */
 }
