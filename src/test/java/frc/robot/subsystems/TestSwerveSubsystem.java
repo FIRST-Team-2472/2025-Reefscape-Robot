@@ -21,11 +21,12 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.extras.SwerveModule;
 
 public class TestSwerveSubsystem {
-    Pigeon2 pigeon;
+    private Pigeon2 pigeon;
     //needs to use typeparameter Angle to align with getYaw
-    StatusSignal<Angle> yawStatusSignal;
-    StatusSignal<Angle> pitchStatusSignal;
-    StatusSignal<Angle> rollStatusSignal;
+    private StatusSignal<Angle> yawStatusSignal;
+    private StatusSignal<Angle> pitchStatusSignal;
+    private StatusSignal<Angle> rollStatusSignal;
+    private StatusSignal<Angle> absEncodedrSignal;
     private SwerveSubsystem swerveSubsystem;
     private GenericEntry headingShuffleBoard;
     private GenericEntry odometerShuffleBoard;
@@ -35,6 +36,7 @@ public class TestSwerveSubsystem {
     private SwerveModule frontRight;
     private SwerveModule backLeft;
     private SwerveModule backRight;
+    private double frontLeftDrivePosition, frontRightDrivePosition, backLeftDrivePosition, backRightDrivePosition;
 
     @BeforeEach
     public void setUp() {
@@ -55,6 +57,12 @@ public class TestSwerveSubsystem {
         frontRight = mock();
         backLeft = mock();
         backRight = mock();
+
+        frontLeft.absoluteEncoder = mock();
+        frontRight.absoluteEncoder = mock();
+        backLeft.absoluteEncoder = mock();
+        backRight.absoluteEncoder = mock();
+        absEncodedrSignal = mock();
 
         swerveSubsystem = new SwerveSubsystem(pigeon, 
         frontLeft, frontRight, backLeft, backRight, 
@@ -77,30 +85,43 @@ public class TestSwerveSubsystem {
     }
     @Test
     public void testOdometryAngle(){
+        when(frontLeft.getAbsolutePosition()).thenReturn(0.0);
+        when(frontRight.getAbsolutePosition()).thenReturn(0.0);
+        when(backLeft.getAbsolutePosition()).thenReturn(0.0);
+        when(backRight.getAbsolutePosition()).thenReturn(0.0);
+        when(absEncodedrSignal.getValueAsDouble()).thenReturn(0.0);
+        when(frontLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+        when(frontRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+        when(backLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+        when(backRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
+
+        when(frontLeft.getDrivePosition()).thenReturn(0.0);
+        when(frontRight.getDrivePosition()).thenReturn(0.0);
+        when(backLeft.getDrivePosition()).thenReturn(0.0);
+        when(backRight.getDrivePosition()).thenReturn(0.0);
+        frontLeftDrivePosition = frontLeft.getDrivePosition();
+        frontRightDrivePosition = frontRight.getDrivePosition();
+        backLeftDrivePosition = backLeft.getDrivePosition();
+        backRightDrivePosition = backRight.getDrivePosition();
+        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(frontLeftDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(frontRightDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(backLeftDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(backRightDrivePosition, new Rotation2d(0)));// 0 = 100% x movement, 90 = 100% y movement
+
         when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
-        when(pitchStatusSignal.getValueAsDouble()).thenReturn(0.0);
-        when(rollStatusSignal.getValueAsDouble()).thenReturn(0.0);
         swerveSubsystem.periodic();
+
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
         assertEquals(90.0, odometerPostUpdate.getRotation().getDegrees());
     }
     @Test
     public void testOdometryTranslation(){
 
-        double frontLeftDrivePosition;
-        double frontRightDrivePosition;
-        double backLeftDrivePosition;
-        double backRightDrivePosition;
         when(frontLeft.getAbsolutePosition()).thenReturn(0.0);
         when(frontRight.getAbsolutePosition()).thenReturn(0.0);
         when(backLeft.getAbsolutePosition()).thenReturn(0.0);
         when(backRight.getAbsolutePosition()).thenReturn(0.0);
-        StatusSignal<Angle> absEncodedrSignal = mock();
         when(absEncodedrSignal.getValueAsDouble()).thenReturn(0.0);
-        frontLeft.absoluteEncoder = mock();
-        frontRight.absoluteEncoder = mock();
-        backLeft.absoluteEncoder = mock();
-        backRight.absoluteEncoder = mock();
         when(frontLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
         when(frontRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
         when(backLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
