@@ -22,22 +22,24 @@ import frc.robot.extras.SwerveModule;
 
 public class TestSwerveSubsystem {
     private Pigeon2 pigeon;
-    //needs to use typeparameter Angle to align with getYaw
     private StatusSignal<Angle> yawStatusSignal;
     private StatusSignal<Angle> pitchStatusSignal;
     private StatusSignal<Angle> rollStatusSignal;
     private StatusSignal<Angle> absEncodedrSignal;
     private SwerveSubsystem swerveSubsystem;
+    //GenericEntrys are mocked to avoid null pointer exceptions
     private GenericEntry headingShuffleBoard;
     private GenericEntry odometerShuffleBoard;
     private GenericEntry rollSB;
     private GenericEntry pitchSB;
+
     private SwerveModule frontLeft;
     private SwerveModule frontRight;
     private SwerveModule backLeft;
     private SwerveModule backRight;
     private double frontLeftDrivePosition, frontRightDrivePosition, backLeftDrivePosition, backRightDrivePosition;
 
+    //This is the setup for the tests @BeforeEach means that this method will run before each test
     @BeforeEach
     public void setUp() {
         headingShuffleBoard = mock();
@@ -69,22 +71,22 @@ public class TestSwerveSubsystem {
         headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB);
     }
     @Test
-    public void testIsAtAngle(){
-        // we needed to use thenReturn
+    public void testIsAtAngle(){ //runs test for isAtAngle method
         when(yawStatusSignal.getValueAsDouble()).thenReturn(0.0);
         assertTrue(swerveSubsystem.isAtAngle(new Rotation2d()));
         when(yawStatusSignal.getValueAsDouble()).thenReturn(1.6);
         assertFalse(swerveSubsystem.isAtAngle(new Rotation2d()));
     }
     @Test
-    public void testIsAtPoint(){
+    public void testIsAtPoint(){ //runs test for isAtPoint method
         Translation2d targetDrivePos = new Translation2d();
         assertTrue(swerveSubsystem.isAtPoint(targetDrivePos));
         targetDrivePos = new Translation2d(1,1);
         assertFalse(swerveSubsystem.isAtPoint(targetDrivePos));
     }
     @Test
-    public void testOdometryAngle(){
+    public void testOdometryAngle(){ //runs test for changing yaw and then updating odometry in periodic
+        //first block to appease shuffleboard
         when(frontLeft.getAbsolutePosition()).thenReturn(0.0);
         when(frontRight.getAbsolutePosition()).thenReturn(0.0);
         when(backLeft.getAbsolutePosition()).thenReturn(0.0);
@@ -95,6 +97,7 @@ public class TestSwerveSubsystem {
         when(backLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
         when(backRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
 
+        //needed to update odometry when mocking swerve modules
         when(frontLeft.getDrivePosition()).thenReturn(0.0);
         when(frontRight.getDrivePosition()).thenReturn(0.0);
         when(backLeft.getDrivePosition()).thenReturn(0.0);
@@ -113,10 +116,16 @@ public class TestSwerveSubsystem {
 
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
         assertEquals(90.0, odometerPostUpdate.getRotation().getDegrees());
+
+        when(yawStatusSignal.getValueAsDouble()).thenReturn(0.0);
+        swerveSubsystem.periodic();
+
+        var odometerSecondPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
+        assertNotEquals(90.0, odometerSecondPostUpdate.getRotation().getDegrees());
     }
     @Test
-    public void testOdometryTranslation(){
-
+    public void testOdometryTranslation(){ //runs test for changing drive position and then updating odometry in periodic
+        //first block to appease shuffleboard
         when(frontLeft.getAbsolutePosition()).thenReturn(0.0);
         when(frontRight.getAbsolutePosition()).thenReturn(0.0);
         when(backLeft.getAbsolutePosition()).thenReturn(0.0);
@@ -149,7 +158,6 @@ public class TestSwerveSubsystem {
         assertNotEquals(1.0, odometerPostUpdate.getTranslation().getY());
         assertNotEquals(1.0, odometerPostUpdate.getRotation().getDegrees());
 
-        //when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
         when(frontLeft.getDrivePosition()).thenReturn(1.0);
         when(frontRight.getDrivePosition()).thenReturn(1.0);
         when(backLeft.getDrivePosition()).thenReturn(1.0);
