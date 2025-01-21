@@ -207,6 +207,7 @@ public class TestSwerveSubsystem {
         assertTest(0.0, 1.0, 0.0);
     }
     /*/
+    /* Pigeon yaw overides all rotational values so this test is invalid
     @Test
     public void testOdometryRotation(){
         //First test is with default values (Aka 0.0)
@@ -226,10 +227,11 @@ public class TestSwerveSubsystem {
         swerveSubsystem.periodic();
         assertTest(0.0, 0.0, 90.0);
     }
+        */
     private void assertTest(double expectedX, double expectedY, double expectedRotation){
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
-        //assertEquals(expectedX, odometerPostUpdate.getTranslation().getX());
-        //assertEquals(expectedY, odometerPostUpdate.getTranslation().getY());
+        assertEquals(expectedX, odometerPostUpdate.getTranslation().getX());
+        assertEquals(expectedY, odometerPostUpdate.getTranslation().getY());
         assertEquals(expectedRotation, odometerPostUpdate.getRotation().getDegrees());
         assertNotEquals(expectedX + allowedVariation, odometerPostUpdate.getTranslation().getX());
         assertNotEquals(expectedY + allowedVariation, odometerPostUpdate.getTranslation().getY());
