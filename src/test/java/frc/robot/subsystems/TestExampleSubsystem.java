@@ -11,6 +11,6 @@ public class TestExampleSubsystem {
     public void testExampleCondition(){
         System.out.println("Test");
 
-        assertTrue(true);
+        assertFalse(false);
     }
 }
