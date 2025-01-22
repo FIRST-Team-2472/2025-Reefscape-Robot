@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -29,7 +32,7 @@ public class TestSwerveSubsystem {
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
 
     private SwerveModule frontLeft, frontRight, backLeft, backRight;
-    private double allowedVariation = 0.0001;
+    private BigDecimal allowedVariation = new BigDecimal(0.01);
 
     //This is the setup for the tests @BeforeEach means that this method will run before each test
     @BeforeEach
@@ -127,7 +130,7 @@ public class TestSwerveSubsystem {
         assertTest(-1.0, 0.0, 0.0);
 
         //Attempted next test but it resulted in 6.123233995736766E-17 instead of 0.0 for x
-        /*
+        
         setUp();
         //Fourth test is with the robot moving one meter in the y direction
         when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
@@ -137,7 +140,7 @@ public class TestSwerveSubsystem {
         swerveSubsystem.periodic();
         assertTest(0.0, 1.0, 0.0);
         
-
+        
         //Fith test is with the robot moving one meter to the right in the y direction
         setUp();
         when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(-1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
@@ -146,7 +149,7 @@ public class TestSwerveSubsystem {
         when(backRight.getPosition()).thenReturn(new SwerveModulePosition(-1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
         swerveSubsystem.periodic();
         assertTest(0.0, -1.0, 0.0);
-        */
+        
 
         //Sixth test is with the robot moving one meter in the x and then y direction
         setUp();
@@ -163,7 +166,7 @@ public class TestSwerveSubsystem {
         swerveSubsystem.periodic();
         assertTest(1.0, 1.0, 0.0);
 
-        /* rotation is not perfect so some variability is allowed
+        //* rotation is not perfect so some variability is allowed
         //Seventh test is with the robot moving two meters diagonally to the right
         setUp();
         when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(5.0, Rotation2d.fromDegrees(53.13)));// 0 = 100% x movement, 90 = 100% y movement
@@ -172,9 +175,9 @@ public class TestSwerveSubsystem {
         when(backRight.getPosition()).thenReturn(new SwerveModulePosition(5.0, Rotation2d.fromDegrees(53.13)));// 0 = 100% x movement, 90 = 100% y movement
         swerveSubsystem.periodic();
         assertTest(3.0, -4.0, 0.0);
-        */
         
-        /*
+        
+        
         //Eighth test is with math for a 45 degree angle
         setUp();
         when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(45)));// 0 = 100% x movement, 90 = 100% y movement
@@ -184,7 +187,7 @@ public class TestSwerveSubsystem {
         swerveSubsystem.periodic();
         double expectedXY = Math.sqrt(.5);
         assertTest(expectedXY, -expectedXY, 0.0);
-        */
+        
     }
     
     /* test still fails if in its own seperate test
@@ -228,13 +231,19 @@ public class TestSwerveSubsystem {
         assertTest(0.0, 0.0, 90.0);
     }
         */
-    private void assertTest(double expectedX, double expectedY, double expectedRotation){
+    private void assertTest(double expectedXD, double expectedYD, double expectedRotationD){
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
-        assertEquals(expectedX, odometerPostUpdate.getTranslation().getX());
-        assertEquals(expectedY, odometerPostUpdate.getTranslation().getY());
-        assertEquals(expectedRotation, odometerPostUpdate.getRotation().getDegrees());
-        assertNotEquals(expectedX + allowedVariation, odometerPostUpdate.getTranslation().getX());
-        assertNotEquals(expectedY + allowedVariation, odometerPostUpdate.getTranslation().getY());
-        assertNotEquals(expectedRotation + allowedVariation, odometerPostUpdate.getRotation().getDegrees());
+        var expectedX = new BigDecimal(expectedXD).setScale(2, RoundingMode.HALF_UP);
+        var expectedY = new BigDecimal(expectedYD).setScale(2, RoundingMode.HALF_UP);
+        var expectedRotation = new BigDecimal(expectedRotationD).setScale(2, RoundingMode.HALF_UP);
+        var realX = new BigDecimal(odometerPostUpdate.getTranslation().getX()).setScale(2, RoundingMode.HALF_UP);
+        var realY = new BigDecimal(odometerPostUpdate.getTranslation().getY()).setScale(2, RoundingMode.HALF_UP);
+        var realRotation = new BigDecimal(odometerPostUpdate.getRotation().getDegrees()).setScale(2, RoundingMode.HALF_UP);
+        assertEquals(expectedX, realX);
+        assertEquals(expectedY, realY);
+        assertEquals(expectedRotation, realRotation);
+        assertNotEquals(expectedX.add(allowedVariation), realX);
+        assertNotEquals(expectedY.add(allowedVariation), realY);
+        assertNotEquals(expectedRotation.add(allowedVariation), realRotation);
     }
 }
