@@ -15,17 +15,29 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
+
 
 public class RobotContainer {
-//Add subsystems below this comment
+  //Add subsystems below this comment
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  ElevatorSubsystem elevatorSubsystem;
 
-ElevatorSubsystem elevatorSubsystem;
-
-//Make sure this xbox controller is correct and add driver sticks
+  //Make sure this xbox controller is correct and add driver sticks
   XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);
 
 
+  public static Joystick leftJoystick = new Joystick(OperatorConstants.kLeftJoystickPort);
+  public static Joystick rightJoystick = new Joystick(OperatorConstants.kRightJoystickPort);
+
   public RobotContainer() {
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
+      ()-> leftJoystick.getY(),
+      ()-> -leftJoystick.getX(),
+      ()-> rightJoystick.getX()
+    ));
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
     () -> xboxController.getLeftY(), 

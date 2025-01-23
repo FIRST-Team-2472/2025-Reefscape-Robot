@@ -28,7 +28,7 @@ import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
 
-    private final SwerveModule frontLeft = new SwerveModule(
+    private SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
@@ -37,7 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
 
-    private final SwerveModule frontRight = new SwerveModule(
+    private SwerveModule frontRight = new SwerveModule(
             DriveConstants.kFrontRightDriveMotorPort,
             DriveConstants.kFrontRightTurningMotorPort,
             DriveConstants.kFrontRightDriveEncoderReversed,
@@ -46,7 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
 
-    private final SwerveModule backLeft = new SwerveModule(
+    private SwerveModule backLeft = new SwerveModule(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
@@ -55,7 +55,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
     // It's still going, oh my god.
-    private final SwerveModule backRight = new SwerveModule(
+    private SwerveModule backRight = new SwerveModule(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
@@ -64,7 +64,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
-    private final Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
+    private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
@@ -100,7 +100,24 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }).start();
     }
-
+    public SwerveSubsystem(Pigeon2 gyro, 
+        //SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, 
+        GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB, GenericEntry pitchSB) {
+        this.gyro = gyro;
+        /* 
+        this.frontLeft = frontLeft;
+        this.frontRight = frontRight;
+        this.backLeft = backLeft;
+        this.backRight = backRight;
+        */
+        this.headingShuffleBoard = headingShuffleBoard;
+        this.odometerShuffleBoard = odometerShuffleBoard;
+        this.rollSB = rollSB;
+        this.pitchSB = pitchSB;
+    }
+    public SwerveDriveOdometry getOdometer(){
+        return odometer;
+    }
     // Just a quick method that zeros the IMU.
     public void zeroHeading() {
         gyro.setYaw(0);
@@ -240,6 +257,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return Math.abs(getRotation2d().minus(angle).getDegrees()) //
                 <= TargetPosConstants.kAcceptableAngleError;
     }
+    
 
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
