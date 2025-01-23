@@ -43,7 +43,7 @@ public class ElevatorCommand extends Command{
     double y = joystickY.get();
     if(Math.abs(y) <= OperatorConstants.kXboxControllerDeadband)
         y = 0;
-    elevatorSetHeight = elevatorSetHeight + y;
+    elevatorSetHeight += y;
 
     if(XboxYPressed.get())
         elevatorSetHeight = ElevatorConstants.kElevatorL4Height;
@@ -53,6 +53,7 @@ public class ElevatorCommand extends Command{
         elevatorSetHeight = ElevatorConstants.kElevatorL2Height;
     if(XboxXPressed.get())
         elevatorSetHeight = ElevatorConstants.kElevatorL1Height;
+        
     //Makes so cannot go past physical limits or below 0
     if (elevatorSetHeight > ElevatorConstants.kElevatorMaxHeight)
         elevatorSetHeight = ElevatorConstants.kElevatorMaxHeight;

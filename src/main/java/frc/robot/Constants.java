@@ -8,8 +8,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class ElevatorConstants {
         public static final int kElevatorMotorID = 0; // change later
-        public static final double kElevatorGearRatio = 0;// set later
-        public static final double kGearDiameter = 0;// set later
+        public static final double kElevatorGearRatio = 1/20; // 20 rotations of the motor to one shaft rotation
+        public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
 
         public static final double kElevatorL4Height = 0;// set later
         public static final double kElevatorL3Height = 0;// set later
