@@ -38,7 +38,8 @@ public class LEDSubsystem extends SubsystemBase {
         BLUE(3),
         YELLOW(4),
         PURPLE(5),
-        CYAN(6);
+        CYAN(6),
+        CENTURION(7);
         
 
         private final int code;

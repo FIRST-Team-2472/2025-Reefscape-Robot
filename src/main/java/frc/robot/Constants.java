@@ -199,4 +199,9 @@ public final class Constants {
         public static double kClimberAngle = 0;
         public static double kPivotAngle = 0;
     }
+    public static class LEDConstants {
+        public static int kChannel1 = 0;
+        public static int kChannel2 = 1;
+        public static int kChannel3 = 2;
+      }
 }
