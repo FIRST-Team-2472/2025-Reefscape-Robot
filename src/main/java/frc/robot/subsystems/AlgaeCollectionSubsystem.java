@@ -19,12 +19,13 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
     public AlgaeCollectionSubsystem() {
         
-        SparkMaxConfig config = new SparkMaxConfig();
-            config.smartCurrentLimit(35);
-            config.idleMode(IdleMode.kBrake);
-        pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      SparkMaxConfig config = new SparkMaxConfig();
+          config.smartCurrentLimit(35);
+          config.idleMode(IdleMode.kBrake);
+      pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+      SensorStatus.kPivotAngle = absoluteEncoder.get()*360;//updating it before its read, converting it to degrees as well
     }
     public void runPivotMotor(double powerPercent){
     pivotmotor.set(powerPercent);
@@ -35,6 +36,6 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
      @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kPivotAngle = absoluteEncoder.get();
+    SensorStatus.kPivotAngle = absoluteEncoder.get()*360;// converting it to degrees
   }
 }
