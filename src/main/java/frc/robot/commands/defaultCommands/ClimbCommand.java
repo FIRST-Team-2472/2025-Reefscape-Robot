@@ -50,7 +50,7 @@ public class ClimbCommand extends Command{
             y = climberPID.calculatePID(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
-        climberSusbsystem.runClimberMotor(y);
+        climberSusbsystem.runClimberMotors(y);
     }
     
     @Override
