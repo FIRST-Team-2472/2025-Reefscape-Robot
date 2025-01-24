@@ -174,7 +174,7 @@ public class TestSwerveSubsystem {
         when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(5.0, Rotation2d.fromDegrees(53.13)));// 0 = 100% x movement, 90 = 100% y movement
         when(backRight.getPosition()).thenReturn(new SwerveModulePosition(5.0, Rotation2d.fromDegrees(53.13)));// 0 = 100% x movement, 90 = 100% y movement
         swerveSubsystem.periodic();
-        assertTest(3.0, -4.0, 0.0);
+        assertTest(3.0, 4.0, 0.0);
         
         
         
@@ -186,7 +186,7 @@ public class TestSwerveSubsystem {
         when(backRight.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(45)));// 0 = 100% x movement, 90 = 100% y movement
         swerveSubsystem.periodic();
         double expectedXY = Math.sqrt(.5);
-        assertTest(expectedXY, -expectedXY, 0.0);
+        assertTest(expectedXY, expectedXY, 0.0);
         
     }
     
