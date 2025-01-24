@@ -121,9 +121,9 @@ public final class Constants {
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
 
-        public static final double TRANSLATION_KP = 1.27;
-        public static final double TRANSLATION_KI = 0;
-        public static final double TRANSLATION_KD = 0.024;
+        public static final double TRANSLATION_KP = 0; //1.34
+        public static final double TRANSLATION_KI = 0; //0.164
+        public static final double TRANSLATION_KD = 0;
                     
         public static final double ROTATION_KP = .045;
         public static final double ROTATION_KI = 0;
