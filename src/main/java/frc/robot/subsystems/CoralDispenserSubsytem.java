@@ -34,6 +34,10 @@ public class CoralDispenserSubsytem extends SubsystemBase{
         timeOfFlightSensor.init();
         timeOfFlightSensor.startRanging();
     }
+    public void runMotors(double leftPower, double rightPower){
+        leftMotor.set(leftPower);
+        rightMotor.set(rightPower);
+    }
 
     public void periodic() {
         

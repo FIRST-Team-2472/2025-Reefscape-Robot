@@ -46,7 +46,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SensorStatus.kLeftLimitSwitchValue = LeftLimitSwitch.get();
     SensorStatus.kMiddleLimitSwitchValue = MiddleLimitSwitch.get();
     SensorStatus.kRightLimitSwitchValue = RightLimitSwitch.get();
-    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition()*ElevatorConstants.kElevatorGearRatio*ElevatorConstants.kGearDiameter;
+    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition()*ElevatorConstants.kElevatorGearRatio*ElevatorConstants.kSprocketCircumference*2;// the times two is bc its 2 stage
   }
 
   @Override
