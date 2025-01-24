@@ -14,12 +14,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.subsystems.CoralDispenserSubsytem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class RobotContainer {
 //Add subsystems below this comment
 
-ElevatorSubsystem elevatorSubsystem;
+ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+CoralDispenserSubsytem coralDispenserSubsytem = new CoralDispenserSubsytem();
 
 //Make sure this xbox controller is correct and add driver sticks
   XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);

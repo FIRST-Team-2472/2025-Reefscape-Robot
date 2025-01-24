@@ -23,8 +23,8 @@ public final class Constants {
         public static final double kClimberGearRatio = 1; // change later
     }
     public static final class CoralDispenserConstants {
-        public static final int kLeftMotorID = 0; // change later
-        public static final int kRightMotorID = 0; // change later
+        public static final int kLeftMotorID = 1; // change later
+        public static final int kRightMotorID = 2; // change later it breaks if they are the same
     }
 
     public static final class ModuleConstants {
@@ -174,8 +174,8 @@ public final class Constants {
         public static final int kPigeonID = 0;
 
         public static int kLeftLimitSwitchID = 0;// set later
-        public static int kMiddleLimitSwitchID = 0;// set later
-        public static int kRightLimitSwitchID = 0;// set later
+        public static int kMiddleLimitSwitchID = 1;// set later it will break if they are the same number
+        public static int kRightLimitSwitchID = 2;// set later
     }
 
     public static class SensorStatus {
