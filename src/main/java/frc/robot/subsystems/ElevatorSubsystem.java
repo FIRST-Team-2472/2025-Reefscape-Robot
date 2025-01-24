@@ -17,6 +17,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -35,6 +36,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
+  public void runElevatorMotor(double powerPercent){
+    elevatorMotor.set(powerPercent);
+  }
 
   @Override
   public void periodic() {
@@ -42,7 +46,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SensorStatus.kLeftLimitSwitchValue = LeftLimitSwitch.get();
     SensorStatus.kMiddleLimitSwitchValue = MiddleLimitSwitch.get();
     SensorStatus.kRightLimitSwitchValue = RightLimitSwitch.get();
-    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition()*SensorConstants.kElevatorGearRatio*SensorConstants.kGearDiameter;
+    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition()*ElevatorConstants.kElevatorGearRatio*ElevatorConstants.kSprocketCircumference*2;// the times two is bc its 2 stage
   }
 
   @Override

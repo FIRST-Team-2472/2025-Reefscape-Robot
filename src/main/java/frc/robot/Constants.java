@@ -8,6 +8,32 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class ElevatorConstants {
         public static final int kElevatorMotorID = 0; // change later
+        public static final double kElevatorGearRatio = 1/20; // 20 rotations of the motor to one shaft rotation
+        public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
+
+        public static final double kElevatorL4Height = 0;// set later
+        public static final double kElevatorL3Height = 0;// set later
+        public static final double kElevatorL2Height = 0;// set later
+        public static final double kElevatorL1Height = 0;// set later
+
+        public static final double kElevatorMaxHeight = 0;// set later
+    }
+    public static final class ClimberConstants {
+        public static final int kClimberMotorRightID = 0; // change later
+        public static final int kClimberMotorLeftID = 0; // change later
+        
+        public static final double kClimberGearRatio = 1; // change later
+        public static final double kClimberOutAngle = 90; // change later
+        public static final double kClimberInAngle = 270; // change later
+    }
+    public static final class CoralDispenserConstants {
+        public static final int kLeftMotorID = 1; // change later
+        public static final int kRightMotorID = 2; // change later it breaks if they are the same
+    }
+    public static final class AlgaeConstants {
+        public static final int kPivotMotorID = 0;
+        public static final double kPivotGearRatio = 1/2;
+        public static final int kSpinMotorID = 0;
     }
 
     public static final class ModuleConstants {
@@ -149,24 +175,34 @@ public final class Constants {
         public static final int kRightDriverRotAxis = 0;
 
         // area were joysticks will not activate
-        public static final double kDeadband = 0.1;
+        public static final double kXboxControllerDeadband = 0.1;
+        public static final double kFlightControllerDeadband = 0.05;
     }
 
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
         public static int kLeftLimitSwitchID = 0;// set later
-        public static int kMiddleLimitSwitchID = 0;// set later
-        public static int kRightLimitSwitchID = 0;// set later
-
-        public static double kElevatorGearRatio = 0;// set later
-        public static double kGearDiameter = 0;// set later
+        public static int kMiddleLimitSwitchID = 1;// set later it will break if they are the same number
+        public static int kRightLimitSwitchID = 2;// set later
+        public static int kAlgeaABSEncoderDIOPort = 0; // set later
+        public static int kClimberABSEncoderDIOPort = 0; // set later
     }
 
     public static class SensorStatus {
         public static boolean kLeftLimitSwitchValue = false;
         public static boolean kMiddleLimitSwitchValue = false;
         public static boolean kRightLimitSwitchValue = false;
+
         public static double kElevatorHeight = 0;
+
+        public static double kTimeOfFlightDistance = 0;
+        public static double kClimberAngle = 0;
+        public static double kPivotAngle = 0;
     }
+    public static class LEDConstants {
+        public static int kChannel1 = 0;
+        public static int kChannel2 = 1;
+        public static int kChannel3 = 2;
+      }
 }
