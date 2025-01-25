@@ -6,11 +6,10 @@ import org.junit.jupiter.api.Test;
 
 public class TestExampleSubsystem {
 
-    
-    @Test
-    public void testExampleCondition(){
-        System.out.println("Test");
+  @Test
+  public void testExampleCondition() {
+    System.out.println("Test");
 
-        assertTrue(true);
-    }
+    assertTrue(true);
+  }
 }
