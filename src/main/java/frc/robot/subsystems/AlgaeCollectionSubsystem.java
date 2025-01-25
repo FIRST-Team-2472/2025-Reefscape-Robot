@@ -13,29 +13,37 @@ import frc.robot.Constants.SensorStatus;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class AlgaeCollectionSubsystem extends SubsystemBase {
-    private SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
-    private SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
+  // creating the motors.
+  private SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
+  private SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
 
-    private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
-    public AlgaeCollectionSubsystem() {
-        
-      SparkMaxConfig config = new SparkMaxConfig();
-          config.smartCurrentLimit(35);
-          config.idleMode(IdleMode.kBrake);
-      pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  // duty cycle encoders are absolute encoders that send pulses that are
+  // proportional to the current position of the encoder.
+  private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
 
-      SensorStatus.kPivotAngle = absoluteEncoder.get()*360;//updating it before its read, converting it to degrees as well
-    }
-    public void runPivotMotor(double powerPercent){
+  public AlgaeCollectionSubsystem() {
+    //configuring motors
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.smartCurrentLimit(35);
+    config.idleMode(IdleMode.kBrake);
+    pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    SensorStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read,
+                                                           // converting it to degrees as well
+  }
+
+  public void runPivotMotor(double powerPercent) {
     pivotmotor.set(powerPercent);
   }
-  public void runSpinMotor(double powerPercent){
+
+  public void runSpinMotor(double powerPercent) {
     pivotmotor.set(powerPercent);
   }
-     @Override
+
+  @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kPivotAngle = absoluteEncoder.get()*360;// converting it to degrees
+    SensorStatus.kPivotAngle = absoluteEncoder.get() * 360;// converting it to degrees
   }
 }

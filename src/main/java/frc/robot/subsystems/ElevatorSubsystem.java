@@ -17,13 +17,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  
-  private SparkMax elevatorMotor = new SparkMax(ElevatorConstants.kElevatorMotorID, MotorType.kBrushless);
 
+  private SparkMax elevatorMotor = new SparkMax(ElevatorConstants.kElevatorMotorID, MotorType.kBrushless);
+  // Limit Switches used as kill switches for mechanical safety
   private DigitalInput LeftLimitSwitch = new DigitalInput(SensorConstants.kLeftLimitSwitchID);
   private DigitalInput MiddleLimitSwitch = new DigitalInput(SensorConstants.kMiddleLimitSwitchID);
   private DigitalInput RightLimitSwitch = new DigitalInput(SensorConstants.kRightLimitSwitchID);
@@ -36,7 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
-  public void runElevatorMotor(double powerPercent){
+
+  public void runElevatorMotor(double powerPercent) {
     elevatorMotor.set(powerPercent);
   }
 
@@ -46,7 +46,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SensorStatus.kLeftLimitSwitchValue = LeftLimitSwitch.get();
     SensorStatus.kMiddleLimitSwitchValue = MiddleLimitSwitch.get();
     SensorStatus.kRightLimitSwitchValue = RightLimitSwitch.get();
-    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition()*ElevatorConstants.kElevatorGearRatio*ElevatorConstants.kSprocketCircumference*2;// the times two is bc its 2 stage
+    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorGearRatio
+        * ElevatorConstants.kSprocketCircumference * 2;// the times two is bc its 2 stage
   }
 
   @Override
