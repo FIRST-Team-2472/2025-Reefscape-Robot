@@ -71,7 +71,6 @@ public class SwerveSubsystem extends SubsystemBase {
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
 
-
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
@@ -100,24 +99,29 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }).start();
     }
-    public SwerveSubsystem(Pigeon2 gyro, 
-        //SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, 
-        GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB, GenericEntry pitchSB) {
+
+    public SwerveSubsystem(Pigeon2 gyro,
+            // SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft,
+            // SwerveModule backRight,
+            GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB,
+            GenericEntry pitchSB) {
         this.gyro = gyro;
-        /* 
-        this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
-        this.backLeft = backLeft;
-        this.backRight = backRight;
-        */
+        /*
+         * this.frontLeft = frontLeft;
+         * this.frontRight = frontRight;
+         * this.backLeft = backLeft;
+         * this.backRight = backRight;
+         */
         this.headingShuffleBoard = headingShuffleBoard;
         this.odometerShuffleBoard = odometerShuffleBoard;
         this.rollSB = rollSB;
         this.pitchSB = pitchSB;
     }
-    public SwerveDriveOdometry getOdometer(){
+
+    public SwerveDriveOdometry getOdometer() {
         return odometer;
     }
+
     // Just a quick method that zeros the IMU.
     public void zeroHeading() {
         gyro.setYaw(0);
@@ -206,7 +210,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
-    public void zeroOdometry(){
+    public void zeroOdometry() {
         odometer.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d());
     }
 
@@ -224,16 +228,17 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
         // Converts robot speeds to speeds relative to field
-        //System.out.print(" Heading :" + getHeading());
+        // System.out.print(" Heading :" + getHeading());
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, getRotation2d());
-        
-        //System.out.print(" ChassisSpeeds: (" + chassisSpeeds.vxMetersPerSecond + ", " + chassisSpeeds.vyMetersPerSecond + ")");
+
+        // System.out.print(" ChassisSpeeds: (" + chassisSpeeds.vxMetersPerSecond + ", "
+        // + chassisSpeeds.vyMetersPerSecond + ")");
 
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-        //System.out.println(" ModuleStates: " + moduleStates[0].speedMetersPerSecond);
+        // System.out.println(" ModuleStates: " + moduleStates[0].speedMetersPerSecond);
 
         // Output each module states to wheels
         setModuleStates(moduleStates);
@@ -247,7 +252,6 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
-
     public boolean isAtPoint(Translation2d targetDrivePos) {
         return getPose().getTranslation().getDistance(targetDrivePos) //
                 <= TargetPosConstants.kAcceptableDistanceError; //
@@ -257,8 +261,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return Math.abs(getRotation2d().minus(angle).getDegrees()) //
                 <= TargetPosConstants.kAcceptableAngleError;
     }
-    
-
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // if their speed is larger then the physical max speed, it reduces all speeds
@@ -292,10 +294,13 @@ public class SwerveSubsystem extends SubsystemBase {
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
-        SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("frontLeft Encoder",
+                frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("frontRight Encoder",
+                frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("BackRight Encoder", backRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("BackRight Encoder",
+                backRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
 
         SmartDashboard.putNumber("read frontLeft Encoder", frontLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());

@@ -31,7 +31,6 @@ public class CoralDispenserCommand extends Command {
     public void end(boolean interrupted) {
     }
 
-    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         return false;

@@ -35,7 +35,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   /**
    * 
-   * @param power as -1 to 1 power for the motor positive is up and negative is
+   * @param powerPercent as -1 to 1 power for the motor positive is up and negative is
    *              down
    */
   public void runClimberMotors(double powerPercent) {
