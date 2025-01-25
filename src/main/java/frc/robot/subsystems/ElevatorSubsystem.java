@@ -4,25 +4,22 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.SensorStatus;
 
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-
-import edu.wpi.first.wpilibj.DigitalInput;
-
 public class ElevatorSubsystem extends SubsystemBase {
-  
-  private SparkMax elevatorMotor = new SparkMax(ElevatorConstants.kElevatorMotorID, MotorType.kBrushless);
+
+  private SparkMax elevatorMotor =
+      new SparkMax(ElevatorConstants.kElevatorMotorID, MotorType.kBrushless);
 
   private DigitalInput LeftLimitSwitch = new DigitalInput(SensorConstants.kLeftLimitSwitchID);
   private DigitalInput MiddleLimitSwitch = new DigitalInput(SensorConstants.kMiddleLimitSwitchID);
@@ -36,7 +33,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
-  public void runElevatorMotor(double powerPercent){
+
+  public void runElevatorMotor(double powerPercent) {
     elevatorMotor.set(powerPercent);
   }
 
@@ -46,7 +44,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     SensorStatus.kLeftLimitSwitchValue = LeftLimitSwitch.get();
     SensorStatus.kMiddleLimitSwitchValue = MiddleLimitSwitch.get();
     SensorStatus.kRightLimitSwitchValue = RightLimitSwitch.get();
-    SensorStatus.kElevatorHeight = elevatorMotor.getEncoder().getPosition()*ElevatorConstants.kElevatorGearRatio*ElevatorConstants.kSprocketCircumference*2;// the times two is bc its 2 stage
+    SensorStatus.kElevatorHeight =
+        elevatorMotor.getEncoder().getPosition()
+            * ElevatorConstants.kElevatorGearRatio
+            * ElevatorConstants.kSprocketCircumference
+            * 2; // the times two is bc its 2 stage
   }
 
   @Override

@@ -1,11 +1,21 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2025.1.1"
+
+    // Added Spotless plugin (minimal change)
+    id "com.diffplug.spotless" version "6.14.1"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+// Added Spotless configuration (minimal change)
+spotless {
+    java {
+        googleJavaFormat('1.25.0')
+    }
 }
 
 sourceSets {

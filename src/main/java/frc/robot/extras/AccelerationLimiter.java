@@ -29,7 +29,8 @@ public class AccelerationLimiter {
    *     second. This is expected to be negative.
    * @param initialValue The initial value of the input.
    */
-  public AccelerationLimiter(double positiveRateLimit, double negativeRateLimit, double initialValue) {
+  public AccelerationLimiter(
+      double positiveRateLimit, double negativeRateLimit, double initialValue) {
     m_positiveRateLimit = positiveRateLimit;
     m_negativeRateLimit = negativeRateLimit;
     m_prevVal = initialValue;
@@ -84,4 +85,3 @@ public class AccelerationLimiter {
     m_negativeRateLimit = negativeRateLimit;
   }
 }
-
