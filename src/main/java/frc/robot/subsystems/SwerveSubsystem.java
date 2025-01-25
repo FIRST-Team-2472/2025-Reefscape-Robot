@@ -137,6 +137,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
         return temp.vxMetersPerSecond;
     }
+
+    /* public ChassisSpeeds getChassisSpeedsRobotRelative() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
+    } */
+
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }

@@ -74,7 +74,6 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
               swerveSubsystem // Reference to this subsystem to set requirements
           );
-          System.out.println("Ran this line");
     }
   }
 

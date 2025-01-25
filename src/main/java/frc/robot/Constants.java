@@ -121,17 +121,17 @@ public final class Constants {
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
 
-        public static final double TRANSLATION_KP = 0; //1.34
-        public static final double TRANSLATION_KI = 0; //0.164
+        public static final double TRANSLATION_KP = 1.9; 
+        public static final double TRANSLATION_KI = 0.04; 
         public static final double TRANSLATION_KD = 0;
                     
-        public static final double ROTATION_KP = .045;
+        public static final double ROTATION_KP = 0.1;
         public static final double ROTATION_KI = 0;
         public static final double ROTATION_KD = 0;
                     
-        public static final double MAX_MODULE_SPEED = 4.5;
-        public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth,
-            DriveConstants.kWheelBase) / 2;
+        public static final double MAX_MODULE_SPEED = 2;
+        public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth/2,
+            DriveConstants.kWheelBase/2);
 
         public static final PPHolonomicDriveController HOLONOMIC_PATH_FOLLOWER_CONFIG = new PPHolonomicDriveController(
         new PIDConstants(
@@ -141,8 +141,7 @@ public final class Constants {
         new PIDConstants(
             ROTATION_KP,
             ROTATION_KI,
-            ROTATION_KD), // Rotation PID constants
-        .02 //Time between code runs
+            ROTATION_KD) //Time between code runs
         );
     
         public static final Rotation2d kHeadingOffset = Rotation2d.fromDegrees(90);
