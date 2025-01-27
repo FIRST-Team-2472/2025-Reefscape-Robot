@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.ColorSensorV3;
 import frc.robot.Constants;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -12,6 +15,8 @@ public class LEDSubsystem extends SubsystemBase {
     private LEDStatusMode currentStatusMode;
 
     private boolean disableLEDs;
+
+    public Color color;
 
     public LEDSubsystem() {
         // DIO outputs
@@ -67,6 +72,31 @@ public class LEDSubsystem extends SubsystemBase {
         channel2.set((code & 2) > 0); // 2^1
         channel3.set((code & 4) > 0); // 2^2
 
+        switch(code) {
+            case (1): 
+            color = new Color(150,0,0);
+            break;
+            case(2):
+            color = new Color(0,150,0);
+            break;
+            case (3): 
+            color = new Color(0,0,150);
+            break;
+            case (4): 
+            color = new Color(150,150,0);
+            break;
+            case (5): 
+            color = new Color(150,0,150);
+            break;
+            case (6): 
+            color = new Color(0,150,150);
+            break;
+            case (7): 
+            color = new Color(150,150,150);
+            break;
+            default:
+            color = new Color(0,0,0);
+        }
     }
 
     public void LEDMode(LEDStatusMode code) {

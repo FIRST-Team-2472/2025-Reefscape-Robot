@@ -69,27 +69,12 @@ public class SwerveSubsystem extends SubsystemBase {
     // but this is the original.
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), getModulePositions());
-    private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
+    public GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
 
-    private static final SendableChooser<String> colorChooser = new SendableChooser<>();
-    private final String red = "Red", blue = "Blue";
+    public static final SendableChooser<String> colorChooser = new SendableChooser<>();
+    public final String red = "Red", blue = "Blue";
 
     public SwerveSubsystem() {
-        // Gets tabs from Shuffleboard
-        ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
-        ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
-
-        // Sets up the different displays on suffle board
-        headingShuffleBoard = programmerBoard.add("Robot Heading", 0).getEntry();
-        odometerShuffleBoard = programmerBoard.add("Robot Location", "").getEntry();
-        rollSB = programmerBoard.add("Roll", 0).getEntry();
-        pitchSB = programmerBoard.add("Pitch", 0).getEntry();
-
-        // makes a team color choser
-        colorChooser.addOption(red, red);
-        colorChooser.addOption(blue, blue);
-        driverBoard.add("Team Chooser", colorChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
-
         // zeros heading after pigeon boots up
         new Thread(() -> {
             try {

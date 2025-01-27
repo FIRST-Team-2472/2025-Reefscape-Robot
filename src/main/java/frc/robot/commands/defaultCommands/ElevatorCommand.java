@@ -2,6 +2,9 @@ package frc.robot.commands.defaultCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDStatusMode;
+
 import java.util.function.Supplier;
 import frc.robot.PID;
 import frc.robot.Constants.ElevatorConstants;
@@ -11,6 +14,7 @@ import frc.robot.Constants.SensorStatus;
 
 public class ElevatorCommand extends Command {
     ElevatorSubsystem elevatorSubsystem;
+    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     Supplier<Double> joystickY;
     PID elevatorPID;
     double elevatorSetHeight = 0;
@@ -49,14 +53,22 @@ public class ElevatorCommand extends Command {
         elevatorSetHeight += y;
 
         // automated presets
-        if (XboxYPressed.get())
+        if (XboxYPressed.get()) {
+            ledSubsystem.LEDMode(LEDStatusMode.BLUE);
             elevatorSetHeight = ElevatorConstants.kElevatorL4Height;
-        if (XboxBPressed.get())
+        }
+        if (XboxBPressed.get()) {
+            ledSubsystem.LEDMode(LEDStatusMode.BLUE);
             elevatorSetHeight = ElevatorConstants.kElevatorL3Height;
-        if (XboxAPressed.get())
+        }
+        if (XboxAPressed.get()) {
+            ledSubsystem.LEDMode(LEDStatusMode.BLUE);
             elevatorSetHeight = ElevatorConstants.kElevatorL2Height;
-        if (XboxXPressed.get())
+        }
+        if (XboxXPressed.get()) {
+            ledSubsystem.LEDMode(LEDStatusMode.BLUE);
             elevatorSetHeight = ElevatorConstants.kElevatorL1Height;
+        }
 
         // Makes so cannot go past physical limits or below 0
         if (elevatorSetHeight > ElevatorConstants.kElevatorMaxHeight)
