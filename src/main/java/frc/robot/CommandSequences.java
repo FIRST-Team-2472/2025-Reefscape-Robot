@@ -25,23 +25,80 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
-    // Create a list of waypoints from poses. Each pose represents one waypoint.
-    // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
-        new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-        new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
-    );
 
-    PathConstraints constraints = new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared); // The constraints for this path.
-    // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
+    Pose2d[] miscellaneousNodes = new Pose2d[4];
+    Pose2d[] importantNodes = new Pose2d[6];
+    Pose2d[] startingNodes = new Pose2d[5];
+    Pose2d[] collectingNearNodes = new Pose2d[3];
+    Pose2d[] shootingNearNodes = new Pose2d[3];
 
-    // Create the path using the waypoints created above
-    PathPlannerPath path = new PathPlannerPath(
-        waypoints,
-        constraints,
-        null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    );
+    public Command test(SwerveSubsystem swerveSubsystem) {
+
+        swerveSubsystem.setOdometry(simplePose(2, 5.55, 0));
+
+        return new SequentialCommandGroup(
+            generatePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4]));
+    }
+
+        // generates a path via points
+        private static Command generatePath(SwerveSubsystem swerveSubsystem, Pose2d startPoint,
+        List<Waypoint> midPoints,
+        Pose2d endPoint) {
+    // 1. Create trajectory settings
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+            AutoConstants.kMaxSpeedMetersPerSecond,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
+
+    Pose2d driveStartPoint = startPoint;
+    Pose2d driveEndPoint = endPoint;
+    List<Translation2d> driveMidPoints = new ArrayList<Translation2d>();
+    for (int i = 0; i < midPoints.size(); i++)
+        driveMidPoints.add(midPoints.get(i).anchor());
+
+    // 2. Generate trajectory
+    // Generates trajectory. Need to feed start point, a series of inbetween points,
+    // and end point
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+            driveStartPoint,
+            driveMidPoints,
+            driveEndPoint,
+            trajectoryConfig);
+
+    // 3. Define PID controllers for tracking trajectory
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // 4. Construct command to follow trajectory
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+            trajectory,
+            // swerveSubsystm::getPose is same as () -> swerveSubsystem.getPose()
+            swerveSubsystem::getPose,
+            DriveConstants.kDriveKinematics,
+            xController,
+            yController,
+            thetaController,
+            swerveSubsystem::setModuleStates,
+            swerveSubsystem);
+
+    // 5. Add some init and wrap-up, and return everything
+    // creates a Command list that will reset the Odometry, then move the path, then
+    // stop
+    return new SequentialCommandGroup(
+            swerveControllerCommand,
+            new InstantCommand(() -> swerveSubsystem.stopModules()));
+    }
+
+    public Pose2d simplePose(double x, double y, double angleDegrees) {
+        return new Pose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
+    }
+    public static Rotation2d teamChangeAngle(double degrees){
+            if(SwerveSubsystem.isOnRed())
+                return  Rotation2d.fromDegrees(-degrees+180);
+        return  Rotation2d.fromDegrees(degrees);
+    }
 
 }
