@@ -187,6 +187,8 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
+        public static final double sizeOfFieldMeters = 16.5;
+
         public static int kLeftLimitSwitchID = 0;// set later
         public static int kMiddleLimitSwitchID = 0;// set later
         public static int kRightLimitSwitchID = 0;// set later
