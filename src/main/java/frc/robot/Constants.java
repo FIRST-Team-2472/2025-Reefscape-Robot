@@ -169,9 +169,6 @@ public final class Constants {
             ROTATION_KI,
             ROTATION_KD) //Time between code runs
         );
-    
-        public static final Rotation2d kHeadingOffset = Rotation2d.fromDegrees(90);
-        public static final Rotation2d kAdjustedHeading = SwerveSubsystem.gyro.getRotation2d().minus(kHeadingOffset);
     }
 
     public static final class TargetPosConstants {
