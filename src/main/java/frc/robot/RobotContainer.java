@@ -1,4 +1,5 @@
 // Copyright (c) FIRST and other WPILib contributors.
+
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -8,6 +9,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -17,7 +19,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.SwerveJoystickCmd;
+
+import frc.robot.subsystems.CoralDispenserSubsytem;
+import frc.robot.commands.defaultCommands.ElevatorCommand;
+import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
+
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 
@@ -30,12 +37,15 @@ public class RobotContainer {
 
   private final CommandSequences commandSequences = new CommandSequences();
 
-//Add subsystems below this comment
-private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  //Add subsystems below this comment
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-//Make sure this xbox controller is correct and add driver sticks
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kXboxControllerPort);
+  ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  CoralDispenserSubsytem coralDispenserSubsytem = new CoralDispenserSubsytem();
+
+  //Make sure this xbox controller is correct and add driver sticks
+  XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);
+
 
   public static Joystick leftJoystick = new Joystick(OperatorConstants.kLeftJoystickPort);
   public static Joystick rightJoystick = new Joystick(OperatorConstants.kRightJoystickPort);
@@ -48,36 +58,19 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
       ()-> leftJoystick.getRawButton(1)
     ));
 
-    configureBindings();
-
     m_chooser.addOption(testAuto, testAuto);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    
-    try{
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      // Handle exception as needed
-      e.printStackTrace();
-    }
-    if(config != null){
-      AutoBuilder.configure(
-              () -> swerveSubsystem.getPose(), // Robot pose supplier for auto (correct range -180-180)
-              swerveSubsystem ::setOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-              () -> swerveSubsystem.getChassisSpeedsRobotRelative(), // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-              swerveSubsystem :: runModulesRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-              AutoConstants.HOLONOMIC_PATH_FOLLOWER_CONFIG,
-              config,
-              () -> SwerveSubsystem.isOnRed(),
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
+    () -> xboxController.getLeftY(), 
+    () -> xboxController.getYButton(), 
+    () -> xboxController.getBButton(), 
+    () -> xboxController.getAButton(), 
+    () -> xboxController.getXButton()));
 
-              swerveSubsystem // Reference to this subsystem to set requirements
-          );
-    }
+    configureBindings();
   }
 
   private void configureBindings() {
