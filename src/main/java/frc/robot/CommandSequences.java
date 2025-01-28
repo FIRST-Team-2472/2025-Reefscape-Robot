@@ -32,9 +32,14 @@ public class CommandSequences {
     Pose2d[] collectingNearNodes = new Pose2d[3];
     Pose2d[] shootingNearNodes = new Pose2d[3];
 
+    public CommandSequences() {
+    startingNodes[0] = simplePose(7.589, 3.929, 0);
+    startingNodes[4] = simplePose(5.589, 3.929, 0);
+    }
+
     public Command test(SwerveSubsystem swerveSubsystem) {
 
-        swerveSubsystem.setOdometry(simplePose(2, 5.55, 0));
+        swerveSubsystem.setOdometry(simplePose(7.589, 3.929, 0));
 
         return new SequentialCommandGroup(
             generatePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4]));

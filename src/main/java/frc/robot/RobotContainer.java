@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -26,6 +27,8 @@ public class RobotContainer {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   RobotConfig config;
+
+  private final CommandSequences commandSequences = new CommandSequences();
 
 //Add subsystems below this comment
 private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -85,7 +88,10 @@ private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
     m_autoSelected = m_chooser.getSelected();
 
     if(m_autoSelected == testAuto)
-        return AutoBuilder.buildAuto("test");
+        //return AutoBuilder.buildAuto("test");
+        return new SequentialCommandGroup(
+          commandSequences.test(swerveSubsystem)
+        );
     return null;
   }
 }
