@@ -60,7 +60,7 @@ public class ElevatorCommand extends Command{
     if (elevatorSetHeight < 0)
         elevatorSetHeight = 0;
 
-    elevatorSubsystem.runElevatorMotor(elevatorMotorMotorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
+    elevatorSubsystem.runElevatorMotors(elevatorMotorMotorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
   }
 
   // Called once the command ends or is interrupted.
