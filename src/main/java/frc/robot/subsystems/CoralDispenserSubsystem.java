@@ -18,12 +18,12 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class CoralDispenserSubsytem extends SubsystemBase{
+public class CoralDispenserSubsystem extends SubsystemBase{
     private SparkMax leftMotor = new SparkMax(CoralDispenserConstants.kLeftMotorID, MotorType.kBrushless);
     private SparkMax rightMotor = new SparkMax(CoralDispenserConstants.kRightMotorID, MotorType.kBrushless);
     VL53L4CD timeOfFlightSensor = new VL53L4CD(I2C.Port.kOnboard);
     
-    public CoralDispenserSubsytem(){
+    public CoralDispenserSubsystem(){
 
         SparkMaxConfig config = new SparkMaxConfig();
             config.smartCurrentLimit(35);
