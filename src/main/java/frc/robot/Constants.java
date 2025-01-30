@@ -196,6 +196,10 @@ public final class Constants {
 
         public static double kElevatorHeight = 0;
 
+        public static double pigeonYaw = 0;
+        public static double pigeonPitch = 0;
+        public static double pigeonRoll = 0;
+
         public static double kTimeOfFlightDistance = 0;
         public static double kClimberAngle = 0;
         public static double kPivotAngle = 0;

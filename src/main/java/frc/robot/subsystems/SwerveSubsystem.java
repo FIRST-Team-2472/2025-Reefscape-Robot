@@ -63,6 +63,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+    
+    LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
 
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
@@ -301,5 +303,9 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());
         SmartDashboard.putNumber("read BackLeft Encoder", backLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
+
+        limeLightSubsystem.periodic();
+        SmartDashboard.putNumber("AprilTagArea", limeLightSubsystem.getArea(0));
+        SmartDashboard.putNumber("AprilTagDist", limeLightSubsystem.getDistance(0));
     }
 }
