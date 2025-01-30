@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 
-
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
 import frc.robot.subsystems.SwerveSubsystem;
@@ -25,7 +24,6 @@ public class RobotContainer {
   //Add subsystems below this comment
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-
   //Make sure this xbox controller is correct and add driver sticks
   XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);
 
@@ -34,6 +32,12 @@ public class RobotContainer {
   public static Joystick rightJoystick = new Joystick(OperatorConstants.kRightJoystickPort);
 
   public RobotContainer() {
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
+      ()-> leftJoystick.getY(),
+      ()-> -leftJoystick.getX(),
+      ()-> rightJoystick.getX()
+    ));
+
     configureBindings();
   }
 
