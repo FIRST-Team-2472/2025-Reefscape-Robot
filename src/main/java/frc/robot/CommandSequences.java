@@ -27,19 +27,23 @@ import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
-
-    PosPose2d[] miscellaneousNodes = new PosPose2d[4];
-    PosPose2d[] importantNodes = new PosPose2d[6];
-    PosPose2d[] startingNodes = new PosPose2d[5];
-    PosPose2d[] collectingNearNodes = new PosPose2d[3];
-    PosPose2d[] shootingNearNodes = new PosPose2d[3];
+    PosPose2d[] startingNodes = new PosPose2d[6];
+    PosPose2d[] reefNodes = new PosPose2d[6];
 
     public CommandSequences() {
-    startingNodes[0] = simplePose(7.589, 3.929, 0);
-    startingNodes[1] = simplePose(0, 0, 0);
-    startingNodes[2] = simplePose(0, 0, 0);
-    startingNodes[3] = simplePose(0, 0, 0);
-    startingNodes[4] = simplePose(5.589, 3.929, 0);
+        startingNodes[0] = simplePose(7.671, 7.279, 0); //Cage position 1
+        startingNodes[1] = simplePose(7.671, 6.145, 0); //Cage Position 2
+        startingNodes[2] = simplePose(7.671, 5.077, 0); //Cage Position 3
+        startingNodes[3] = simplePose(7.671, 3.929, 0); //Cage Position 4
+        startingNodes[4] = simplePose(7.671, 1.898, 0); //Cage Position 5
+        startingNodes[5] = simplePose(7.671, 0.794, 0); //Cage Position 6
+
+        reefNodes[0] = simplePose(6.055, 4.025, 0); //Reef Position 1
+        reefNodes[1] = simplePose(5.329, 5.366, 60); //Reef Position 2
+        reefNodes[2] = simplePose(3.676, 5.374, 120); //Reef Position 3
+        reefNodes[3] = simplePose(2.950, 4.025, 180); //Reef Position 4
+        reefNodes[4] = simplePose(3.706, 2.646, 240); //Reef Position 5
+        reefNodes[5] = simplePose(5.277, 2.654, 300); //Reef Position 6
     }
 
     public Command test(SwerveSubsystem swerveSubsystem) {
