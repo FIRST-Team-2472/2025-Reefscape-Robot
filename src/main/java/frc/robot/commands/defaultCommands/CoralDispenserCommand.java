@@ -3,13 +3,13 @@ package frc.robot.commands.defaultCommands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralDispenserSubsytem;
+import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class CoralDispenserCommand extends Command{
-    CoralDispenserSubsytem coralDispenserSubsytem;
+    CoralDispenserSubsystem coralDispenserSubsytem;
     Supplier<Boolean> xboxControllerRightTrigger;
 
-    public CoralDispenserCommand(CoralDispenserSubsytem coralDispenserSubsytem, Supplier<Boolean> xboxControllerRightTrigger){
+    public CoralDispenserCommand(CoralDispenserSubsystem coralDispenserSubsytem, Supplier<Boolean> xboxControllerRightTrigger){
         this.coralDispenserSubsytem = coralDispenserSubsytem;
         this.xboxControllerRightTrigger = xboxControllerRightTrigger;
         addRequirements(coralDispenserSubsytem);
