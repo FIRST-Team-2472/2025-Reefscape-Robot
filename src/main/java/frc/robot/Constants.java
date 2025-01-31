@@ -4,6 +4,8 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import java.lang.System.Logger.Level;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -13,6 +15,19 @@ import frc.robot.subsystems.SwerveSubsystem;
 public final class Constants {
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+
+    /**
+     * The LoggingConstants class holds the logging configuration for the robot.
+     * 
+     * <p>currentLogLevel: The current logging level for the robot's logging system.
+     * The log level determines the severity of messages that will be logged.
+     * Common log levels include DEBUG, INFO, WARN, and ERROR, with DEBUG being the most
+     * verbose and ERROR being the least.
+     */
+    public static final class LoggingConstants{
+        public static final Level CURRENT_LOG_LEVEL = Level.INFO;
+    }
+    
     public static final class ElevatorConstants {
         public static final int kElevatorMotorID = 0; // change later
         public static final double kElevatorGearRatio = 1/20; // 20 rotations of the motor to one shaft rotation
