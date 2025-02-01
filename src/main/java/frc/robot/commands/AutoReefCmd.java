@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.subsystems.CoralDispenserSubsytem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -10,7 +11,8 @@ public class AutoReefCmd extends Command{
     CoralDispenserSubsytem coralDispenserSubsytem;
     ElevatorSubsystem elevatorSubsystem;
     SwerveSubsystem swerveSubsystem;
-    double tx, ty;
+    PoseEstimate robotPosition; 
+    
     public AutoReefCmd(CoralDispenserSubsytem coralDispenserSubsytem, ElevatorSubsystem elevatorSubsystem, SwerveSubsystem swerveSubsystem) {
         this.coralDispenserSubsytem = coralDispenserSubsytem;
         this.elevatorSubsystem = elevatorSubsystem;
@@ -20,10 +22,8 @@ public class AutoReefCmd extends Command{
 
     @Override
     public void initialize() {
-        tx = LimelightHelpers.getTX("limelight-objFeed"); 
-        System.out.println("tx: " + tx);
-        ty = -LimelightHelpers.getTY("limelight-intake"); // + IntakeLimelightConstants.kIntakeLimelightTYAngleOffset;
-        System.out.println("ty: " + ty);
+        robotPosition = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limlight-objFeed");
+
         
 
     }
