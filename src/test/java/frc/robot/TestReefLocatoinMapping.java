@@ -1,45 +1,25 @@
-package frc.robot.commands;
+package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.CommandSequences;
-import frc.robot.subsystems.CoralDispenserSubsytem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AutoReefCmd extends Command{
-    CommandSequences commandSequences;
-    CoralDispenserSubsytem coralDispenserSubsytem;
-    ElevatorSubsystem elevatorSubsystem;
-    SwerveSubsystem swerveSubsystem;
-    int T, Q, P, reefLevel;     
+import org.junit.jupiter.api.Test;
+
+public class TestReefLocatoinMapping {
+    int T, Q, P;     
     double X, Y; 
-    Pose2d reefLocation; 
-    Command placeCoralOnReef;
-    public AutoReefCmd(CommandSequences commandSequences, CoralDispenserSubsytem coralDispenserSubsytem, ElevatorSubsystem elevatorSubsystem, SwerveSubsystem swerveSubsystem, int reefLevel) {
-        this.commandSequences = commandSequences;
-        this.coralDispenserSubsytem = coralDispenserSubsytem;
-        this.elevatorSubsystem = elevatorSubsystem;
-        this.swerveSubsystem = swerveSubsystem;
-        this.reefLevel = reefLevel;
-        addRequirements(coralDispenserSubsytem, elevatorSubsystem, swerveSubsystem);
-    }
+    String reefLocation;       
 
-    @Override
-    public void initialize() {      
-        X = swerveSubsystem.getOdometer().getPoseMeters().getTranslation().getX();
-        Y = swerveSubsystem.getOdometer().getPoseMeters().getTranslation().getX();
+    @Test
+    public void testReefLocationMapping() {
+        X = 3.5;
+        Y = 5.05;
         X-= 4.5;
         Y-= 4.05;
         Q = findQ();
         T = findT();
         P = findP();
-        placeCoralOnReef = commandSequences.placeCoralOnReef(swerveSubsystem, elevatorSubsystem, coralDispenserSubsytem, reefLocation, reefLevel);
-        placeCoralOnReef.schedule();
-}
-    @Override
-    public boolean isFinished() {
-        return true;
+        assertEquals(12, P);
     }
 
     private int findQ() {
@@ -69,9 +49,9 @@ public class AutoReefCmd extends Command{
             return 3;
         } else {
             return 2;
-        }
-    }
 
+    }
+    }
     private int findP() {
         if (Q == 2){
             if (T == 3){

@@ -18,12 +18,15 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
+import frc.robot.subsystems.CoralDispenserSubsytem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
@@ -40,12 +43,12 @@ public class CommandSequences {
         startingNodes[4] = simplePose(7.671, 1.898, 0); //Cage Position 5
         startingNodes[5] = simplePose(7.671, 0.794, 0); //Cage Position 6
 
-        reefNodes[0] = simplePose(6.055, 4.025, 0); //Reef Position 1
-        reefNodes[1] = simplePose(5.329, 5.366, 60); //Reef Position 2
-        reefNodes[2] = simplePose(3.676, 5.374, 120); //Reef Position 3
-        reefNodes[3] = simplePose(2.950, 4.025, 180); //Reef Position 4
-        reefNodes[4] = simplePose(3.706, 2.646, 240); //Reef Position 5
-        reefNodes[5] = simplePose(5.277, 2.654, 300); //Reef Position 6
+        reefNodes[0] = simplePose(6.055, 4.025, 180); //Reef Position 1
+        reefNodes[1] = simplePose(5.329, 5.366, 240); //Reef Position 2
+        reefNodes[2] = simplePose(3.676, 5.374, 300); //Reef Position 3
+        reefNodes[3] = simplePose(2.950, 4.025, 0); //Reef Position 4
+        reefNodes[4] = simplePose(3.706, 2.646, 60); //Reef Position 5
+        reefNodes[5] = simplePose(5.277, 2.654, 120); //Reef Position 6
 
         hpStations[0] = simplePose(1.127, 0.962, 54);
         hpStations[1] = simplePose(1.118, 7.106, 306);
@@ -120,5 +123,12 @@ public class CommandSequences {
         if(SwerveSubsystem.isOnRed())
                 return  Rotation2d.fromDegrees(-degrees+180);
         return  Rotation2d.fromDegrees(degrees);
+    }
+    public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
+    CoralDispenserSubsytem coralDispenserSubsytem, Pose2d reefPosition, int reefLevel){
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+            )        
+        );
     }
 }

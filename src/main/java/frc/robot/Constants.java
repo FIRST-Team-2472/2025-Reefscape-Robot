@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import java.lang.System.Logger.Level;
 
@@ -184,6 +185,21 @@ public final class Constants {
             ROTATION_KI,
             ROTATION_KD) //Time between code runs
         );
+    }
+
+    public static final class ReefConstants {
+        public static final Pose2d reefA = new Pose2d(3.17, 4.19, new Rotation2d(0));
+        public static final Pose2d reefB = new Pose2d(3.17, 3.86, new Rotation2d(0));
+        public static final Pose2d reefC = new Pose2d(3.69, 2.97, new Rotation2d(60));
+        public static final Pose2d reefD = new Pose2d(0, 0, new Rotation2d(60));
+        public static final Pose2d reefE = new Pose2d(0, 0, new Rotation2d(120));
+        public static final Pose2d reefF = new Pose2d(0, 0, new Rotation2d(120));
+        public static final Pose2d reefG = new Pose2d(0, 0, new Rotation2d(180));
+        public static final Pose2d reefH = new Pose2d(0, 0, new Rotation2d(180));
+        public static final Pose2d reefI = new Pose2d(0, 0, new Rotation2d(240));
+        public static final Pose2d reefJ = new Pose2d(0, 0, new Rotation2d(240));
+        public static final Pose2d reefK = new Pose2d(0, 0, new Rotation2d(300));
+        public static final Pose2d reefL = new Pose2d(0, 0, new Rotation2d(300));
     }
 
     public static final class TargetPosConstants {
