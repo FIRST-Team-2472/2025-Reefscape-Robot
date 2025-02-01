@@ -29,6 +29,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class CommandSequences {
     PosPose2d[] startingNodes = new PosPose2d[6];
     PosPose2d[] reefNodes = new PosPose2d[6];
+    PosPose2d[] hpStations = new PosPose2d[2];
+    PosPose2d[] processor = new PosPose2d[1];
 
     public CommandSequences() {
         startingNodes[0] = simplePose(7.671, 7.279, 0); //Cage position 1
@@ -44,6 +46,11 @@ public class CommandSequences {
         reefNodes[3] = simplePose(2.950, 4.025, 180); //Reef Position 4
         reefNodes[4] = simplePose(3.706, 2.646, 240); //Reef Position 5
         reefNodes[5] = simplePose(5.277, 2.654, 300); //Reef Position 6
+
+        hpStations[0] = simplePose(1.127, 0.962, 54);
+        hpStations[1] = simplePose(1.118, 7.106, 306);
+
+        processor[0] = simplePose(2, 7,90);
     }
 
     public Command test(SwerveSubsystem swerveSubsystem) {
@@ -51,7 +58,7 @@ public class CommandSequences {
         swerveSubsystem.setOdometry(simplePose(7.589, 3.929, 0));
 
         return new SequentialCommandGroup(
-            generatePath(swerveSubsystem, startingNodes[0], null, startingNodes[4]));
+            generatePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4]));
     }
 
     // generates a path via points
