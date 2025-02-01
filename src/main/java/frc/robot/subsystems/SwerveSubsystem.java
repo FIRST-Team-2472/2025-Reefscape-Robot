@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
@@ -63,8 +64,6 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetDegrees,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
-    
-    LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
 
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
@@ -294,6 +293,9 @@ public class SwerveSubsystem extends SubsystemBase {
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
+
+        Constants.SensorStatus.odometryBotPose = getOdometer().getPoseMeters();
+
         SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
@@ -303,8 +305,5 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());
         SmartDashboard.putNumber("read BackLeft Encoder", backLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
-
-        SmartDashboard.putNumber("AprilTagArea", limeLightSubsystem.getArea(0));
-        SmartDashboard.putNumber("AprilTagDist", limeLightSubsystem.getDistance(0));
     }
 }
