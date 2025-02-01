@@ -304,7 +304,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackLeft Encoder", backLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
 
-        limeLightSubsystem.periodic();
         SmartDashboard.putNumber("AprilTagArea", limeLightSubsystem.getArea(0));
         SmartDashboard.putNumber("AprilTagDist", limeLightSubsystem.getDistance(0));
     }

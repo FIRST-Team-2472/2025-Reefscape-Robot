@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -199,6 +200,9 @@ public final class Constants {
         public static double pigeonYaw = 0;
         public static double pigeonPitch = 0;
         public static double pigeonRoll = 0;
+
+        public static Pose2d[] LimeLightBotPoses;
+        public static double[] LimeLightConfidences;
 
         public static double kTimeOfFlightDistance = 0;
         public static double kClimberAngle = 0;
