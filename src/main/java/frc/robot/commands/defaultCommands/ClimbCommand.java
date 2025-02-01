@@ -61,12 +61,10 @@ public class ClimbCommand extends Command {
             y = climberPID.calculatePID(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
-        if (y != 0) {
-            ledSubsystem.LEDMode(LEDStatusMode.RED);
-        }
-        if (SensorStatus.kClimberAngle >= ClimberConstants.kClimberInAngle-20) {
-            ledSubsystem.LEDMode(LEDStatusMode.GREEN);
-        }
+        ledSubsystem.isClimbing(y != 0?true:false);
+        ledSubsystem.climbAtAngle(SensorStatus.kClimberAngle >= ClimberConstants.kClimberInAngle-20?true:false);
+        ledSubsystem.runningAutonomistCommand(anglingIn || anglingOut?true:false);
+        
         climberSusbsystem.runClimberMotors(y);
     }
 
