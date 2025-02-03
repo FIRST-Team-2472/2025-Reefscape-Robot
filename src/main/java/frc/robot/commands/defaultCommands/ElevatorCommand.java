@@ -12,7 +12,7 @@ import frc.robot.Constants.SensorStatus;
 public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     Supplier<Double> joystickY;
-   MotorPowerController elevatorMotorMotorPowerController;
+   MotorPowerController motorPowerController;
     double elevatorSetHeight = 0;
     Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed;
 
@@ -24,7 +24,7 @@ public class ElevatorCommand extends Command{
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-        elevatorMotorMotorPowerController = new MotorPowerController(0.0001, 0.0001, 0.0001, 10, 0, SensorStatus.kElevatorHeight, 0);
+        motorPowerController = new MotorPowerController(0.0083, 0.1, 0.5, 2, 1, SensorStatus.kElevatorHeight, 10);
     }
 
     //set height - need variable
@@ -43,6 +43,8 @@ public class ElevatorCommand extends Command{
     double y = joystickY.get();
     if(Math.abs(y) <= OperatorConstants.kXboxControllerDeadband)
         y = 0;
+    y *= .3; // remove this when it becomes automatic
+    /* 
     elevatorSetHeight += y;
 
     if(XboxYPressed.get())
@@ -60,7 +62,9 @@ public class ElevatorCommand extends Command{
     if (elevatorSetHeight < 0)
         elevatorSetHeight = 0;
 
-    elevatorSubsystem.runElevatorMotors(elevatorMotorMotorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
+    elevatorSubsystem.runElevatorMotors(-motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight)); //negative because up is reverse
+    */
+    elevatorSubsystem.runElevatorMotors(y); // remove this when it becomes automatic
   }
 
   // Called once the command ends or is interrupted.

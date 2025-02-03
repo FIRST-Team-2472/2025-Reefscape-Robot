@@ -22,12 +22,12 @@ public final class Constants {
     }
     
     public static final class ElevatorConstants {
-        public static final int kLeftElevatorMotorID = 0; // change later
-        public static final int kRightElevatorMotorID = 0; // change later
+        public static final int kLeftElevatorMotorID = 16;
+        public static final int kRightElevatorMotorID = 40;
 
-        public static final double kElevatorGearRatio = 1/20; // 20 rotations of the motor to one shaft rotation
+        public static final double kElevatorGearRatio = 1.0 /20; // 20 rotations of the motor to one shaft rotation the 1.0 is so it does decimal not integer division
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
-        public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * 2; // times two because its a two stage elevator
+        public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
         public static final double kElevatorL4Height = 0;// set later
         public static final double kElevatorL3Height = 0;// set later
