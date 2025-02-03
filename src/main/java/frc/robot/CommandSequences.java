@@ -3,11 +3,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
@@ -128,7 +124,15 @@ public class CommandSequences {
     CoralDispenserSubsytem coralDispenserSubsytem, Pose2d reefPosition, int reefLevel){
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
+                //move to point (reefPosition)
+                //raise elevator (reefLevel)
             )        
+            //drop coral
+            /*
+            new ParallelDeadlineGroup(
+                //lower elevator, move to point (slightly away from reef)
+            )
+                */
         );
     }
 }

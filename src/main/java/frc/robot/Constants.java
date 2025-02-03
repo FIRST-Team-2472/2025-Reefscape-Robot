@@ -200,6 +200,12 @@ public final class Constants {
         public static final Pose2d reefJ = new Pose2d(0, 0, new Rotation2d(240));
         public static final Pose2d reefK = new Pose2d(0, 0, new Rotation2d(300));
         public static final Pose2d reefL = new Pose2d(0, 0, new Rotation2d(300));
+        public static final Pose2d reefTroughAB = new Pose2d(0, 0, new Rotation2d(0));
+        public static final Pose2d reefTroughCD = new Pose2d(0, 0, new Rotation2d(60));
+        public static final Pose2d reefTroughEF = new Pose2d(0, 0, new Rotation2d(120));
+        public static final Pose2d reefTroughGH = new Pose2d(0, 0, new Rotation2d(180));
+        public static final Pose2d reefTroughIJ = new Pose2d(0, 0, new Rotation2d(240));
+        public static final Pose2d reefTroughKL = new Pose2d(0, 0, new Rotation2d(300));
     }
 
     public static final class TargetPosConstants {
