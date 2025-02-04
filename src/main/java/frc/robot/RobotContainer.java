@@ -44,7 +44,7 @@ public class RobotContainer {
     ));
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
-    () -> xboxController.getLeftY(), 
+    () -> -xboxController.getLeftY(), 
     () -> xboxController.getYButton(), 
     () -> xboxController.getBButton(), 
     () -> xboxController.getAButton(), 
