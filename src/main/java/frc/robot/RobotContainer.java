@@ -37,9 +37,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
+      ()-> leftJoystick.getX(),
       ()-> leftJoystick.getY(),
-      ()-> -leftJoystick.getX(),
-      ()-> rightJoystick.getX()
+      ()-> rightJoystick.getX(),
+      ()-> leftJoystick.getRawButton(1)
     ));
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
