@@ -1,5 +1,6 @@
 package frc.robot.commands.defaultCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.function.Supplier;
@@ -12,7 +13,7 @@ import frc.robot.Constants.SensorStatus;
 public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     Supplier<Double> joystickY;
-   MotorPowerController elevatorMotorMotorPowerController;
+   MotorPowerController motorPowerController;
     double elevatorSetHeight = 0;
     Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed;
 
@@ -24,7 +25,7 @@ public class ElevatorCommand extends Command{
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-        elevatorMotorMotorPowerController = new MotorPowerController(0.0001, 0.0001, 0.0001, 10, 0, SensorStatus.kElevatorHeight, 0);
+        motorPowerController = new MotorPowerController(0.0083, 0.1, 0.3, 2, 1, SensorStatus.kElevatorHeight, 10);
     }
 
     //set height - need variable
@@ -43,6 +44,8 @@ public class ElevatorCommand extends Command{
     double y = joystickY.get();
     if(Math.abs(y) <= OperatorConstants.kXboxControllerDeadband)
         y = 0;
+    //y *= .3; // remove this when it becomes automatic
+    
     elevatorSetHeight += y;
 
     if(XboxYPressed.get())
@@ -60,7 +63,11 @@ public class ElevatorCommand extends Command{
     if (elevatorSetHeight < 0)
         elevatorSetHeight = 0;
 
-    elevatorSubsystem.runElevatorMotors(elevatorMotorMotorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
+    SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
+    SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
+    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight), .3), -1)); //negative because up is reverse
+    
+    //elevatorSubsystem.runElevatorMotors(y); // remove this when it becomes automatic
   }
 
   // Called once the command ends or is interrupted.
