@@ -17,7 +17,7 @@ public final class Constants {
         public static final double kElevatorL4Height = 57.5;
         public static final double kElevatorL3Height = 33.5;
         public static final double kElevatorL2Height = 17.5;
-        public static final double kElevatorL1Height = 8;
+        public static final double kElevatorL1Height = 9;
 
         public static final double kElevatorMaxHeight = 58;// set later
     }

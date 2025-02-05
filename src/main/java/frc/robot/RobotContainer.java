@@ -42,6 +42,7 @@ public class RobotContainer {
       ()-> -leftJoystick.getX(),
       ()-> -leftJoystick.getY(),
       ()-> -rightJoystick.getX(),
+      ()-> rightJoystick.getRawButton(1),
       ()-> leftJoystick.getRawButton(1)
     ));
 
@@ -53,7 +54,9 @@ public class RobotContainer {
     () -> xboxController.getXButton()));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
-    () -> xboxController.getRightTriggerAxis()));
+    () -> xboxController.getRightTriggerAxis(),
+    () -> xboxController.getLeftTriggerAxis()
+    ));
 
     configureBindings();
   }
