@@ -1,14 +1,6 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2025.1.1"
-    id 'org.asciidoctor.convert' version '2.4.0'
-    id 'io.gitlab.plunts.plantuml' version "2.1.7"
-}
-
-plantuml {
-    sourceDir = file('src/docs/plantuml')
-    outputDir = file('build/docs/plantuml')
-    format = "svg" // ✅ Generate SVG diagrams
 }
 
 java {
@@ -69,11 +61,6 @@ wpi.java.debugJni = false
 
 // Set this to true to enable desktop support.
 def includeDesktopSupport = true
-
-repositories {
-    mavenCentral()
-    gradlePluginPortal() 
-}
 
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
