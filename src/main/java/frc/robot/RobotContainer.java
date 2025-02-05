@@ -13,11 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
-
+import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -27,6 +28,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
 
   //Make sure this xbox controller is correct and add driver sticks
   XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);
@@ -49,6 +51,9 @@ public class RobotContainer {
     () -> xboxController.getBButton(), 
     () -> xboxController.getAButton(), 
     () -> xboxController.getXButton()));
+
+    coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
+    () -> xboxController.getRightTriggerAxis()));
 
     configureBindings();
   }
