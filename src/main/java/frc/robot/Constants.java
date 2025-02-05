@@ -44,8 +44,8 @@ public final class Constants {
         public static final double kClimberInAngle = 270; // change later
     }
     public static final class CoralDispenserConstants {
-        public static final int kLeftMotorID = 1; // change later
-        public static final int kRightMotorID = 2; // change later it breaks if they are the same
+        public static final int kLeftMotorID = 17; 
+        public static final int kRightMotorID = 44; 
     }
     public static final class AlgaeConstants {
         public static final int kPivotMotorID = 0;
