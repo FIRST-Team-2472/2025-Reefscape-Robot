@@ -9,13 +9,15 @@ public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
+    private final Supplier<Boolean> slowButton;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction) {
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
+        this.slowButton = slowButton;
 
         addRequirements(swerveSubsystem);
     }
@@ -27,12 +29,10 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
-        double slow = 1;
-
-        // 1. Get real-time joystick inputs
-        double xSpeed = -ySpdFunction.get()*.3;
-        double ySpeed = -xSpdFunction.get()*.3;
-        double turningSpeed = -turningSpdFunction.get();
+        
+        double xSpeed = ySpdFunction.get();
+        double ySpeed = xSpdFunction.get();
+        double turningSpeed = turningSpdFunction.get();
 
         System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
@@ -40,6 +40,10 @@ public class SwerveJoystickCmd extends Command {
         xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
+
+        xSpeed = slowButton.get() ? xSpeed*.3 : xSpeed;
+        ySpeed = slowButton.get() ? ySpeed*.3 : ySpeed;
+        
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 

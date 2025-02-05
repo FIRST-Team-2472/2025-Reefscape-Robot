@@ -7,9 +7,9 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class CoralDispenserCommand extends Command{
     CoralDispenserSubsystem coralDispenserSubsytem;
-    Supplier<Boolean> xboxControllerRightTrigger;
+    Supplier<Double> xboxControllerRightTrigger;
 
-    public CoralDispenserCommand(CoralDispenserSubsystem coralDispenserSubsytem, Supplier<Boolean> xboxControllerRightTrigger){
+    public CoralDispenserCommand(CoralDispenserSubsystem coralDispenserSubsytem, Supplier<Double> xboxControllerRightTrigger){
         this.coralDispenserSubsytem = coralDispenserSubsytem;
         this.xboxControllerRightTrigger = xboxControllerRightTrigger;
         addRequirements(coralDispenserSubsytem);
@@ -20,8 +20,10 @@ public class CoralDispenserCommand extends Command{
 
     @Override
     public void execute() {
-        if(xboxControllerRightTrigger.get())
-            coralDispenserSubsytem.runMotors(1, -1);
+        if(xboxControllerRightTrigger.get() > 0.5)
+            coralDispenserSubsytem.runMotors(.1, -.1);//subject to change
+        else 
+            coralDispenserSubsytem.runMotors(0, 0);
     }
 
     @Override
@@ -33,3 +35,4 @@ public class CoralDispenserCommand extends Command{
         return false;
     }
 }
+
