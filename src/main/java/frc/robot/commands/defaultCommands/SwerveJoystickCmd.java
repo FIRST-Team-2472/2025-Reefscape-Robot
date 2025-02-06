@@ -9,15 +9,16 @@ public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> slowButton;
+    private final Supplier<Boolean> slowButton, resetHeadingButton;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton) {
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.slowButton = slowButton;
+        this.resetHeadingButton = resetHeadingButton;
 
         addRequirements(swerveSubsystem);
     }
@@ -29,6 +30,10 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
+
+        if(resetHeadingButton.get())
+            swerveSubsystem.zeroHeading();
+      
         // 1. Get joystick values
         double xSpeed = ySpdFunction.get();
         double ySpeed = xSpdFunction.get();

@@ -25,7 +25,7 @@ public class ElevatorCommand extends Command{
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-        motorPowerController = new MotorPowerController(0.0083, 0.1, 0.3, 2, 1, SensorStatus.kElevatorHeight, 10);
+        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
     }
 
     //set height - need variable
@@ -65,7 +65,7 @@ public class ElevatorCommand extends Command{
 
     SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
     SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
-    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight), .3), -1)); //negative because up is reverse
+    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight), .6), -1)); //negative because up is reverse
     
     //elevatorSubsystem.runElevatorMotors(y); // remove this when it becomes automatic
   }
