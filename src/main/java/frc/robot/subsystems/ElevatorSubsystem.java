@@ -25,6 +25,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double lastLeftElevatorReading = 0;
   public double lastRightElevatorReading = 0;
+  public double leftElevatorPower;
+  public double rightElevatorPower;
 
   public ElevatorSubsystem() {
     final LimitSwitchConfig limitSwitchConfig = new LimitSwitchConfig();
@@ -66,8 +68,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     lastLeftElevatorReading = leftElevatorMotor.getEncoder().getPosition();
     lastRightElevatorReading = rightElevatorMotor.getEncoder().getPosition();
+    leftElevatorPower = leftElevatorMotor.getOutputCurrent();
+    rightElevatorPower = rightElevatorMotor.getOutputCurrent();
 
     SmartDashboard.putNumber("elevatorHeight", SensorStatus.kElevatorHeight);
+    SmartDashboard.putNumber("RightElevatorPower", rightElevatorPower);
+    SmartDashboard.putNumber("LeftElevatorPower", leftElevatorPower);
   }
 
   @Override
