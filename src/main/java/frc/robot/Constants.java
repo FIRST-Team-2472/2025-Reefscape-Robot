@@ -1,11 +1,26 @@
 package frc.robot;
 
+import java.lang.System.Logger.Level;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+
+    /**
+     * The LoggingConstants class holds the logging configuration for the robot.
+     * 
+     * <p>currentLogLevel: The current logging level for the robot's logging system.
+     * The log level determines the severity of messages that will be logged.
+     * Common log levels include DEBUG, INFO, WARN, and ERROR, with DEBUG being the most
+     * verbose and ERROR being the least.
+     */
+    public static final class LoggingConstants{
+        public static final Level CURRENT_LOG_LEVEL = Level.INFO;
+    }
+    
     public static final class ElevatorConstants {
         public static final int kLeftElevatorMotorID = 16;
         public static final int kRightElevatorMotorID = 40;
@@ -22,8 +37,7 @@ public final class Constants {
         public static final double kElevatorMaxHeight = 58;// set later
     }
     public static final class ClimberConstants {
-        public static final int kClimberMotorRightID = 0; // change later
-        public static final int kClimberMotorLeftID = 0; // change later
+        public static final int kClimberMotorID = 0; // change later
         
         public static final double kClimberGearRatio = 1; // change later
         public static final double kClimberOutAngle = 90; // change later
