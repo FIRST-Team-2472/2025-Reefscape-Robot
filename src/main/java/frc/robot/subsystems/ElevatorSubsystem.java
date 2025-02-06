@@ -68,6 +68,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     lastRightElevatorReading = rightElevatorMotor.getEncoder().getPosition();
 
     SmartDashboard.putNumber("elevatorHeight", SensorStatus.kElevatorHeight);
+    SmartDashboard.putNumber("RightElevatorPower", rightElevatorMotor.getOutputCurrent());
+    SmartDashboard.putNumber("LeftElevatorPower", leftElevatorMotor.getOutputCurrent());
   }
 
   @Override
