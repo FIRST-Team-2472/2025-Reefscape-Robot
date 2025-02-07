@@ -28,12 +28,6 @@ public class ElevatorCommand extends Command{
         motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
     }
 
-    //set height - need variable
-    //feed throughMotorPowerController to figure out how to get there
-    //ultimately have something to move to that height 
-    //Called when the command is initially scheduled.
-
-    //
   @Override
   public void initialize() {}
 
@@ -44,7 +38,6 @@ public class ElevatorCommand extends Command{
     double y = joystickY.get();
     if(Math.abs(y) <= OperatorConstants.kXboxControllerDeadband)
         y = 0;
-    //y *= .3; // remove this when it becomes automatic
     
     elevatorSetHeight += y;
 
@@ -67,7 +60,6 @@ public class ElevatorCommand extends Command{
     SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
     elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight), .6), -1)); //negative because up is reverse
     
-    //elevatorSubsystem.runElevatorMotors(y); // remove this when it becomes automatic
   }
 
   // Called once the command ends or is interrupted.
