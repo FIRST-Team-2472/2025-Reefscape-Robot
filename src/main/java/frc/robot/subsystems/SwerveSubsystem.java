@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -25,6 +27,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
+import frc.robot.Constants.TeleDriveConstants;
+import frc.robot.extras.AccelerationLimiter;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -72,6 +76,9 @@ public class SwerveSubsystem extends SubsystemBase {
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
 
+    private AccelerationLimiter xLimiter, yLimiter, turningLimiter;
+    private PIDController xController, yController;
+    public PIDController thetaController;
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
@@ -88,6 +95,14 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
+
+        xLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxSpeedMetersPerSecond);
+        yLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAccelerationUnitsPerSecond);
+        turningLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAngularAccelerationUnitsPerSecond);
+
+        xController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
+        yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
+        thetaController = new PIDController(TargetPosConstants.kPAngleController, 0.08, 0.02);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -221,6 +236,49 @@ public class SwerveSubsystem extends SubsystemBase {
     // Gets our drive position aka where the odometer thinks we are
     public Pose2d getPose() {
         return odometer.getPoseMeters();
+    }
+
+    public void initializeDriveToPointAndRotate() {
+        xLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
+                TargetPosConstants.kBackwardMaxAcceleration);
+        yLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
+                TargetPosConstants.kBackwardMaxAcceleration);
+        xLimiter.reset(getXSpeedFieldRel());
+        yLimiter.reset(getYSpeedFieldRel());
+
+        xController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
+        xController.reset();
+        yController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
+        yController.reset();
+        thetaController.setPID(TargetPosConstants.kPAngleController, 0, 0);
+        thetaController.reset();
+    }
+
+    public void executeDriveToPointAndRotate(Pose2d targetPosition) {
+        double xSpeed = MathUtil.clamp(
+                xController.calculate(getPose().getX(), targetPosition.getX()), -1, 1);
+        double ySpeed = MathUtil.clamp(
+                yController.calculate(getPose().getY(), targetPosition.getY()), -1, 1);
+
+        Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        double turningSpeed = MathUtil.clamp(thetaController.calculate(angleDifference.getRadians(),
+                0), -1, 1);
+        turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
+        turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
+
+        xSpeed = xLimiter.calculate(xSpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
+        ySpeed = yLimiter.calculate(ySpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
+
+        double unitCircleAngle = Math.atan2(ySpeed, xSpeed);
+        xSpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, xSpeed) * Math.abs(Math.cos(unitCircleAngle));
+        ySpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, ySpeed) * Math.abs(Math.sin(unitCircleAngle));
+        
+   
+        xSpeed = -xSpeed;
+        ySpeed = -ySpeed;
+        
+        
+        runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
     public SwerveModulePosition[] getModulePositions() {

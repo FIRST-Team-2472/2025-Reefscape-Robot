@@ -61,6 +61,12 @@ public class CommandSequences {
             generatePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4]));
     }
 
+    public Command swervePointTest(SwerveSubsystem swerveSubsystem) {
+        return new SequentialCommandGroup(
+            
+        );
+    }
+
     // generates a path via points
     private static Command generatePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,
             List<PositivePoint> midPoints,
