@@ -20,12 +20,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 
-import frc.robot.subsystems.CoralDispenserSubsytem;
+
+
+import frc.robot.commands.defaultCommands.CoralDispenserCommand;
+
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.CoralDispenserSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RobotContainer {
@@ -41,7 +46,10 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-  CoralDispenserSubsytem coralDispenserSubsytem = new CoralDispenserSubsytem();
+
+
+  CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
+
 
   //Make sure this xbox controller is correct and add driver sticks
   XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);
@@ -52,9 +60,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
-      ()-> leftJoystick.getX(),
-      ()-> leftJoystick.getY(),
-      ()-> rightJoystick.getX(),
+      ()-> -leftJoystick.getX(),
+      ()-> -leftJoystick.getY(),
+      ()-> -rightJoystick.getX(),
+      ()-> rightJoystick.getRawButton(1),
       ()-> leftJoystick.getRawButton(1)
     ));
 
@@ -64,11 +73,16 @@ public class RobotContainer {
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
-    () -> xboxController.getLeftY(), 
+    () -> -xboxController.getLeftY(), 
     () -> xboxController.getYButton(), 
     () -> xboxController.getBButton(), 
     () -> xboxController.getAButton(), 
     () -> xboxController.getXButton()));
+
+    coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
+    () -> xboxController.getRightTriggerAxis(),
+    () -> xboxController.getLeftTriggerAxis()
+    ));
 
     configureBindings();
   }

@@ -9,15 +9,16 @@ public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    Supplier<Boolean> slowButton;
+    private final Supplier<Boolean> slowButton, resetHeadingButton;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton) {
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.slowButton = slowButton;
+        this.resetHeadingButton = resetHeadingButton;
 
         addRequirements(swerveSubsystem);
     }
@@ -29,8 +30,9 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
-
-        // 1. Get real-time joystick inputs flipping the x and y of controller to the fields x and y
+        if(resetHeadingButton.get())
+            swerveSubsystem.zeroHeading();
+        
         double xSpeed = ySpdFunction.get();
         double ySpeed = xSpdFunction.get();
         double turningSpeed = turningSpdFunction.get();
@@ -41,6 +43,10 @@ public class SwerveJoystickCmd extends Command {
         xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
+
+        xSpeed = slowButton.get() ? xSpeed*.3 : xSpeed;
+        ySpeed = slowButton.get() ? ySpeed*.3 : ySpeed;
+        
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
