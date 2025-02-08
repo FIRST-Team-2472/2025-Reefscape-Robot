@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 import frc.robot.MotorPowerController;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.SensorStatus;
 
 public class ElevatorCommand extends Command{
