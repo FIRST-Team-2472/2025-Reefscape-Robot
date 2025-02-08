@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,9 +26,18 @@ public class PositionFilteringSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         numLimeLights = Constants.SensorStatus.LimeLightBotPoses.length;
+        
+        Pose2d weightedPose2d;
 
         odometryBotPose = Constants.SensorStatus.odometryBotPose;
         limeLightBotPoses = Constants.SensorStatus.LimeLightBotPoses;
+
+        // System.out.println(limeLightBotPoses.length);
+
+        if (numLimeLights == 0) {
+            weightedPose2d = odometryBotPose;
+            return;
+        }
 
         // An implementation of a super simple weighted average
 
@@ -33,7 +45,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         // Copy the LimeLight confidences to entries 1-numLimeLights and the odometry
         // confidence to the 0th term
-        System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights);
+        System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights - 1);
         confs[0] = odometryConfidence;
 
         // Now find the total confidence so we can normalize all the positions
@@ -45,11 +57,6 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         for (int i = 0; i < confs.length; i++) {
             confs[i] /= totalConfidence;
         }
-
-        System.out.println(limeLightConfidences[0]);
-        System.out.println();
-
-        Pose2d weightedPose2d;
 
         // Divide all positions to normalize them
         for (int i = 0; i < numLimeLights; i++) {
@@ -64,5 +71,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
                     new Transform2d(weightedPose2d.getTranslation(), weightedPose2d.getRotation()));
 
         Constants.SensorStatus.filteredBotPose = filteredBotPose;
+
+        SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
+        SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
     }
 }

@@ -11,11 +11,11 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class LimeLightSubsystem extends SubsystemBase {
 
-    private String[] LimeLights = { "limelight-test" };
-    private double[] LimeLightConfidence = { 0 };
-    private double[] LimeLightArea = { 0 };
-    private double[] LimeLightDist = { 0 };
-    private Pose2d[] LimeLightPose2d = { new Pose2d() };
+    private String[] LimeLights = { "limelight-front" };
+    private double[] LimeLightConfidence = { 0, 0 };
+    private double[] LimeLightArea = { 0, 0 };
+    private double[] LimeLightDist = { 0, 0 };
+    private Pose2d[] LimeLightPose2d = { new Pose2d(), new Pose2d() }; 
     private double totalConfidence;
 
     public LimeLightSubsystem() {
