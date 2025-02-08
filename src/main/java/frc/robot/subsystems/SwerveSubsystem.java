@@ -320,5 +320,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
+        SmartDashboard.putBoolean("isRed", isOnRed());
     }
 }

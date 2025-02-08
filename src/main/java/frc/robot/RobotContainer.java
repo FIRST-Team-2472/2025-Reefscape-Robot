@@ -33,7 +33,6 @@ public class RobotContainer {
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  RobotConfig config;
 
   private final CommandSequences commandSequences = new CommandSequences();
 
