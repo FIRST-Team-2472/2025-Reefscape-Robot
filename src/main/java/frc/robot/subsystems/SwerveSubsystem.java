@@ -141,8 +141,11 @@ public class SwerveSubsystem extends SubsystemBase {
     public static boolean isOnRed() {
         // gets the selected team color from the suffleboard
         Optional<Alliance> ally = DriverStation.getAlliance();
+        if(ally.isPresent()){
             return ally.get() == Alliance.Red;
-        // if no team selected on suffleboard, it will default to the field info
+        }
+
+        return false;
     }
 
     // gets our current velocity relative to the x of the field
