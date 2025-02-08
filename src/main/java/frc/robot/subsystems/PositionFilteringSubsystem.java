@@ -3,12 +3,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class PositionFilteringSubsystem extends SubsystemBase {
 
-    private int numLimeLights = Constants.SensorStatus.LimeLightBotPoses.length;
+    private int numLimeLights = 1;
 
     private Pose2d filteredBotPose = new Pose2d();
     private Pose2d odometryBotPose = new Pose2d();
@@ -23,6 +25,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        numLimeLights = Constants.SensorStatus.LimeLightBotPoses.length;
+
         odometryBotPose = Constants.SensorStatus.odometryBotPose;
         limeLightBotPoses = Constants.SensorStatus.LimeLightBotPoses;
 
@@ -43,7 +47,10 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         for (int i = 0; i < confs.length; i++) {
             confs[i] /= totalConfidence;
-        } 
+        }
+
+        System.out.println(limeLightConfidences[0]);
+        System.out.println();
 
         Pose2d weightedPose2d;
 
