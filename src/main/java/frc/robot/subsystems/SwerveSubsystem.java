@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
@@ -292,6 +293,9 @@ public class SwerveSubsystem extends SubsystemBase {
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
+
+        Constants.SensorStatus.odometryBotPose = getOdometer().getPoseMeters();
+
         SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());

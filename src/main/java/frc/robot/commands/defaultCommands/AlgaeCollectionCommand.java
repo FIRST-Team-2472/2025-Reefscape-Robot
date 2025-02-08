@@ -17,6 +17,7 @@ public class AlgaeCollectionCommand extends Command{
         this.JoystickY = JoystickY;
         addRequirements(AlgaeSubsystem);
     }
+    
     @Override
     public void initialize() {}
 
