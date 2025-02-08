@@ -46,8 +46,8 @@ public class LimeLightSubsystem extends SubsystemBase {
                 continue;
             }
 
-            // Get the pose estimate
-            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLights[i]);
+            // Get the pose estimates
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
 
             double targetArea = estimate.avgTagArea;
             double targetDistance = estimate.avgTagDist;
