@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -62,8 +63,11 @@ public class CommandSequences {
     }
 
     public Command swervePointTest(SwerveSubsystem swerveSubsystem) {
+
+        swerveSubsystem.setOdometry(startingNodes[2]);
+
         return new SequentialCommandGroup(
-            
+          new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[0])  
         );
     }
 

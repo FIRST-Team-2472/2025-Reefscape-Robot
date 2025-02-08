@@ -29,7 +29,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 
 public class RobotContainer {
-  private final String testAuto = "testAuto";
+  private final String testAuto = "testAuto", swervedtptest = "Swerve Drive to Point Test";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -58,6 +58,7 @@ public class RobotContainer {
     ));
 
     m_chooser.addOption(testAuto, testAuto);
+    m_chooser.addOption(swervedtptest, swervedtptest);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -84,6 +85,12 @@ public class RobotContainer {
         return new SequentialCommandGroup(
           commandSequences.test(swerveSubsystem)
         );
+
+    if(m_autoSelected == swervedtptest)
+      return new SequentialCommandGroup(
+        commandSequences.swervePointTest(swerveSubsystem)
+      );
+
     return null;
   }
 }
