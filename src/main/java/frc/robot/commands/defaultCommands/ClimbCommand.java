@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SensorStatus;
-import frc.robot.PID;
+import frc.robot.MotorPowerController;
+import frc.robot.MotorPowerController;
 import frc.robot.subsystems.ClimbSubsystem;
 
 public class ClimbCommand extends Command{
@@ -15,7 +16,7 @@ public class ClimbCommand extends Command{
     Supplier<Boolean> xboxControllerLeftBumper, xboxControllerRightBumper;
     boolean anglingOut = false;
     boolean anglingIn = false;
-    PID climberPID = new PID(0.0001, 0.0001, 0.0001, 1, SensorStatus.kClimberAngle);
+    MotorPowerController climberMotorPowerController = new MotorPowerController(0.0001, 0.0001, 0.0001, 1, 0, SensorStatus.kClimberAngle, 0);
     public ClimbCommand(ClimbSubsystem climberSusbsystem, Supplier<Double> xboxControllerY, Supplier<Boolean> xboxControllerLeftBumper, Supplier<Boolean> xboxControllerRightBumper){
         this.climberSusbsystem = climberSusbsystem;
         this.xboxControllerY = xboxControllerY;
@@ -44,13 +45,13 @@ public class ClimbCommand extends Command{
             anglingIn = false;
         }
         if(anglingIn){
-            y = climberPID.calculatePID(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
         }
         if(anglingOut){
-            y = climberPID.calculatePID(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
-        climberSusbsystem.runClimberMotors(y);
+        climberSusbsystem.runClimberMotor(y);
     }
     
     @Override

@@ -1,35 +1,52 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import java.lang.System.Logger.Level;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+
+    /**
+     * The LoggingConstants class holds the logging configuration for the robot.
+     * 
+     * <p>currentLogLevel: The current logging level for the robot's logging system.
+     * The log level determines the severity of messages that will be logged.
+     * Common log levels include DEBUG, INFO, WARN, and ERROR, with DEBUG being the most
+     * verbose and ERROR being the least.
+     */
+    public static final class LoggingConstants{
+        public static final Level CURRENT_LOG_LEVEL = Level.INFO;
+    }
+    
     public static final class ElevatorConstants {
-        public static final int kElevatorMotorID = 0; // change later
-        public static final double kElevatorGearRatio = 1/20; // 20 rotations of the motor to one shaft rotation
+        public static final int kLeftElevatorMotorID = 16;
+        public static final int kRightElevatorMotorID = 40;
+
+        public static final double kElevatorGearRatio = 1.0 /20; // 20 rotations of the motor to one shaft rotation the 1.0 is so it does decimal not integer division
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
+        public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
-        public static final double kElevatorL4Height = 0;// set later
-        public static final double kElevatorL3Height = 0;// set later
-        public static final double kElevatorL2Height = 0;// set later
-        public static final double kElevatorL1Height = 0;// set later
+        public static final double kElevatorL4Height = 58;
+        public static final double kElevatorL3Height = 33.5;
+        public static final double kElevatorL2Height = 17.5;
+        public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 0;// set later
+        public static final double kElevatorMaxHeight = 58;// set later
     }
     public static final class ClimberConstants {
-        public static final int kClimberMotorRightID = 0; // change later
-        public static final int kClimberMotorLeftID = 0; // change later
+        public static final int kClimberMotorID = 0; // change later
         
         public static final double kClimberGearRatio = 1; // change later
         public static final double kClimberOutAngle = 90; // change later
         public static final double kClimberInAngle = 270; // change later
     }
     public static final class CoralDispenserConstants {
-        public static final int kLeftMotorID = 1; // change later
-        public static final int kRightMotorID = 2; // change later it breaks if they are the same
+        public static final int kLeftMotorID = 17; 
+        public static final int kRightMotorID = 44; 
     }
     public static final class AlgaeConstants {
         public static final int kPivotMotorID = 0;
@@ -63,10 +80,10 @@ public final class Constants {
         // Distance between front and back wheels
         public static final double kWheelBase = Units.inchesToMeters(23.5);
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
                 new Translation2d(kTrackWidth / 2, kWheelBase / 2),
-                new Translation2d(-kTrackWidth / 2, -kWheelBase / 2),
-                new Translation2d(kTrackWidth / 2, -kWheelBase / 2));
+                new Translation2d(kTrackWidth / 2, -kWheelBase / 2),
+                new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
+                new Translation2d(-kTrackWidth / 2, -kWheelBase / 2));
 
         public static final int kFrontRightDriveMotorPort = 4;
         public static final int kFrontLeftDriveMotorPort = 8;
@@ -101,8 +118,8 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
         // To find set the motors forward record the value (don't inverse the value)
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 180; 
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
         public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
         public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180; 
 
