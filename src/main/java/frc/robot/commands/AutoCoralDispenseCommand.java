@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.SensorStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -23,7 +25,10 @@ public class AutoCoralDispenseCommand extends Command{
 
     @Override
     public void execute() {
-        coralDispenserSubsystem.runMotors(-1, 1);
+        if(SensorStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && SensorStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1)
+                coralDispenserSubsystem.runMotors(.9, -.3);
+            else 
+                coralDispenserSubsystem.runMotors(.8, -.8);
     }
 
     @Override

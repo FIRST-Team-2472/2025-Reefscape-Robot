@@ -21,9 +21,11 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
-import frc.robot.subsystems.CoralDispenserSubsytem;
+import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.AutoCoralDispenseCommand;
+import frc.robot.commands.AutoElevatorCommand;
 
 public class CommandSequences {
     PosPose2d[] startingNodes = new PosPose2d[6];
@@ -121,18 +123,14 @@ public class CommandSequences {
         return  Rotation2d.fromDegrees(degrees);
     }
     public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
-    CoralDispenserSubsytem coralDispenserSubsytem, Pose2d reefPosition, int reefLevel){
+    CoralDispenserSubsystem coralDispenserSubsytem, Pose2d reefPosition, double reefLevel){
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 //move to point (reefPosition)
-                //raise elevator (reefLevel)
-            )        
-            //drop coral
-            /*
-            new ParallelDeadlineGroup(
-                //lower elevator, move to point (slightly away from reef)
-            )
-                */
+                new AutoElevatorCommand(elevatorSubsystem, reefLevel)
+            ),        
+            new AutoCoralDispenseCommand(coralDispenserSubsytem),
+            new AutoElevatorCommand(elevatorSubsystem, 0.0) 
         );
     }
 }
