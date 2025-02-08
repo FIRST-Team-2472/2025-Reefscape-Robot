@@ -28,6 +28,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         numLimeLights = Constants.SensorStatus.LimeLightBotPoses.length;
         
         Pose2d weightedPose2d;
+        double weightedX = 0;
+        double weightedY = 0;
 
         odometryBotPose = Constants.SensorStatus.odometryBotPose;
         limeLightBotPoses = Constants.SensorStatus.LimeLightBotPoses;
@@ -60,19 +62,19 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         // Divide all positions to normalize them
         for (int i = 0; i < numLimeLights; i++) {
-            weightedPose2d = limeLightBotPoses[i].times(confs[i + 1]);
-
-            filteredBotPose = filteredBotPose.plus(
-                    new Transform2d(weightedPose2d.getTranslation(), weightedPose2d.getRotation()));
+            weightedX += limeLightBotPoses[i].getX() * confs[i + 1];
+            weightedY += limeLightBotPoses[i].getY() * confs[i + 1];
         }
         
-        weightedPose2d = odometryBotPose.times(confs[0]);
-        filteredBotPose = filteredBotPose.plus(
-                    new Transform2d(weightedPose2d.getTranslation(), weightedPose2d.getRotation()));
+        weightedX += odometryBotPose.getX() * confs[0];
+        weightedY += odometryBotPose.getY() * confs[0];
+
+        filteredBotPose = new Pose2d(weightedX, weightedY, odometryBotPose.getRotation());
 
         Constants.SensorStatus.filteredBotPose = filteredBotPose;
 
         SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
         SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
+        SmartDashboard.putNumber("Total Confidence", totalConfidence);
     }
 }
