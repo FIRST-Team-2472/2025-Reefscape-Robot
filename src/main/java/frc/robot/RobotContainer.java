@@ -13,15 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
-
-
-
+import frc.robot.commands.AutoPrepForClimbCommand;
 import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.CoralCollectionSubsystem;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -32,14 +31,13 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-
+  CoralCollectionSubsystem coralCollectionSubsystem = new CoralCollectionSubsystem();
 
   CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
 
 
   //Make sure this xbox controller is correct and add driver sticks
-  XboxController xboxController = new XboxController(OperatorConstants.kXboxControllerPort);
-
+  CommandXboxController xboxController = new CommandXboxController(OperatorConstants.kXboxControllerPort);
 
   public static Joystick leftJoystick = new Joystick(OperatorConstants.kLeftJoystickPort);
   public static Joystick rightJoystick = new Joystick(OperatorConstants.kRightJoystickPort);
@@ -54,11 +52,12 @@ public class RobotContainer {
     ));
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
-    () -> -xboxController.getLeftY(), 
-    () -> xboxController.getYButton(), 
-    () -> xboxController.getBButton(), 
-    () -> xboxController.getAButton(), 
-    () -> xboxController.getXButton()));
+      ()-> xboxController.getLeftY(),
+      ()-> xboxController.y().getAsBoolean(), 
+      ()-> xboxController.b().getAsBoolean(), 
+      ()-> xboxController.a().getAsBoolean(), 
+      ()-> xboxController.x().getAsBoolean()
+      ));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
     () -> xboxController.getRightTriggerAxis(),
@@ -70,6 +69,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     //Controllers need to be added
+    /*
+    xboxController.a().onTrue(new AutoPrepForClimbCommand(coralCollectionSubsystem, 30));
+    xboxController.b().onTrue(new AutoPrepForClimbCommand(coralCollectionSubsystem, 0));
+    */
   }
 
   public Command getAutonomousCommand() {
