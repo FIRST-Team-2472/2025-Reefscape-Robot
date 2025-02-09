@@ -189,48 +189,6 @@ public class TestSwerveSubsystem {
         assertTest(expectedXY, expectedXY, 0.0);
         
     }
-    
-    /* test still fails if in its own seperate test
-    @Test
-    public void testOdometryTranslationY(){
-        //First test is with default values (Aka 0.0)
-        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        swerveSubsystem.periodic();
-        assertTest(0.0, 0.0, 0.0);
-
-        //Second test is with the robot moving one meter in the y direction
-        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
-        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(90)));// 0 = 100% x movement, 90 = 100% y movement
-        swerveSubsystem.periodic();
-        assertTest(0.0, 1.0, 0.0);
-    }
-    /*/
-    /* Pigeon yaw overides all rotational values so this test is invalid
-    @Test
-    public void testOdometryRotation(){
-        //First test is with default values (Aka 0.0)
-        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));// 0 = 100% x movement, 90 = 100% y movement
-        swerveSubsystem.periodic();
-        assertTest(0.0, 0.0, 0.0);
-
-        //Second test is with the robot rotating 90 degrees
-        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(45)));// 0 = 100% x movement, 90 = 100% y movement
-        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(1.0, Rotation2d.fromDegrees(135)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(-1.0, Rotation2d.fromDegrees(45)));// 0 = 100% x movement, 90 = 100% y movement
-        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(-1.0, Rotation2d.fromDegrees(135)));// 0 = 100% x movement, 90 = 100% y movement
-        //when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
-        swerveSubsystem.periodic();
-        assertTest(0.0, 0.0, 90.0);
-    }
-        */
     private void assertTest(double expectedXD, double expectedYD, double expectedRotationD){
         var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
         var expectedX = new BigDecimal(expectedXD).setScale(2, RoundingMode.HALF_UP);
