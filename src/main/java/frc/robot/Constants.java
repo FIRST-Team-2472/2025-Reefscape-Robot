@@ -177,7 +177,8 @@ public final class Constants {
         public static final double MAX_MODULE_SPEED = 2;
         public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth/2,
             DriveConstants.kWheelBase/2);
-
+            
+        /*  PathPlanner Holonomic Controller - Not used anymore
         public static final PPHolonomicDriveController HOLONOMIC_PATH_FOLLOWER_CONFIG = new PPHolonomicDriveController(
         new PIDConstants(
             TRANSLATION_KP,
@@ -187,7 +188,7 @@ public final class Constants {
             ROTATION_KP,
             ROTATION_KI,
             ROTATION_KD) //Time between code runs
-        );
+        ); */
     }
 
     public static final class TargetPosConstants {
