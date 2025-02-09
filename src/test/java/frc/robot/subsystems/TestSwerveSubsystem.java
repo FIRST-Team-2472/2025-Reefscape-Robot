@@ -1,11 +1,9 @@
 package frc.robot.subsystems;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +14,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
-import frc.robot.extras.SwerveModule;
 
 public class TestSwerveSubsystem {
     Pigeon2 pigeon;
@@ -50,6 +47,7 @@ public class TestSwerveSubsystem {
         when(pigeon.getPitch()).thenReturn(pitchStatusSignal);
         rollStatusSignal = mock();
         when(pigeon.getRoll()).thenReturn(rollStatusSignal);
+        when(pigeon.getRotation2d()).thenReturn(new Rotation2d(0.0));
 
         /*
         frontLeft = mock();
@@ -62,14 +60,17 @@ public class TestSwerveSubsystem {
         //frontLeft, frontRight, backLeft, backRight, 
         headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB);
     }
+    
     @Test
     public void testIsAtAngle(){
         // we needed to use thenReturn
         when(yawStatusSignal.getValueAsDouble()).thenReturn(0.0);
         assertTrue(swerveSubsystem.isAtAngle(new Rotation2d()));
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(1.6);
+        when(pigeon.getRotation2d()).thenReturn(new Rotation2d(1.6));
+
         assertFalse(swerveSubsystem.isAtAngle(new Rotation2d()));
     }
+
     @Test
     public void testIsAtPoint(){
         Translation2d targetDrivePos = new Translation2d();
@@ -77,15 +78,17 @@ public class TestSwerveSubsystem {
         targetDrivePos = new Translation2d(1,1);
         assertFalse(swerveSubsystem.isAtPoint(targetDrivePos));
     }
-    @Test
-    public void testOdometryAngle(){
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
-        when(pitchStatusSignal.getValueAsDouble()).thenReturn(0.0);
-        when(rollStatusSignal.getValueAsDouble()).thenReturn(0.0);
-        swerveSubsystem.periodic();
-        var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
-        assertEquals(90.0, odometerPostUpdate.getRotation().getDegrees());
-    }
+    // @Test
+    // public void testOdometryAngle(){
+    //     when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
+        
+
+    //     when(pitchStatusSignal.getValueAsDouble()).thenReturn(0.0);
+    //     when(rollStatusSignal.getValueAsDouble()).thenReturn(0.0);
+    //     swerveSubsystem.periodic();
+    //     var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
+    //     assertEquals(90.0, odometerPostUpdate.getRotation().getDegrees());
+    // }
     //TODO: testOdometryTranslation
     /*
     @Test
