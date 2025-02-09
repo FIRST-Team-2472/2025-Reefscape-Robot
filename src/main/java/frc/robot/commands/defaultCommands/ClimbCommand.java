@@ -51,7 +51,7 @@ public class ClimbCommand extends Command{
             y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
-        climberSusbsystem.runClimberMotors(y);
+        climberSusbsystem.runClimberMotor(y);
     }
     
     @Override
