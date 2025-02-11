@@ -37,7 +37,7 @@ public final class Constants {
         public static final double kElevatorMaxHeight = 58;// set later
     }
     public static final class ClimberConstants {
-        public static final int kClimberMotorID = 0; // change later
+        public static final int kClimberMotorID = 19; // change later
         
         public static final double kClimberGearRatio = 1; // change later
         public static final double kClimberOutAngle = 90; // change later
@@ -48,9 +48,9 @@ public final class Constants {
         public static final int kRightMotorID = 44; 
     }
     public static final class AlgaeConstants {
-        public static final int kPivotMotorID = 0;
+        public static final int kPivotMotorID = 18;
         public static final double kPivotGearRatio = 1/2;
-        public static final int kSpinMotorID = 0;
+        public static final int kSpinMotorID = 10;
     }
 
     public static final class ModuleConstants {
@@ -199,11 +199,8 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static int kLeftLimitSwitchID = 0;// set later
-        public static int kMiddleLimitSwitchID = 1;// set later it will break if they are the same number
-        public static int kRightLimitSwitchID = 2;// set later
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
-        public static int kClimberABSEncoderDIOPort = 0; // set later
+        public static int kClimberABSEncoderDIOPort = 1; // set later
     }
 
     public static class SensorStatus {

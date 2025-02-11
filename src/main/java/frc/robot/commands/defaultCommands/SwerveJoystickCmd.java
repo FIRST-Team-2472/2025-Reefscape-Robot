@@ -37,8 +37,6 @@ public class SwerveJoystickCmd extends Command {
         double ySpeed = xSpdFunction.get();
         double turningSpeed = turningSpdFunction.get();
 
-        System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
-
         // 2. Apply deadband & square output for more precise movement at low speed
         xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
