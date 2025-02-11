@@ -52,10 +52,11 @@ public class SwerveJoystickCmd extends Command {
         } else if(slowButton.get()){
             xSpeed *= .3;
             ySpeed *= .3;
+            turningSpeed *= .3;
         }
 
-        // 4. invert direction if on blue alliance
-        if(!SwerveSubsystem.isOnRed()){
+        // 4. invert direction if on red alliance
+        if(SwerveSubsystem.isOnRed()){
             xSpeed *= -1;
             ySpeed *= -1;
         }
