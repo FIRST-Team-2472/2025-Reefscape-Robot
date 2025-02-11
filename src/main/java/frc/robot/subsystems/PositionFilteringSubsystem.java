@@ -37,7 +37,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         // System.out.println(limeLightBotPoses.length);
 
         if (numLimeLights == 0) {
-            weightedPose2d = odometryBotPose;
+            Constants.SensorStatus.filteredBotPose = odometryBotPose;
             return;
         }
 
@@ -76,5 +76,6 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
         SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
         SmartDashboard.putNumber("Total Confidence", totalConfidence);
+        SmartDashboard.putNumber("numLimeLights", numLimeLights);
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,10 +14,10 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 public class LimeLightSubsystem extends SubsystemBase {
 
     private String[] LimeLights = { "limelight-front" };
-    private double[] LimeLightConfidence = { 0, 0 };
-    private double[] LimeLightArea = { 0, 0 };
-    private double[] LimeLightDist = { 0, 0 };
-    private Pose2d[] LimeLightPose2d = { new Pose2d(), new Pose2d() }; 
+    private double[] LimeLightConfidence = { 0 };
+    private double[] LimeLightArea = { 0 };
+    private double[] LimeLightDist = { 0 };
+    private Pose2d[] LimeLightPose2d = { new Pose2d() }; 
     private double totalConfidence;
 
     public LimeLightSubsystem() {
@@ -38,6 +40,8 @@ public class LimeLightSubsystem extends SubsystemBase {
             // Get if the limelight has a target
             boolean hasTarget = LimelightHelpers.getTV(LimeLights[i]); // Do you have a valid target?
 
+            System.out.println(hasTarget);
+
             if (!hasTarget) {
                 LimeLightConfidence[i] = 0;
                 LimeLightArea[i] = 0;
@@ -47,13 +51,15 @@ public class LimeLightSubsystem extends SubsystemBase {
             }
 
             // Get the pose estimates
-            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLights[i]);
 
             double targetArea = estimate.avgTagArea;
             double targetDistance = estimate.avgTagDist;
 
             // Confidence calculation
             double confidence = Math.min(((32.0f / (targetDistance + 4.0f)) - (0.25f * targetDistance) + (7.0f * targetArea)) * 0.1f + 0.02f, 1.0f);
+            
+
 
             // Save the confidence
             LimeLightConfidence[i] = confidence;
@@ -71,7 +77,8 @@ public class LimeLightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("AprilTagDist", targetDistance);
             SmartDashboard.putNumber("AprilTagConf", confidence);
         }
-
+        
+        System.out.println(Arrays.toString(getConfidences()));
         Constants.SensorStatus.LimeLightBotPoses = getBotPose2ds();
         Constants.SensorStatus.LimeLightConfidences = getConfidences();
     }
