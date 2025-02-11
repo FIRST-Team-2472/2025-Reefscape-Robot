@@ -58,11 +58,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     // updating the sensors status to be read by other files
 
     // code to check that both motors are working and returning the other motors value if one isnt
-    if (!leftElevatorMotor.hasActiveFault() || leftElevatorMotor.getEncoder().getPosition() != lastLeftElevatorReading) {
+    if (!leftElevatorMotor.hasActiveFault() && leftElevatorMotor.getEncoder().getPosition() != lastLeftElevatorReading) {
       SensorStatus.kElevatorHeight = leftElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
     } else {
       SensorStatus.kElevatorHeight = rightElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
     }
+    
     lastLeftElevatorReading = leftElevatorMotor.getEncoder().getPosition();
     lastRightElevatorReading = rightElevatorMotor.getEncoder().getPosition();
 
