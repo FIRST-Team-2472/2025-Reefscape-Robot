@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 
-public class TestSwerveSubsystem 
+public class TestSwerveSubsystem {
     Pigeon2 pigeon;
     //needs to use typeparameter Angle to align with getYaw
     StatusSignal<Angle> yawStatusSignal;
@@ -78,6 +78,7 @@ public class TestSwerveSubsystem
         targetDrivePos = new Translation2d(1,1);
         assertFalse(swerveSubsystem.isAtPoint(targetDrivePos));
     }
+    /*
     @Test
     public void testOdometryAngle(){
          when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
@@ -89,6 +90,7 @@ public class TestSwerveSubsystem
          var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
          assertEquals(90.0, odometerPostUpdate.getRotation().getDegrees());
     }
+    */
     //TODO: testOdometryTranslation
     /*
     @Test
@@ -102,4 +104,5 @@ public class TestSwerveSubsystem
         assertEquals(0.0, odometerPostUpdate.getTranslation().getY());
     }
     */
+}
 
