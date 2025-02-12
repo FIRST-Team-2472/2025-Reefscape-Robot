@@ -144,10 +144,7 @@ public class SwerveSubsystem extends SubsystemBase {
         if (ally.isPresent()) {
             return ally.get() == Alliance.Red;
         }
-
-        String choices = colorChooser.getSelected();
-        return choices == "Red";
-        // if no team selected on suffleboard, it will default to the field info
+        return false;
     }
 
     // gets our current velocity relative to the x of the field
