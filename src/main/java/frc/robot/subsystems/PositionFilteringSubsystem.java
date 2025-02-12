@@ -32,8 +32,13 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         odometryBotPose = Constants.SensorStatus.odometryBotPose;
         limeLightBotPoses = Constants.SensorStatus.LimeLightBotPoses;
+        limeLightConfidences = Constants.SensorStatus.LimeLightConfidences;
 
         // System.out.println(limeLightBotPoses.length);
+
+        for (int i = 0; i < numLimeLights; i++) {
+            System.out.println("PositionFilteringSubsystem: Confidence: " + limeLightConfidences[i] + ", Pose: (" + limeLightBotPoses[i].getX() + ", " + limeLightBotPoses[i].getY() + ")");
+        }
 
         if (numLimeLights == 0) {
             Constants.SensorStatus.filteredBotPose = odometryBotPose;

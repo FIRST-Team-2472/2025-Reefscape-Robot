@@ -41,10 +41,10 @@ public class LimeLightSubsystem extends SubsystemBase {
             // Get the pose estimates
             PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLights[i]);
 
-            System.out.println(estimate);
+            // System.out.println(estimate);
 
-            if (estimate == null) {
-                System.out.println("LimeLight " + LimeLights[i] + " not found");
+            if (estimate.tagCount == 0) {
+                // System.out.println("LimeLight " + LimeLights[i] + " not found");
                 LimeLightConfidence[i] = 0;
                 LimeLightArea[i] = 0;
                 LimeLightDist[i] = 0;
@@ -73,9 +73,12 @@ public class LimeLightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("AprilTagArea", targetArea);
             SmartDashboard.putNumber("AprilTagDist", targetDistance);
             SmartDashboard.putNumber("AprilTagConf", confidence);
+
+            // Print the pose, confidence, and name
+            System.out.println("LimeLightSubsystem: Name: " + LimeLights[i] + ", Confidence: " + confidence + ", Pose: (" + estimate.pose.getX() + ", " + estimate.pose.getY() + ")");
         }
         
-        System.out.println(Arrays.toString(getConfidences()));
+        // sSystem.out.println(Arrays.toString(getConfidences()));
         Constants.SensorStatus.LimeLightBotPoses = getBotPose2ds();
         Constants.SensorStatus.LimeLightConfidences = getConfidences();
     }
