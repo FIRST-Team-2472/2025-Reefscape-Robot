@@ -46,7 +46,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         // Copy the LimeLight confidences to entries 1-numLimeLights and the odometry
         // confidence to the 0th term
-        System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights - 1);
+        System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights - 1); // Maybe remove the -1?
         confs[0] = odometryConfidence;
 
         // Now find the total confidence so we can normalize all the positions
@@ -59,7 +59,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
             confs[i] /= totalConfidence;
         }
 
-        // Divide all positions to normalize them
+        // Multiply all positions to normalize them
         for (int i = 0; i < numLimeLights; i++) {
             weightedX += limeLightBotPoses[i].getX() * confs[i + 1];
             weightedY += limeLightBotPoses[i].getY() * confs[i + 1];
