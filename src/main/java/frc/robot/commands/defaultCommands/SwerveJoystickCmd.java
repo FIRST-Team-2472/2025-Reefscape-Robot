@@ -30,6 +30,7 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
+
         if(resetHeadingButton.get())
             swerveSubsystem.zeroHeading();
 
@@ -38,15 +39,27 @@ public class SwerveJoystickCmd extends Command {
         double ySpeed = xSpdFunction.get();
         double turningSpeed = turningSpdFunction.get();
 
-        System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
-
-        // 2. Apply deadband & square output for more precise movement at low speed
+        // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
 
-        xSpeed = slowButton.get() ? xSpeed*.3 : xSpeed;
-        ySpeed = slowButton.get() ? ySpeed*.3 : ySpeed;
+        // 3. Apply polynomial function or slowmode to joystick values
+        if (!slowButton.get()) {
+            xSpeed = input_2_speed(xSpeed);
+            ySpeed = input_2_speed(ySpeed);
+
+        } else if(slowButton.get()){
+            xSpeed *= .3;
+            ySpeed *= .3;
+            turningSpeed *= .3;
+        }
+
+        // 4. invert direction if on red alliance
+        if(SwerveSubsystem.isOnRed()){
+            xSpeed *= -1;
+            ySpeed *= -1;
+        }
         
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
@@ -54,11 +67,15 @@ public class SwerveJoystickCmd extends Command {
     @Override
     public void end(boolean interrupted) {
 
-        // swerveSubsystem.stopModules();
     }
 
     @Override
     public boolean isFinished() {
         return false;
+    }
+    // alters the joystick input according to a polynomial function for more precise control
+    public static double input_2_speed(double x) {
+        return 19.4175 * Math.pow(x, 13) - 103.7677 * Math.pow(x, 11) + 195.0857 * Math.pow(x, 9)
+                - 165.5452 * Math.pow(x, 7) + 61.8185 * Math.pow(x, 5) - 6.5099 * Math.pow(x, 3) + 0.5009 * x;
     }
 }
