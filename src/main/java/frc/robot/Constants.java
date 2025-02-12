@@ -29,12 +29,12 @@ public final class Constants {
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
-        public static final double kElevatorL4Height = 58;
+        public static final double kElevatorL4Height = 57;
         public static final double kElevatorL3Height = 33.5;
         public static final double kElevatorL2Height = 17.5;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 58;// set later
+        public static final double kElevatorMaxHeight = 57;
     }
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 19; // change later
