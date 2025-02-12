@@ -8,9 +8,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
-
-
-
+import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
+import frc.robot.commands.defaultCommands.ClimbCommand;
 import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 
 import frc.robot.commands.defaultCommands.ElevatorCommand;
@@ -20,6 +19,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.AlgaeCollectionSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -33,7 +34,9 @@ public class RobotContainer {
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
+  AlgaeCollectionSubsystem algaeCollectionSubsystem = new AlgaeCollectionSubsystem();
 
+  ClimbSubsystem climbSubsystem = new ClimbSubsystem();
   CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
 
 
@@ -58,11 +61,23 @@ public class RobotContainer {
     () -> xboxController.getYButton(), 
     () -> xboxController.getBButton(), 
     () -> xboxController.getAButton(), 
-    () -> xboxController.getXButton()));
+    () -> xboxController.getXButton()
+    ));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
     () -> xboxController.getRightTriggerAxis(),
     () -> xboxController.getLeftTriggerAxis()
+    ));
+     
+    algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem, 
+    () -> leftJoystick.getRawButton(2), 
+    () -> leftJoystick.getRawAxis(3)
+    ));
+    
+    climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
+    () -> xboxController.getRightY(), 
+    () -> xboxController.getLeftBumperButton(), 
+    () -> xboxController.getRightBumperButton()
     ));
 
     configureBindings();
