@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.Constants.SensorStatus;
 
 //import frc.robot.Constants.SensorStatus;
 import frc.robot.LimelightHelpers.PoseEstimate;
@@ -17,7 +18,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     private double[] LimeLightConfidence = { 0 };
     private double[] LimeLightArea = { 0 };
     private double[] LimeLightDist = { 0 };
-    private Pose2d[] LimeLightPose2d = { new Pose2d() }; 
+    private Pose2d[] LimeLightPose2d = { new Pose2d() };
     private double totalConfidence;
 
     public LimeLightSubsystem() {
@@ -34,15 +35,13 @@ public class LimeLightSubsystem extends SubsystemBase {
         for (int i = 0; i < LimeLights.length; i++) {
 
             // Send Gyro data to Limelight for higher accuracy
-            // LimelightHelpers.SetRobotOrientation(LimeLights[i], SensorStatus.pigeonYaw,
-            // 0.0, SensorStatus.pigeonPitch, 0.0, SensorStatus.pigeonRoll, 0.0);
+            LimelightHelpers.SetRobotOrientation(LimeLights[i], SensorStatus.pigeonYaw,
+            0.0, SensorStatus.pigeonPitch, 0.0, SensorStatus.pigeonRoll, 0.0);
 
-            // Get if the limelight has a target
-            boolean hasTarget = LimelightHelpers.getTV(LimeLights[i]); // Do you have a valid target?
+            // Get the pose estimates
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
 
-            System.out.println(hasTarget);
-
-            if (!hasTarget) {
+            if (estimate.tagCount == 0) {
                 LimeLightConfidence[i] = 0;
                 LimeLightArea[i] = 0;
                 LimeLightDist[i] = 0;
@@ -50,16 +49,11 @@ public class LimeLightSubsystem extends SubsystemBase {
                 continue;
             }
 
-            // Get the pose estimates
-            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLights[i]);
-
             double targetArea = estimate.avgTagArea;
             double targetDistance = estimate.avgTagDist;
 
             // Confidence calculation
             double confidence = Math.min(((32.0f / (targetDistance + 4.0f)) - (0.25f * targetDistance) + (7.0f * targetArea)) * 0.1f + 0.02f, 1.0f);
-            
-
 
             // Save the confidence
             LimeLightConfidence[i] = confidence;

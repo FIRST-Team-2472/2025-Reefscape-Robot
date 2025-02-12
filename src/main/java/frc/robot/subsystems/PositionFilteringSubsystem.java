@@ -27,7 +27,6 @@ public class PositionFilteringSubsystem extends SubsystemBase {
     public void periodic() {
         numLimeLights = Constants.SensorStatus.LimeLightBotPoses.length;
         
-        Pose2d weightedPose2d;
         double weightedX = 0;
         double weightedY = 0;
 
