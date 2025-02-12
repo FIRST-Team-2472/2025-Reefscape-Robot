@@ -51,7 +51,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         // Copy the LimeLight confidences to entries 1-numLimeLights and the odometry
         // confidence to the 0th term
-        System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights - 1); // Maybe remove the -1?
+        System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights); // Maybe remove the -1?
         confs[0] = odometryConfidence;
 
         System.out.println("PositionFilteringSubsystem: Original Confidences: " + Arrays.toString(confs));
