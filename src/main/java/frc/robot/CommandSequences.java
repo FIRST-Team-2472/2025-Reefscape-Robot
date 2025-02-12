@@ -34,22 +34,22 @@ public class CommandSequences {
     PosPose2d[] processor = new PosPose2d[1];
 
     public CommandSequences() {
-        startingNodes[0] = simplePose(7.671, 7.279, 0); //Cage position 1
-        startingNodes[1] = simplePose(7.671, 6.145, 0); //Cage Position 2
-        startingNodes[2] = simplePose(7.671, 5.077, 0); //Cage Position 3
-        startingNodes[3] = simplePose(7.671, 3.929, 0); //Cage Position 4
-        startingNodes[4] = simplePose(7.671, 1.898, 0); //Cage Position 5
-        startingNodes[5] = simplePose(7.671, 0.794, 0); //Cage Position 6
+        startingNodes[0] = simplePose(7.671, 7.279, teamChangeAngle(0).getDegrees()); //Cage position 1
+        startingNodes[1] = simplePose(7.671, 6.145, teamChangeAngle(0).getDegrees()); //Cage Position 2
+        startingNodes[2] = simplePose(7.671, 5.077, teamChangeAngle(0).getDegrees()); //Cage Position 3
+        startingNodes[3] = simplePose(7.671, 3.929, teamChangeAngle(0).getDegrees()); //Cage Position 4
+        startingNodes[4] = simplePose(7.671, 1.898, teamChangeAngle(0).getDegrees()); //Cage Position 5
+        startingNodes[5] = simplePose(7.671, 0.794, teamChangeAngle(0).getDegrees()); //Cage Position 6
 
-        reefNodes[0] = simplePose(6.055, 4.025, 0); //Reef Position 1
-        reefNodes[1] = simplePose(5.329, 5.366, 60); //Reef Position 2
-        reefNodes[2] = simplePose(3.676, 5.374, 120); //Reef Position 3
-        reefNodes[3] = simplePose(2.950, 4.025, 180); //Reef Position 4
-        reefNodes[4] = simplePose(3.706, 2.646, 240); //Reef Position 5
-        reefNodes[5] = simplePose(5.277, 2.654, 300); //Reef Position 6
+        reefNodes[0] = simplePose(6.055, 4.025, teamChangeAngle(0).getDegrees()); //Reef Position 1
+        reefNodes[1] = simplePose(5.329, 5.366, teamChangeAngle(60).getDegrees()); //Reef Position 2
+        reefNodes[2] = simplePose(3.676, 5.374, teamChangeAngle(120).getDegrees()); //Reef Position 3
+        reefNodes[3] = simplePose(2.950, 4.025, teamChangeAngle(180).getDegrees()); //Reef Position 4
+        reefNodes[4] = simplePose(3.706, 2.646, teamChangeAngle(240).getDegrees()); //Reef Position 5
+        reefNodes[5] = simplePose(5.277, 2.654, teamChangeAngle(300).getDegrees()); //Reef Position 6
 
-        hpStations[0] = simplePose(1.127, 0.962, 54);
-        hpStations[1] = simplePose(1.118, 7.106, 306);
+        hpStations[0] = simplePose(1.127, 0.962, teamChangeAngle(54).getDegrees());
+        hpStations[1] = simplePose(1.118, 7.106, teamChangeAngle(306).getDegrees());
 
         processor[0] = simplePose(2, 7,90);
     }
@@ -128,7 +128,7 @@ public class CommandSequences {
     }
     public static Rotation2d teamChangeAngle(double degrees){
         if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(-degrees+180);
+                return  Rotation2d.fromDegrees(degrees+180);
         return  Rotation2d.fromDegrees(degrees);
     }
 }
