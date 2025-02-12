@@ -54,24 +54,38 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights - 1); // Maybe remove the -1?
         confs[0] = odometryConfidence;
 
+        System.out.println("PositionFilteringSubsystem: Original Confidences: " + Arrays.toString(confs));
+
         // Now find the total confidence so we can normalize all the positions
         double totalConfidence = 0d;
         for (double conf : confs) {
             totalConfidence += conf;
         }
 
+        System.out.println("PositionFilteringSubsystem: Total Confidence: " + totalConfidence);
+
         for (int i = 0; i < confs.length; i++) {
             confs[i] /= totalConfidence;
         }
 
+        System.out.println("PositionFilteringSubsystem: Normalized Confidences: " + Arrays.toString(confs));
+
         // Multiply all positions to normalize them
         for (int i = 0; i < numLimeLights; i++) {
             weightedX += limeLightBotPoses[i].getX() * confs[i + 1];
+            System.out.println("PositionFilteringSubsystem: LimeLightBotPose[" + i + "].X: " + limeLightBotPoses[i].getX() + ", Confidence: " + confs[i + 1]);
             weightedY += limeLightBotPoses[i].getY() * confs[i + 1];
+            System.out.println("PositionFilteringSubsystem: LimeLightBotPose[" + i + "].Y: " + limeLightBotPoses[i].getY() + ", Confidence: " + confs[i + 1]);
         }
         
         weightedX += odometryBotPose.getX() * confs[0];
         weightedY += odometryBotPose.getY() * confs[0];
+
+        System.out.println("PositionFilteringSubsystem: OdometryBotPose.X: " + odometryBotPose.getX() + ", Confidence: " + confs[0]);
+        System.out.println("PositionFilteringSubsystem: OdometryBotPose.Y: " + odometryBotPose.getY() + ", Confidence: " + confs[0]);
+
+        System.out.println("PositionFilteringSubsystem: Weighted X: " + weightedX);
+        System.out.println("PositionFilteringSubsystem: Weighted Y: " + weightedY);
 
         filteredBotPose = new Pose2d(weightedX, weightedY, odometryBotPose.getRotation());
 

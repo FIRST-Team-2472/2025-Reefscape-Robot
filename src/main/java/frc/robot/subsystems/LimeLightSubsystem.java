@@ -78,7 +78,7 @@ public class LimeLightSubsystem extends SubsystemBase {
             System.out.println("LimeLightSubsystem: Name: " + LimeLights[i] + ", Confidence: " + confidence + ", Pose: (" + estimate.pose.getX() + ", " + estimate.pose.getY() + ")");
         }
         
-        // sSystem.out.println(Arrays.toString(getConfidences()));
+        // System.out.println(Arrays.toString(getConfidences()));
         Constants.SensorStatus.LimeLightBotPoses = getBotPose2ds();
         Constants.SensorStatus.LimeLightConfidences = getConfidences();
     }
