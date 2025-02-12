@@ -39,9 +39,12 @@ public class LimeLightSubsystem extends SubsystemBase {
             0.0, SensorStatus.pigeonPitch, 0.0, SensorStatus.pigeonRoll, 0.0);
 
             // Get the pose estimates
-            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLights[i]);
 
-            if (estimate.tagCount == 0) {
+            System.out.println(estimate);
+
+            if (estimate == null) {
+                System.out.println("LimeLight " + LimeLights[i] + " not found");
                 LimeLightConfidence[i] = 0;
                 LimeLightArea[i] = 0;
                 LimeLightDist[i] = 0;
