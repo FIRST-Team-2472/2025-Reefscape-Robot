@@ -32,7 +32,7 @@ public class SwerveDriveToPointCmd extends Command {
 
   @Override
   public void initialize() {
-    swerveSubsystem.initializeDriveToPointAndRotate();
+    swerveSubsystem.initializeDriveToPointAndRotate(targetPosition);
     //System.out.println("robot pose" + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
     //System.out.println("target pose" + targetPosition.getX()+", "+ targetPosition.getY());
     timer.restart();

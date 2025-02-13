@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.MotorPowerController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
@@ -80,6 +81,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private PIDController xController, yController;
     public PIDController thetaController;
 
+    public MotorPowerController xPowerController, yPowerController, turningPowerController;
+
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
@@ -100,7 +103,10 @@ public class SwerveSubsystem extends SubsystemBase {
         yLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAccelerationUnitsPerSecond);
         turningLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAngularAccelerationUnitsPerSecond);
 
-        xController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
+        xPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
+        yPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.1, 0.05, .3, 1, .1, 0, 1);
+
         yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
         thetaController = new PIDController(TargetPosConstants.kPAngleController, 0.08, 0.02);
 
@@ -236,44 +242,39 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometer.getPoseMeters();
     }
 
-    public void initializeDriveToPointAndRotate() {
-        xLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
-                TargetPosConstants.kBackwardMaxAcceleration);
-        yLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
-                TargetPosConstants.kBackwardMaxAcceleration);
-        xLimiter.reset(getXSpeedFieldRel());
-        yLimiter.reset(getYSpeedFieldRel());
+    public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
+        xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
+        yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
+        //xLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
+          //      TargetPosConstants.kBackwardMaxAcceleration);
+        //yLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
+            //    TargetPosConstants.kBackwardMaxAcceleration);
+        //xLimiter.reset(getXSpeedFieldRel());
+        //yLimiter.reset(getYSpeedFieldRel());
 
-        xController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
-        xController.reset();
-        yController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
-        yController.reset();
-        thetaController.setPID(TargetPosConstants.kPAngleController, 0, 0);
-        thetaController.reset();
+        //xController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
+        //xController.reset();
+        //yController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
+        //yController.reset();
+        //thetaController.setPID(TargetPosConstants.kPAngleController, 0, 0);
+        //thetaController.reset();
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed = MathUtil.clamp(
-                xController.calculate(getPose().getX(), targetPosition.getX()), -1, 1);
-        double ySpeed = MathUtil.clamp(
-                yController.calculate(getPose().getY(), targetPosition.getY()), -1, 1);
+        double xSpeed =  -xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
+        double ySpeed =  -yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
 
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = MathUtil.clamp(thetaController.calculate(angleDifference.getRadians(),
-                0), -1, 1);
-        turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
-        turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
+        double turningSpeed = -turningPowerController.calculateMotorPowerController(angleDifference.getRadians(), 0);
+        //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
+        //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
 
-        xSpeed = xLimiter.calculate(xSpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
-        ySpeed = yLimiter.calculate(ySpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
+        //xSpeed = xLimiter.calculate(xSpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
+        //ySpeed = yLimiter.calculate(ySpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
 
-        double unitCircleAngle = Math.atan2(ySpeed, xSpeed);
-        xSpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, xSpeed) * Math.abs(Math.cos(unitCircleAngle));
-        ySpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, ySpeed) * Math.abs(Math.sin(unitCircleAngle));
-        
-   
-        xSpeed = -xSpeed;
-        ySpeed = -ySpeed;
+        //double unitCircleAngle = Math.atan2(ySpeed, xSpeed);
+        //xSpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, xSpeed) * Math.abs(Math.cos(unitCircleAngle));
+        //ySpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, ySpeed) * Math.abs(Math.sin(unitCircleAngle));
         
         
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);

@@ -198,8 +198,8 @@ public final class Constants {
         public static final double kMinAngluarSpeedRadians = Math.PI / 16;
         public static final double kMinSpeedMetersPerSec = .2;
 
-        public static final double kPDriveController = 1.9;
-        public static final double kPAngleController = 1.9;
+        public static final double kPDriveController = .1;
+        public static final double kPAngleController = .05;
         public static final double kAcceptableDistanceError = 0.04;
         public static final double kAcceptableAngleError = 1.5;
     }
