@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import java.lang.System.Logger.Level;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -203,28 +202,6 @@ public final class Constants {
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
 
-    public static class SensorStatus {
-        public static boolean kLeftLimitSwitchValue = false;
-        public static boolean kMiddleLimitSwitchValue = false;
-        public static boolean kRightLimitSwitchValue = false;
-
-        public static double kElevatorHeight = 0;
-
-        public static double pigeonYaw = 0;
-        public static double pigeonPitch = 0;
-        public static double pigeonRoll = 0;
-
-        public static Pose2d odometryBotPose;
-
-        public static Pose2d[] LimeLightBotPoses;
-        public static double[] LimeLightConfidences;
-
-        public static Pose2d filteredBotPose;
-
-        public static double kTimeOfFlightDistance = 0;
-        public static double kClimberAngle = 0;
-        public static double kPivotAngle = 0;
-    }
     public static class LEDConstants {
         public static int kChannel1 = 0;
         public static int kChannel2 = 1;

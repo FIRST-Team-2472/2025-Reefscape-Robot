@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class RobotContainer {
   //Add subsystems below this comment
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
-  private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem();
+  private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem(limeLightSubsystem);
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 

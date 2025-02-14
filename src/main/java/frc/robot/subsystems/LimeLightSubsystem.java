@@ -1,15 +1,11 @@
 package frc.robot.subsystems;
 
-import java.util.Arrays;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
-import frc.robot.Constants.SensorStatus;
+import frc.robot.SensorStatus;
 
-//import frc.robot.Constants.SensorStatus;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class LimeLightSubsystem extends SubsystemBase {
@@ -77,17 +73,17 @@ public class LimeLightSubsystem extends SubsystemBase {
             // Print the pose, confidence, and name
             System.out.println("LimeLightSubsystem: Name: " + LimeLights[i] + ", Confidence: " + confidence + ", Pose: (" + estimate.pose.getX() + ", " + estimate.pose.getY() + ")");
         }
-        
-        // System.out.println(Arrays.toString(getConfidences()));
-        Constants.SensorStatus.LimeLightBotPoses = getBotPose2ds();
-        Constants.SensorStatus.LimeLightConfidences = getConfidences();
     }
 
-    public Pose2d getBotPose2d(int index) {
+    public int getNumLimeLights() {
+        return LimeLights.length;
+    }
+
+    public Pose2d getBotPose(int index) {
         return this.LimeLightPose2d[index];
     }
 
-    public Pose2d[] getBotPose2ds() {
+    public Pose2d[] getBotPoses() {
         return this.LimeLightPose2d;
     }
 

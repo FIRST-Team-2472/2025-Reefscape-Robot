@@ -25,6 +25,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
+import frc.robot.SensorStatus;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -71,12 +72,15 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
+    private PositionFilteringSubsystem positionFilteringSubsystem;
 
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
-    public SwerveSubsystem() {
+    public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
+        this.positionFilteringSubsystem = positionFilteringSubsystem;
+
         // Gets tabs from Shuffleboard
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
         ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
@@ -103,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     public SwerveSubsystem(Pigeon2 gyro, //This constructor is used for testing
         SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, 
-        GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB, GenericEntry pitchSB) {
+        GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB, GenericEntry pitchSB, PositionFilteringSubsystem positionFilteringSubsystem) {
         this.gyro = gyro; 
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
@@ -113,6 +117,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this.odometerShuffleBoard = odometerShuffleBoard;
         this.rollSB = rollSB;
         this.pitchSB = pitchSB;
+        this.positionFilteringSubsystem = positionFilteringSubsystem;
     }
     public SwerveDriveOdometry getOdometer(){
         return odometer;
@@ -211,6 +216,14 @@ public class SwerveSubsystem extends SubsystemBase {
         return odometer.getPoseMeters();
     }
 
+    public Pose2d getFilteredPose() {
+        return this.positionFilteringSubsystem.getFilteredBotPose(odometer);
+    }
+
+    public void calibrateOdometry() {
+        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose());
+    }
+
     public SwerveModulePosition[] getModulePositions() {
         // Finds the position of each individual module based on the encoder values.
         SwerveModulePosition[] temp = { frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(),
@@ -289,7 +302,11 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
 
-        Constants.SensorStatus.odometryBotPose = getOdometer().getPoseMeters();
+        // Pose2d filteredBotPose = getFilteredPose();
+        // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
+        // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
+
+        calibrateOdometry();
 
         SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
