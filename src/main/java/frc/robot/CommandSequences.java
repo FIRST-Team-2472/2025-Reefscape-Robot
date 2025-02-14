@@ -64,10 +64,10 @@ public class CommandSequences {
 
     public Command swervePointTest(SwerveSubsystem swerveSubsystem) {
 
-        swerveSubsystem.setOdometry(startingNodes[2].toFieldPose2d()); //X = 7.671, Y = 5.077, angle = 0
+        swerveSubsystem.setOdometry(simplePose(0, 0, 0).toFieldPose2d()); //X = 7.671, Y = 5.077, angle = 0
 
         return new SequentialCommandGroup(
-          new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[0])  //X = 6.055, Y = 4.025, angle = 0
+          new SwerveDriveToPointCmd(swerveSubsystem, simplePose(1, 2, 90))  //X = 6.055, Y = 4.025, angle = 0
         );
     }
 
