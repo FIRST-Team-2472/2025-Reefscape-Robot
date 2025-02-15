@@ -73,6 +73,7 @@ public class SwerveSubsystem extends SubsystemBase {
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
     private PositionFilteringSubsystem positionFilteringSubsystem;
+    private int periods = 0; // period counter used for limelight update timing
 
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
@@ -306,7 +307,15 @@ public class SwerveSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
         // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
 
-        calibrateOdometry();
+        if (periods % 50 == 0) {
+            calibrateOdometry();
+
+            if (periods == 0) {
+                periods = 50;
+            }
+
+            periods--;
+        }
 
         SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
