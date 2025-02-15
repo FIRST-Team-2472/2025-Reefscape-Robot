@@ -9,9 +9,12 @@ import frc.robot.Constants.SensorStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.MotorPowerController;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDStatusMode;
 
 public class ClimbCommand extends Command{
     ClimbSubsystem climberSusbsystem;
+    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     Supplier<Double> xboxControllerY;
     Supplier<Boolean> xboxControllerLeftBumper, xboxControllerRightBumper;
     boolean anglingOut = false;
@@ -50,7 +53,10 @@ public class ClimbCommand extends Command{
         if(anglingOut){
             y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
-
+        ledSubsystem.isClimbing(y != 0);
+        ledSubsystem.climbAtAngle(SensorStatus.kClimberAngle >= ClimberConstants.kClimberInAngle-20);
+        ledSubsystem.runningAutonomistCommand(anglingIn || anglingOut);
+        
         climberSusbsystem.runClimberMotor(y);
     }
     
