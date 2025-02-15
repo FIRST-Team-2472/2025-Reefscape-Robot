@@ -29,7 +29,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
       SensorStatus.kPivotAngle = absoluteEncoder.get()*360;//updating it before its read, converting it to degrees as well
     }
     public void runPivotMotor(double powerPercent){
-    pivotmotor.set(powerPercent);
+    //pivotmotor.set(powerPercent);
   }
   public void runSpinMotor(double powerPercent){
     spinmotor.set(powerPercent);

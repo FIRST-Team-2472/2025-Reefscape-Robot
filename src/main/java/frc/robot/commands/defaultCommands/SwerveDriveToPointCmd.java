@@ -51,9 +51,10 @@ public class SwerveDriveToPointCmd extends Command {
   @Override
   public boolean isFinished() {
     // use this function if you overide the command to finsih it
-    if ( swerveSubsystem.isAtPoint(targetPosition.getTranslation()) && swerveSubsystem.isAtAngle(targetPosition.getRotation()))
-      return timer.hasElapsed(.05);
-    timer.restart();
+    if (swerveSubsystem.isAtPoint(targetPosition.getTranslation()) && swerveSubsystem.isAtAngle(targetPosition.getRotation())){
+      System.out.println("Finished Driving");
+      return true;
+    }
     return false;
   }
 }

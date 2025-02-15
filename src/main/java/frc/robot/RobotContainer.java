@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RobotContainer {
-  private final String testAuto = "testAuto", swervedtptest = "Swerve Drive to Point Test";
+  private final String twoCoral = "Swerve Drive to Point Test";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -69,8 +69,7 @@ public class RobotContainer {
       ()-> leftJoystick.getRawButton(1)
     ));
 
-    m_chooser.addOption(testAuto, testAuto);
-    m_chooser.addOption(swervedtptest, swervedtptest);
+    m_chooser.addOption(twoCoral, twoCoral);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -109,17 +108,10 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     m_autoSelected = m_chooser.getSelected();
 
-    if(m_autoSelected == testAuto)
-        //return AutoBuilder.buildAuto("test");
-        return new SequentialCommandGroup(
-          commandSequences.test(swerveSubsystem)
-        );
-
-    if(m_autoSelected == swervedtptest)
+    if(m_autoSelected == twoCoral)
       return new SequentialCommandGroup(
-        commandSequences.swervePointTest(swerveSubsystem)
+        commandSequences.twoCoralCfourRoneHoneRfive(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
       );
-
     return null;
   }
 }

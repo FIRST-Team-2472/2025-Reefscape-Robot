@@ -105,7 +105,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         xPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
         yPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.1, 0.05, .3, 1, .1, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
 
         yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
         thetaController = new PIDController(TargetPosConstants.kPAngleController, 0.08, 0.02);
@@ -322,13 +322,21 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     public boolean isAtPoint(Translation2d targetDrivePos) {
-        return getPose().getTranslation().getDistance(targetDrivePos) //
-                <= TargetPosConstants.kAcceptableDistanceError; //
+        SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
+        boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
+
+        SmartDashboard.putBoolean("isAtPose", isAtPose);
+        return isAtPose;
+
+        
     }
 
     public boolean isAtAngle(Rotation2d angle) {
-        return Math.abs(getRotation2d().minus(angle).getDegrees()) //
-                <= TargetPosConstants.kAcceptableAngleError;
+        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+
+        SmartDashboard.putBoolean("isAtAngle", isAtAngle);
+        return isAtAngle;
     }
     
 

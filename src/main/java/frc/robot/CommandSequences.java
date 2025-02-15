@@ -18,13 +18,19 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.commands.AutoCoralDispenseCommand;
+import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
+import frc.robot.subsystems.CoralDispenserSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
@@ -37,7 +43,7 @@ public class CommandSequences {
         startingNodes[0] = simplePose(7.671, 7.279, 0); //Cage position 1
         startingNodes[1] = simplePose(7.671, 6.145, 0); //Cage Position 2
         startingNodes[2] = simplePose(7.671, 5.077, 0); //Cage Position 3
-        startingNodes[3] = simplePose(7.671, 3.929, 0); //Cage Position 4
+        startingNodes[3] = simplePose(7.671, 2.929, 0); //Cage Position 4
         startingNodes[4] = simplePose(7.671, 1.898, 0); //Cage Position 5
         startingNodes[5] = simplePose(7.671, 0.794, 0); //Cage Position 6
 
@@ -49,25 +55,33 @@ public class CommandSequences {
         reefNodes[5] = simplePose(5.277, 2.654, 300); //Reef Position 6
 
         hpStations[0] = simplePose(1.127, 0.962, 54);
-        hpStations[1] = simplePose(1.118, 7.106, 306);
+        hpStations[1] = simplePose(1.097, 6.991, 306);
 
         processor[0] = simplePose(2, 7,90);
     }
 
-    public Command test(SwerveSubsystem swerveSubsystem) {
+    public Command twoCoralCfourRoneHoneRfive(SwerveSubsystem swerveSubsystem, 
+    ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
 
-        swerveSubsystem.setOdometry(simplePose(7.589, 3.929, 0));
-
-        return new SequentialCommandGroup(
-            generatePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4]));
-    }
-
-    public Command swervePointTest(SwerveSubsystem swerveSubsystem) {
-
-        swerveSubsystem.setOdometry(simplePose(0, 0, 0).toFieldPose2d()); //X = 7.671, Y = 5.077, angle = 0
+        swerveSubsystem.setOdometry(startingNodes[2].toFieldPose2d());
 
         return new SequentialCommandGroup(
-          new SwerveDriveToPointCmd(swerveSubsystem, simplePose(1, 2, 90))  //X = 6.055, Y = 4.025, angle = 0
+
+            //new ParallelCommandGroup(
+                new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[0]),
+                //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
+            //),
+            //new AutoCoralDispenseCommand(coralDispenserSubsystem),
+            new ParallelCommandGroup(
+                new SwerveDriveToPointCmd(swerveSubsystem, simplePose(6.350, 6.245, 0))
+                //new AutoElevatorCommand(elevatorSubsystem, 0)
+            ),
+            new SwerveDriveToPointCmd(swerveSubsystem, hpStations[1]),
+            new ParallelCommandGroup(
+                //new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[4])
+                //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
+            ),
+            new AutoCoralDispenseCommand(coralDispenserSubsystem)
         );
     }
 

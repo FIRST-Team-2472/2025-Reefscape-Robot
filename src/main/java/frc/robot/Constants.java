@@ -200,8 +200,8 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.04;
-        public static final double kAcceptableAngleError = 1.5;
+        public static final double kAcceptableDistanceError = 0.2;// subject to change was 0.04
+        public static final double kAcceptableAngleError = 5;
     }
 
     public static final class OperatorConstants {
