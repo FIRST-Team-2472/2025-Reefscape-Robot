@@ -25,7 +25,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     public CoralDispenserSubsystem(){
 
         SparkMaxConfig config = new SparkMaxConfig();
-            config.smartCurrentLimit(35);
+            config.smartCurrentLimit(10);// max they can handle over a extended period of time before melting
             config.idleMode(IdleMode.kBrake);
 
         leftMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
