@@ -6,10 +6,12 @@ import frc.robot.MotorPowerController;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SensorStatus;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class AutoElevatorCommand extends Command{
     Timer timer = new Timer();
     ElevatorSubsystem elevatorSubsystem;
+    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     MotorPowerController motorPowerController;
     double elevatorSetHeight;
     
@@ -24,6 +26,7 @@ public class AutoElevatorCommand extends Command{
     @Override
     public void initialize() {
         timer.reset();
+        ledSubsystem.runningAutonomistCommand(true);
     }
 
     @Override

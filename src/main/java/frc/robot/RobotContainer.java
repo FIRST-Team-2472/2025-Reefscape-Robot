@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 
@@ -13,7 +15,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -31,6 +35,7 @@ import frc.robot.subsystems.AlgaeCollectionSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 
 
@@ -51,6 +56,7 @@ public class RobotContainer {
 
   ClimbSubsystem climbSubsystem = new ClimbSubsystem();
   CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
+  LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
 
 
   //Make sure this xbox controller is correct and add driver sticks
@@ -59,6 +65,10 @@ public class RobotContainer {
 
   public static Joystick leftJoystick = new Joystick(OperatorConstants.kLeftJoystickPort);
   public static Joystick rightJoystick = new Joystick(OperatorConstants.kRightJoystickPort);
+
+  ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
+  Color color = ledSubsystem.color;
+  private SuppliedValueWidget<Boolean> colorWidget = Shuffleboard.getTab("Driver Board").addBoolean("Robot Statice", () -> true);
 
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem, 
@@ -72,8 +82,10 @@ public class RobotContainer {
     m_chooser.addOption(testAuto, testAuto);
     m_chooser.addOption(swervedtptest, swervedtptest);
 
-    ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
+    
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+
+    colorWidget.withProperties(Map.of("colorWhenTrue", color));
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
     () -> -xboxController.getLeftY(), 

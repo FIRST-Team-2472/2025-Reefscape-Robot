@@ -5,12 +5,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.MotorPowerController;
 import frc.robot.Constants.SensorStatus;
 import frc.robot.subsystems.AlgaeCollectionSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class AngleAlgaeCollectorCommand extends Command{
 
     Timer timeoutTimer = new Timer();
     Timer atAngleTimer = new Timer();
     AlgaeCollectionSubsystem algaeCollectionSubsystem;
+    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     MotorPowerController motorPowerController;
 
     public AngleAlgaeCollectorCommand(AlgaeCollectionSubsystem algaeCollectionSubsystem) {
@@ -26,6 +28,7 @@ public class AngleAlgaeCollectorCommand extends Command{
         timeoutTimer.reset();
         atAngleTimer.reset();
         atAngleTimer.stop();
+        ledSubsystem.runningAutonomistCommand(true);
     }
 
     @Override
