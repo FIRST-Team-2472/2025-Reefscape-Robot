@@ -2,13 +2,15 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-
     /**
      * The LoggingConstants class holds the logging configuration for the robot.
      * 
@@ -93,7 +95,7 @@ public final class Constants {
         public static final int kBackRightTurningMotorPort = 7;
         public static final int kBackLeftTurningMotorPort = 6;
 
-        // Positive should be clockwise
+        // Positive should be counter clockwise
         public static final boolean kFrontLeftTurningEncoderReversed = false;
         public static final boolean kBackLeftTurningEncoderReversed = false;
         public static final boolean kFrontRightTurningEncoderReversed = false;
@@ -119,7 +121,7 @@ public final class Constants {
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 180;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
         public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180; 
+        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180;
 
         // Max physical speed of our motors. Required for motor speed caculations
         // To find set the modules to 100% and see what speed cap out at
@@ -143,10 +145,10 @@ public final class Constants {
 
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44;//was 4
         public static final double kMaxAngularSpeedRadiansPerSecond = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 14;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 5.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1;// was 5.5
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 2;
         public static final double kPXController = 1.5;
         public static final double kPYController = 1.5;
@@ -156,6 +158,30 @@ public final class Constants {
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
+
+        public static final double TRANSLATION_KP = 0.7; 
+        public static final double TRANSLATION_KI = 0; 
+        public static final double TRANSLATION_KD = 0;
+                    
+        public static final double ROTATION_KP = 0.7;
+        public static final double ROTATION_KI = 0;
+        public static final double ROTATION_KD = 0;
+                    
+        public static final double MAX_MODULE_SPEED = 2;
+        public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth/2,
+            DriveConstants.kWheelBase/2);
+            
+        /*  PathPlanner Holonomic Controller - Not used anymore
+        public static final PPHolonomicDriveController HOLONOMIC_PATH_FOLLOWER_CONFIG = new PPHolonomicDriveController(
+        new PIDConstants(
+            TRANSLATION_KP,
+            TRANSLATION_KI,
+            TRANSLATION_KD), // Translation PID constants
+        new PIDConstants(
+            ROTATION_KP,
+            ROTATION_KI,
+            ROTATION_KD) //Time between code runs
+        ); */
     }
 
     public static final class TargetPosConstants {
@@ -172,8 +198,8 @@ public final class Constants {
         public static final double kMinAngluarSpeedRadians = Math.PI / 16;
         public static final double kMinSpeedMetersPerSec = .2;
 
-        public static final double kPDriveController = 1.9;
-        public static final double kPAngleController = 1.9;
+        public static final double kPDriveController = .1;
+        public static final double kPAngleController = .05;
         public static final double kAcceptableDistanceError = 0.04;
         public static final double kAcceptableAngleError = 1.5;
     }
@@ -197,6 +223,8 @@ public final class Constants {
 
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
+
+        public static final double sizeOfFieldMeters = 17.55;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later

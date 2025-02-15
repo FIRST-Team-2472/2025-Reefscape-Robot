@@ -42,12 +42,7 @@ public class TestSwerveSubsystem {
     @BeforeEach
     public void setUp() {
         pigeon = mock();
-        yawStatusSignal = mock();
-        when(pigeon.getYaw()).thenReturn(yawStatusSignal);
-        pitchStatusSignal = mock();
-        when(pigeon.getPitch()).thenReturn(pitchStatusSignal);
-        rollStatusSignal = mock();
-        when(pigeon.getRoll()).thenReturn(rollStatusSignal);
+        when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(0));
 
         frontLeft = mock();
         frontRight = mock();
@@ -67,6 +62,12 @@ public class TestSwerveSubsystem {
         headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB, positionFilteringSubsystem);
     }
     private void mockSuffleBoard() {
+        yawStatusSignal = mock();
+        when(pigeon.getYaw()).thenReturn(yawStatusSignal);
+        pitchStatusSignal = mock();
+        when(pigeon.getPitch()).thenReturn(pitchStatusSignal);
+        rollStatusSignal = mock();
+        when(pigeon.getRoll()).thenReturn(rollStatusSignal);
         headingShuffleBoard = mock();
         odometerShuffleBoard = mock();
         rollSB = mock();
@@ -83,9 +84,8 @@ public class TestSwerveSubsystem {
     }
     @Test
     public void testIsAtAngle(){ //runs test for isAtAngle method
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(0.0);
         assertTrue(swerveSubsystem.isAtAngle(new Rotation2d()));
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(1.6);
+        when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(1.6));
         assertFalse(swerveSubsystem.isAtAngle(new Rotation2d()));
     }
     @Test
@@ -103,11 +103,11 @@ public class TestSwerveSubsystem {
         when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));
         when(backRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));
 
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(90.0);
+        when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(90));
         swerveSubsystem.periodic();
         assertTest(0.0, 0.0, 90.0);
 
-        when(yawStatusSignal.getValueAsDouble()).thenReturn(0.0);
+        when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(0));
         swerveSubsystem.periodic();
         assertTest(0.0, 0.0, 0.0);
     }
