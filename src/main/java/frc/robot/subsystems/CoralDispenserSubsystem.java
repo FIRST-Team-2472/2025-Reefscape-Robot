@@ -42,5 +42,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         //SensorStatus.kTimeOfFlightDistance = temp;
         ///SmartDashboard.putNumber("distance sensor", temp);
     }
-
+    public boolean hasCoralAlready() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasCoralAlready'");
+    }
 }

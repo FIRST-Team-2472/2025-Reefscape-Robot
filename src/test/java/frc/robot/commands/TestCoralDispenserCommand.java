@@ -22,21 +22,19 @@ public class TestCoralDispenserCommand {
     SwerveSubsystem swerveSubsystem = mock();
     CoralDispenserCommand coralDispenserCommand = new CoralDispenserCommand(coralDispenserSubsystem, xboxControllerRightTrigger, xboxControllerLeftTrigger, swerveSubsystem);
 
-    @BeforeEach
-    public void setup() {
 
-    }
     @Test
     public void isNearCoralStationTrue() {
         when(swerveSubsystem.getPose()).thenReturn(new Pose2d(1,1,mock()));
         assertTrue(coralDispenserCommand.isNearCoralStation());
-        when(swerveSubsystem.getPose()).thenReturn(new Pose2d(0,6,mock()));
+        when(swerveSubsystem.getPose()).thenReturn(new Pose2d(0,7,mock()));
         assertTrue(coralDispenserCommand.isNearCoralStation());
-        when(swerveSubsystem.getPose()).thenReturn(new Pose2d(13,1,mock()));
+        when(swerveSubsystem.getPose()).thenReturn(new Pose2d(17,1,mock()));
         assertTrue(coralDispenserCommand.isNearCoralStation());
-        when(swerveSubsystem.getPose()).thenReturn(new Pose2d(13,6,mock()));
+        when(swerveSubsystem.getPose()).thenReturn(new Pose2d(17,7,mock()));
         assertTrue(coralDispenserCommand.isNearCoralStation());
     }
+
     @Test
     public void isNearCoralStationFalse() {
         when(swerveSubsystem.getPose()).thenReturn(new Pose2d(1,4,mock()));
