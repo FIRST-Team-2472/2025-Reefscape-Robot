@@ -260,6 +260,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void calibrateOdometry() {
         odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose());
+    }
+    
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
         xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
         yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
@@ -338,7 +340,6 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
-
     public boolean isAtPoint(Translation2d targetDrivePos) {
         return getPose().getTranslation().getDistance(targetDrivePos) //
                 <= TargetPosConstants.kAcceptableDistanceError; //
@@ -348,8 +349,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return Math.abs(getRotation2d().minus(angle).getDegrees()) //
                 <= TargetPosConstants.kAcceptableAngleError;
     }
-    
-
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // if their speed is larger then the physical max speed, it reduces all speeds
