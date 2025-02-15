@@ -2,15 +2,13 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+
     /**
      * The LoggingConstants class holds the logging configuration for the robot.
      * 
@@ -31,15 +29,15 @@ public final class Constants {
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
-        public static final double kElevatorL4Height = 57;
+        public static final double kElevatorL4Height = 58;
         public static final double kElevatorL3Height = 33.5;
         public static final double kElevatorL2Height = 17.5;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 57;
+        public static final double kElevatorMaxHeight = 58;// set later
     }
     public static final class ClimberConstants {
-        public static final int kClimberMotorID = 19; // change later
+        public static final int kClimberMotorID = 0; // change later
         
         public static final double kClimberGearRatio = 1; // change later
         public static final double kClimberOutAngle = 90; // change later
@@ -50,9 +48,9 @@ public final class Constants {
         public static final int kRightMotorID = 44; 
     }
     public static final class AlgaeConstants {
-        public static final int kPivotMotorID = 18;
+        public static final int kPivotMotorID = 0;
         public static final double kPivotGearRatio = 1/2;
-        public static final int kSpinMotorID = 10;
+        public static final int kSpinMotorID = 0;
     }
 
     public static final class ModuleConstants {
@@ -62,8 +60,9 @@ public final class Constants {
         public static final double kDriveMotorGearRatio = 1 / 6.75;
         public static final double kTurningMotorGearRatio = 1 / 12.8;
         // 2048 is pulses per rotation of the motor
-        public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
+        public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters
+                * (1.0 / 2048.0) * 0.9402;
+        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI * (1.0 / 2048.0);
 
         // CTRE mesures their velcity in 100ms, so we multiply it by 10 to get 1s
         public static final double kDriveEncoderRPMS2MeterPerSec = kDriveEncoderRot2Meter * 10;
@@ -80,10 +79,10 @@ public final class Constants {
         // Distance between front and back wheels
         public static final double kWheelBase = Units.inchesToMeters(23.5);
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-                new Translation2d(-kWheelBase / 2, kTrackWidth / 2),//this is right dont mess it up
-                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+                new Translation2d(kTrackWidth / 2, kWheelBase / 2),
+                new Translation2d(kTrackWidth / 2, -kWheelBase / 2),
+                new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
+                new Translation2d(-kTrackWidth / 2, -kWheelBase / 2));
 
         public static final int kFrontRightDriveMotorPort = 4;
         public static final int kFrontLeftDriveMotorPort = 8;
@@ -95,7 +94,7 @@ public final class Constants {
         public static final int kBackRightTurningMotorPort = 7;
         public static final int kBackLeftTurningMotorPort = 6;
 
-        // Positive should be counter clockwise
+        // Positive should be clockwise
         public static final boolean kFrontLeftTurningEncoderReversed = false;
         public static final boolean kBackLeftTurningEncoderReversed = false;
         public static final boolean kFrontRightTurningEncoderReversed = false;
@@ -121,7 +120,7 @@ public final class Constants {
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 180;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
         public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180; 
 
         // Max physical speed of our motors. Required for motor speed caculations
         // To find set the modules to 100% and see what speed cap out at
@@ -145,10 +144,10 @@ public final class Constants {
 
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44;//was 4
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
         public static final double kMaxAngularSpeedRadiansPerSecond = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 14;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 1;// was 5.5
+        public static final double kMaxAccelerationMetersPerSecondSquared = 5.5;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 2;
         public static final double kPXController = 1.5;
         public static final double kPYController = 1.5;
@@ -158,30 +157,6 @@ public final class Constants {
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
-
-        public static final double TRANSLATION_KP = 0.7; 
-        public static final double TRANSLATION_KI = 0; 
-        public static final double TRANSLATION_KD = 0;
-                    
-        public static final double ROTATION_KP = 0.7;
-        public static final double ROTATION_KI = 0;
-        public static final double ROTATION_KD = 0;
-                    
-        public static final double MAX_MODULE_SPEED = 2;
-        public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth/2,
-            DriveConstants.kWheelBase/2);
-            
-        /*  PathPlanner Holonomic Controller - Not used anymore
-        public static final PPHolonomicDriveController HOLONOMIC_PATH_FOLLOWER_CONFIG = new PPHolonomicDriveController(
-        new PIDConstants(
-            TRANSLATION_KP,
-            TRANSLATION_KI,
-            TRANSLATION_KD), // Translation PID constants
-        new PIDConstants(
-            ROTATION_KP,
-            ROTATION_KI,
-            ROTATION_KD) //Time between code runs
-        ); */
     }
 
     public static final class TargetPosConstants {
@@ -198,8 +173,8 @@ public final class Constants {
         public static final double kMinAngluarSpeedRadians = Math.PI / 16;
         public static final double kMinSpeedMetersPerSec = .2;
 
-        public static final double kPDriveController = .1;
-        public static final double kPAngleController = .05;
+        public static final double kPDriveController = 1.9;
+        public static final double kPAngleController = 1.9;
         public static final double kAcceptableDistanceError = 0.04;
         public static final double kAcceptableAngleError = 1.5;
     }
@@ -224,10 +199,11 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMeters = 17.55;
-
+        public static int kLeftLimitSwitchID = 0;// set later
+        public static int kMiddleLimitSwitchID = 1;// set later it will break if they are the same number
+        public static int kRightLimitSwitchID = 2;// set later
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
-        public static int kClimberABSEncoderDIOPort = 1; // set later
+        public static int kClimberABSEncoderDIOPort = 0; // set later
     }
 
     public static class SensorStatus {

@@ -48,7 +48,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void runElevatorMotors(double powerPercent){
+    leftElevatorMotor.set(powerPercent);
     rightElevatorMotor.set(powerPercent);
+
   }
 
   @Override
