@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SensorStatus;
+import frc.robot.MotorPowerController;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -25,6 +26,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double lastLeftElevatorReading = 0;
   public double lastRightElevatorReading = 0;
+  MotorPowerController motorPowerController;
 
   public ElevatorSubsystem() {
     final LimitSwitchConfig limitSwitchConfig = new LimitSwitchConfig();
@@ -34,6 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     limitSwitchConfig.forwardLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
     limitSwitchConfig.reverseLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
 
+    motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.smartCurrentLimit(35);
@@ -49,6 +52,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void runElevatorMotors(double powerPercent){
     rightElevatorMotor.set(powerPercent);
+  }
+  public void runElevatorMotorsWithMotorPowerController(double elevatorSetHeight){
+    double drive = -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight);
+    rightElevatorMotor.set(drive);
+    SmartDashboard.putNumber("Elevator Power", drive);
   }
 
   @Override
