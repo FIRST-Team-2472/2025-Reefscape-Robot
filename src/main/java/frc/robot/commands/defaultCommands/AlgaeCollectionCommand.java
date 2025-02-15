@@ -9,12 +9,10 @@ import frc.robot.subsystems.AlgaeCollectionSubsystem;
 public class AlgaeCollectionCommand extends Command{
     AlgaeCollectionSubsystem AlgaeSubsystem;
     Supplier<Boolean> rightJoyStickBackButton;
-    Supplier<Double> JoystickY;
 
-    public AlgaeCollectionCommand(AlgaeCollectionSubsystem AlgeaSubsystem, Supplier<Boolean> rightJoyStickBackButton, Supplier<Double> JoystickY) {
+    public AlgaeCollectionCommand(AlgaeCollectionSubsystem AlgeaSubsystem, Supplier<Boolean> rightJoyStickBackButton) {
         this.AlgaeSubsystem = AlgeaSubsystem;
         this.rightJoyStickBackButton = rightJoyStickBackButton;
-        this.JoystickY = JoystickY;
         addRequirements(AlgaeSubsystem);
     }
     @Override
@@ -22,17 +20,13 @@ public class AlgaeCollectionCommand extends Command{
 
     @Override
     public void execute() {
-        double y = JoystickY.get();
-        if(Math.abs(y) <= OperatorConstants.kFlightControllerDeadband) {
-            y = 0;
-        } // angle to collect is 220
-        y *= 1;//limit it to 30 percent
-        AlgaeSubsystem.runPivotMotor(y);
 
         if (rightJoyStickBackButton.get()) {
             AlgaeSubsystem.runSpinMotor(.2);
+            AlgaeSubsystem.setAngleSetpoint(175);
         }else{
             AlgaeSubsystem.runSpinMotor(0);
+            AlgaeSubsystem.setAngleSetpoint(120);
         }
     }
     @Override
