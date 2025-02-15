@@ -23,28 +23,34 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
 
   public AlgaeCollectionSubsystem() {
-      
+
     SparkMaxConfig config = new SparkMaxConfig();
-        config.smartCurrentLimit(35);
-        config.idleMode(IdleMode.kCoast);
+    config.smartCurrentLimit(35);
+    config.idleMode(IdleMode.kCoast);
     pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    SensorStatus.kPivotAngle = absoluteEncoder.get()*360;//updating it before its read, converting it to degrees as well
+    SensorStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read, converting it to degrees as
+                                                           // well
   }
-  public void runPivotMotor(double powerPercent){
+
+  public void runPivotMotor(double powerPercent) {
     pivotmotor.set(powerPercent);
   }
-  public void runSpinMotor(double powerPercent){
+
+  public void runSpinMotor(double powerPercent) {
     spinmotor.set(powerPercent);
   }
-  public void setAngleSetpoint(double angle){
+
+  public void setAngleSetpoint(double angle) {
     pivotAngleSetPoint = angle;
   }
-     @Override
+
+  @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kPivotAngle = (absoluteEncoder.get()*360+180)%360;// converting it to degrees and offsetting it by 180
+    SensorStatus.kPivotAngle = (absoluteEncoder.get() * 360 + 180) % 360;// converting it to degrees and offsetting it
+                                                                         // by 180
     SmartDashboard.putNumber("Algea Collector angle", SensorStatus.kPivotAngle);
 
     // driving it to hold its angle
