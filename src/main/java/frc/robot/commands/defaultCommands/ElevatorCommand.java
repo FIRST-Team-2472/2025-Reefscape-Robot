@@ -12,7 +12,6 @@ import frc.robot.SensorStatus;
 public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     Supplier<Double> joystickY;
-   MotorPowerController motorPowerController;
     double elevatorSetHeight = 0;
     Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed;
 
@@ -24,7 +23,7 @@ public class ElevatorCommand extends Command{
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
+       
     }
 
   @Override
@@ -56,8 +55,7 @@ public class ElevatorCommand extends Command{
         elevatorSetHeight = 0;
 
     SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
-    SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
-    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight), .6), -1)); //negative because up is reverse
+    elevatorSubsystem.runElevatorMotorsWithMotorPowerController(elevatorSetHeight); //negative because up is reverse
     
   }
 
