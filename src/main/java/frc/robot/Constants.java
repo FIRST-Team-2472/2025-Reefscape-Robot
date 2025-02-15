@@ -1,22 +1,19 @@
 package frc.robot;
 
+import java.lang.System.Logger.Level;
+
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import java.lang.System.Logger.Level;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.SwerveSubsystem;
 
 public final class Constants {
-    private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
-
     /**
      * The LoggingConstants class holds the logging configuration for the robot.
      * 
@@ -37,15 +34,15 @@ public final class Constants {
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
-        public static final double kElevatorL4Height = 58;
+        public static final double kElevatorL4Height = 57;
         public static final double kElevatorL3Height = 33.5;
         public static final double kElevatorL2Height = 17.5;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 58;// set later
+        public static final double kElevatorMaxHeight = 57;
     }
     public static final class ClimberConstants {
-        public static final int kClimberMotorID = 0; // change later
+        public static final int kClimberMotorID = 19; // change later
         
         public static final double kClimberGearRatio = 1; // change later
         public static final double kClimberOutAngle = 90; // change later
@@ -56,9 +53,9 @@ public final class Constants {
         public static final int kRightMotorID = 44; 
     }
     public static final class AlgaeConstants {
-        public static final int kPivotMotorID = 0;
+        public static final int kPivotMotorID = 18;
         public static final double kPivotGearRatio = 1/2;
-        public static final int kSpinMotorID = 0;
+        public static final int kSpinMotorID = 10;
     }
 
     public static final class ModuleConstants {
@@ -86,10 +83,10 @@ public final class Constants {
         // Distance between front and back wheels
         public static final double kWheelBase = Units.inchesToMeters(23.5);
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                new Translation2d(kTrackWidth / 2, kWheelBase / 2),
-                new Translation2d(kTrackWidth / 2, -kWheelBase / 2),
-                new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
-                new Translation2d(-kTrackWidth / 2, -kWheelBase / 2));
+                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, kTrackWidth / 2),//this is right dont mess it up
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
         public static final int kFrontRightDriveMotorPort = 4;
         public static final int kFrontLeftDriveMotorPort = 8;
@@ -176,7 +173,8 @@ public final class Constants {
         public static final double MAX_MODULE_SPEED = 2;
         public static final double DRIVE_BASE_RADIUS_METERS = Math.hypot(DriveConstants.kTrackWidth/2,
             DriveConstants.kWheelBase/2);
-
+            
+        /*  PathPlanner Holonomic Controller - Not used anymore
         public static final PPHolonomicDriveController HOLONOMIC_PATH_FOLLOWER_CONFIG = new PPHolonomicDriveController(
         new PIDConstants(
             TRANSLATION_KP,
@@ -186,7 +184,7 @@ public final class Constants {
             ROTATION_KP,
             ROTATION_KI,
             ROTATION_KD) //Time between code runs
-        );
+        ); */
     }
 
     public static final class ReefConstants {
@@ -224,8 +222,8 @@ public final class Constants {
         public static final double kMinAngluarSpeedRadians = Math.PI / 16;
         public static final double kMinSpeedMetersPerSec = .2;
 
-        public static final double kPDriveController = 1.9;
-        public static final double kPAngleController = 1.9;
+        public static final double kPDriveController = .1;
+        public static final double kPAngleController = .05;
         public static final double kAcceptableDistanceError = 0.04;
         public static final double kAcceptableAngleError = 1.5;
     }
@@ -250,30 +248,12 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMeters = 16.5;
+        public static final double sizeOfFieldMeters = 17.55;
 
-        public static int kLeftLimitSwitchID = 0;// set later
-        public static int kMiddleLimitSwitchID = 1;// set later it will break if they are the same number
-        public static int kRightLimitSwitchID = 2;// set later
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
-        public static int kClimberABSEncoderDIOPort = 0; // set later
+        public static int kClimberABSEncoderDIOPort = 1; // set later
     }
 
-    public static class SensorStatus {
-        public static boolean kLeftLimitSwitchValue = false;
-        public static boolean kMiddleLimitSwitchValue = false;
-        public static boolean kRightLimitSwitchValue = false;
-
-        public static double kElevatorHeight = 0;
-
-        public static double pigeonYaw = 0;
-        public static double pigeonPitch = 0;
-        public static double pigeonRoll = 0;
-
-        public static double kTimeOfFlightDistance = 0;
-        public static double kClimberAngle = 0;
-        public static double kPivotAngle = 0;
-    }
     public static class LEDConstants {
         public static int kChannel1 = 0;
         public static int kChannel2 = 1;

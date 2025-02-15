@@ -8,28 +8,26 @@ import frc.robot.subsystems.AlgaeCollectionSubsystem;
 
 public class AlgaeCollectionCommand extends Command{
     AlgaeCollectionSubsystem AlgaeSubsystem;
-    Supplier<Boolean> xboxControllerLeftTrigger;
-    Supplier<Double> JoystickY;
+    Supplier<Boolean> rightJoyStickBackButton;
 
-    public AlgaeCollectionCommand(AlgaeCollectionSubsystem AlgeaSubsystem,Supplier<Boolean> xboxControllerLeftTrigger,Supplier<Double> JoystickY) {
+    public AlgaeCollectionCommand(AlgaeCollectionSubsystem AlgeaSubsystem, Supplier<Boolean> rightJoyStickBackButton) {
         this.AlgaeSubsystem = AlgeaSubsystem;
-        this.xboxControllerLeftTrigger = xboxControllerLeftTrigger;
-        this.JoystickY = JoystickY;
+        this.rightJoyStickBackButton = rightJoyStickBackButton;
         addRequirements(AlgaeSubsystem);
     }
+    
     @Override
     public void initialize() {}
 
     @Override
     public void execute() {
-        double y = JoystickY.get();
-        if(Math.abs(y) <= OperatorConstants.kXboxControllerDeadband) {
-            y = 0;
-        }
-        AlgaeSubsystem.runPivotMotor(y);
 
-        if (xboxControllerLeftTrigger.get()) {
+        if (rightJoyStickBackButton.get()) {
             AlgaeSubsystem.runSpinMotor(.2);
+            AlgaeSubsystem.setAngleSetpoint(175);
+        }else{
+            AlgaeSubsystem.runSpinMotor(0);
+            AlgaeSubsystem.setAngleSetpoint(120);
         }
     }
     @Override

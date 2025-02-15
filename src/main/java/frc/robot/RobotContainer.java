@@ -19,35 +19,42 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
-
-
-
+import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
+import frc.robot.commands.defaultCommands.ClimbCommand;
 import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.AlgaeCollectionSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RobotContainer {
-  private final String testAuto = "testAuto";
+  private final String testAuto = "testAuto", swervedtptest = "Swerve Drive to Point Test";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  RobotConfig config;
 
   private final CommandSequences commandSequences = new CommandSequences();
 
   //Add subsystems below this comment
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
+  private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem(limeLightSubsystem);
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
+  AlgaeCollectionSubsystem algaeCollectionSubsystem = new AlgaeCollectionSubsystem();
 
+  ClimbSubsystem climbSubsystem = new ClimbSubsystem();
   CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
 
 
@@ -64,10 +71,11 @@ public class RobotContainer {
       ()-> -leftJoystick.getY(),
       ()-> -rightJoystick.getX(),
       ()-> rightJoystick.getRawButton(1),
-      ()-> leftJoystick.getRawButton(1)
+      ()-> rightJoystick.getRawButton(4)
     ));
 
     m_chooser.addOption(testAuto, testAuto);
+    m_chooser.addOption(swervedtptest, swervedtptest);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -77,11 +85,22 @@ public class RobotContainer {
     () -> xboxController.getYButton(), 
     () -> xboxController.getBButton(), 
     () -> xboxController.getAButton(), 
-    () -> xboxController.getXButton()));
+    () -> xboxController.getXButton()
+    ));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
     () -> xboxController.getRightTriggerAxis(),
     () -> xboxController.getLeftTriggerAxis()
+    ));
+     
+    algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem, 
+    () -> leftJoystick.getRawButton(1)
+    ));
+    
+    climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
+    () -> xboxController.getRightY(), 
+    () -> xboxController.getLeftBumperButton(), 
+    () -> xboxController.getRightBumperButton()
     ));
 
     configureBindings();
@@ -99,6 +118,12 @@ public class RobotContainer {
         return new SequentialCommandGroup(
           commandSequences.test(swerveSubsystem)
         );
+
+    if(m_autoSelected == swervedtptest)
+      return new SequentialCommandGroup(
+        commandSequences.swervePointTest(swerveSubsystem)
+      );
+
     return null;
   }
 }

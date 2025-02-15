@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.CoralDispenserSubsystem;
@@ -60,6 +61,15 @@ public class CommandSequences {
 
         return new SequentialCommandGroup(
             generatePath(swerveSubsystem, startingNodes[0], List.of(), startingNodes[4]));
+    }
+
+    public Command swervePointTest(SwerveSubsystem swerveSubsystem) {
+
+        swerveSubsystem.setOdometry(simplePose(0, 0, 0).toFieldPose2d()); //X = 7.671, Y = 5.077, angle = 0
+
+        return new SequentialCommandGroup(
+          new SwerveDriveToPointCmd(swerveSubsystem, simplePose(1, 2, 90))  //X = 6.055, Y = 4.025, angle = 0
+        );
     }
 
     // generates a path via points
@@ -119,7 +129,7 @@ public class CommandSequences {
     }
     public static Rotation2d teamChangeAngle(double degrees){
         if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(-degrees+180);
+                return  Rotation2d.fromDegrees(degrees+180);
         return  Rotation2d.fromDegrees(degrees);
     }
     public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
