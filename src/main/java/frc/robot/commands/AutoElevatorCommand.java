@@ -28,7 +28,7 @@ public class AutoElevatorCommand extends Command{
 
     @Override
     public void execute() {
-        elevatorSubsystem.runElevatorMotors(motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
+        elevatorSubsystem.runElevatorMotors(motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight));
     }
 
     public void end(boolean interrupted) {

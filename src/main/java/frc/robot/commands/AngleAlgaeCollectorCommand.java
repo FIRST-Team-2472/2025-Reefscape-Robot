@@ -30,7 +30,7 @@ public class AngleAlgaeCollectorCommand extends Command{
 
     @Override
     public void execute() {
-        algaeCollectionSubsystem.runPivotMotor(motorPowerController.calculateMotorPowerController(30, SensorStatus.kPivotAngle));
+        algaeCollectionSubsystem.runPivotMotor(motorPowerController.calculate(30, SensorStatus.kPivotAngle));
         algaeCollectionSubsystem.runSpinMotor(0.15);
         if (Math.abs(30 - SensorStatus.kPivotAngle) < 2) {
             atAngleTimer.start();

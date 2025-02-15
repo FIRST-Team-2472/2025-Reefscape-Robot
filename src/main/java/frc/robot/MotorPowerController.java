@@ -34,7 +34,7 @@ public class MotorPowerController {
      * @param sensorRead The current position
      * @return The motor speed needed to reach the setpoint
      */
-    public double calculateMotorPowerController(double setpoint, double sensorRead){
+    public double calculate(double setpoint, double sensorRead){
         error = setpoint - sensorRead; //calculates error
 
         if (Math.abs(error) > allowedError){ //if error is greater than allowed error then integral is added proportional to the error

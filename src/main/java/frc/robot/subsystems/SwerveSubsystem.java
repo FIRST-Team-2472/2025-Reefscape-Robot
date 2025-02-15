@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MotorPowerController;
+import frc.robot.NewAccelerationLimiter;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
@@ -77,14 +78,16 @@ public class SwerveSubsystem extends SubsystemBase {
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
 
-    private AccelerationLimiter xLimiter, yLimiter, turningLimiter;
-    private PIDController xController, yController;
+    private NewAccelerationLimiter xLimiter, yLimiter;
     public PIDController thetaController;
 
     public MotorPowerController xPowerController, yPowerController, turningPowerController;
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
+
+    double lastXDrive = 0;
+    double lastYDrive = 0;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
@@ -99,16 +102,12 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
 
-        xLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxSpeedMetersPerSecond);
-        yLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAccelerationUnitsPerSecond);
-        turningLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAngularAccelerationUnitsPerSecond);
+        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
+        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);//use this constant not maxspeed
 
         xPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
         yPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
         turningPowerController = new MotorPowerController(0.1, 0.05, .3, 1, .1, 0, 1);
-
-        yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
-        thetaController = new PIDController(TargetPosConstants.kPAngleController, 0.08, 0.02);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -177,10 +176,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return temp.vxMetersPerSecond;
     }
 
-    /* public ChassisSpeeds getChassisSpeedsRobotRelative() {
-        return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
-    } */
-
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }
@@ -243,40 +238,24 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
-        yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
-        //xLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
-          //      TargetPosConstants.kBackwardMaxAcceleration);
-        //yLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
-            //    TargetPosConstants.kBackwardMaxAcceleration);
-        //xLimiter.reset(getXSpeedFieldRel());
-        //yLimiter.reset(getYSpeedFieldRel());
-
-        //xController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
-        //xController.reset();
-        //yController.setPID(TargetPosConstants.kPDriveController, 0, 0.002);
-        //yController.reset();
-        //thetaController.setPID(TargetPosConstants.kPAngleController, 0, 0);
-        //thetaController.reset();
+        xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xLimiter.setInitialSpeed(lastXDrive);
+        yLimiter.setInitialSpeed(lastYDrive);
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed =  -xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
-        double ySpeed =  -yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
+        double xSpeed =  -xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        double ySpeed =  -yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
+        //angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = -turningPowerController.calculateMotorPowerController(angleDifference.getRadians(), 0);
+        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
         //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
 
-        //xSpeed = xLimiter.calculate(xSpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
-        //ySpeed = yLimiter.calculate(ySpeed * TargetPosConstants.kMaxSpeedMetersPerSecond);
-
-        //double unitCircleAngle = Math.atan2(ySpeed, xSpeed);
-        //xSpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, xSpeed) * Math.abs(Math.cos(unitCircleAngle));
-        //ySpeed += Math.copySign(TargetPosConstants.kMinSpeedMetersPerSec, ySpeed) * Math.abs(Math.sin(unitCircleAngle));
-        
-        
+        xSpeed = xLimiter.calculate(xSpeed);
+        ySpeed = yLimiter.calculate(ySpeed);
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
@@ -288,9 +267,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
+        lastXDrive = xSpeed;
+        lastYDrive = ySpeed;
         // Converts robot speeds to speeds relative to field
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, odometer.getPoseMeters().getRotation());
+                xSpeed, ySpeed, turningSpeed, getRotation2d());
         
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -376,7 +357,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
-        SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
     }

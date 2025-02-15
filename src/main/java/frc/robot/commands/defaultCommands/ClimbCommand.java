@@ -7,7 +7,6 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SensorStatus;
 import frc.robot.MotorPowerController;
-import frc.robot.MotorPowerController;
 import frc.robot.subsystems.ClimbSubsystem;
 
 public class ClimbCommand extends Command{
@@ -45,10 +44,10 @@ public class ClimbCommand extends Command{
             anglingIn = false;
         }
         if(anglingIn){
-            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculate(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
         }
         if(anglingOut){
-            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculate(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
         climberSusbsystem.runClimberMotor(y);
