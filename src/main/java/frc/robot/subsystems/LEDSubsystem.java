@@ -70,15 +70,14 @@ public class LEDSubsystem extends SubsystemBase {
 
     }
 
-    // Disables LEDs (turns them off)
     public void LEDMode(LEDStatusMode code) {
         currentStatusMode = code;
     }
+
     public void disableLEDs() {
         disableLEDs = true;
     }
 
-    // Enables LEDs (turns them on)
     public void enableLEDs() {
         disableLEDs = false;
     }
