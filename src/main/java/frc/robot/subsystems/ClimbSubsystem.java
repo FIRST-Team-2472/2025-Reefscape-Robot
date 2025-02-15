@@ -11,6 +11,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.SensorStatus;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbSubsystem extends SubsystemBase{
   // creating the motors.
@@ -39,8 +40,7 @@ public class ClimbSubsystem extends SubsystemBase{
   @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kClimberAngle = absoluteEncoder.get() * 360;
-    // multiplying it by 360 to convert it from rotations to
-    // degrees
+    SensorStatus.kClimberAngle = (absoluteEncoder.get()*360+120) % 360;//multiplying it by 360 to convert it from rotations to degrees
+    SmartDashboard.putNumber("Climber angle", SensorStatus.kClimberAngle);
   }
 }

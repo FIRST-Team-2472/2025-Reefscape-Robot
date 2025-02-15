@@ -8,13 +8,12 @@ import frc.robot.subsystems.AlgaeCollectionSubsystem;
 
 public class AlgaeCollectionCommand extends Command {
     AlgaeCollectionSubsystem AlgaeSubsystem;
-    Supplier<Boolean> xboxControllerLeftTrigger;
+    Supplier<Boolean> rightJoyStickBackButton;
     Supplier<Double> JoystickY;
 
-    public AlgaeCollectionCommand(AlgaeCollectionSubsystem AlgeaSubsystem, Supplier<Boolean> xboxControllerLeftTrigger,
-            Supplier<Double> JoystickY) {
+    public AlgaeCollectionCommand(AlgaeCollectionSubsystem AlgeaSubsystem, Supplier<Boolean> rightJoyStickBackButton, Supplier<Double> JoystickY) {
         this.AlgaeSubsystem = AlgeaSubsystem;
-        this.xboxControllerLeftTrigger = xboxControllerLeftTrigger;
+        this.rightJoyStickBackButton = rightJoyStickBackButton;
         this.JoystickY = JoystickY;
         addRequirements(AlgaeSubsystem);
     }
@@ -26,14 +25,16 @@ public class AlgaeCollectionCommand extends Command {
     @Override
     public void execute() {
         double y = JoystickY.get();
-        // implementing dead band
-        if (Math.abs(y) <= OperatorConstants.kXboxControllerDeadband) {
+        if(Math.abs(y) <= OperatorConstants.kFlightControllerDeadband) {
             y = 0;
-        }
+        } // angle to collect is 220
+        y *= 1;//limit it to 30 percent
         AlgaeSubsystem.runPivotMotor(y);
-        
-        if (xboxControllerLeftTrigger.get()) {
+
+        if (rightJoyStickBackButton.get()) {
             AlgaeSubsystem.runSpinMotor(.2);
+        }else{
+            AlgaeSubsystem.runSpinMotor(0);
         }
     }
 
