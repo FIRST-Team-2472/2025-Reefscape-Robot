@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.SensorStatus;
+import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import edu.wpi.first.wpilibj.Timer;

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.extras.PosPose2d;
 
 public final class Constants {
     /**
@@ -188,24 +189,24 @@ public final class Constants {
     }
 
     public static final class ReefConstants {
-        public static final Pose2d reefA = new Pose2d(3.17, 4.19, new Rotation2d(0));
-        public static final Pose2d reefB = new Pose2d(3.17, 3.86, new Rotation2d(0));
-        public static final Pose2d reefC = new Pose2d(3.69, 2.97, new Rotation2d(60));
-        public static final Pose2d reefD = new Pose2d(0, 0, new Rotation2d(60));
-        public static final Pose2d reefE = new Pose2d(0, 0, new Rotation2d(120));
-        public static final Pose2d reefF = new Pose2d(0, 0, new Rotation2d(120));
-        public static final Pose2d reefG = new Pose2d(0, 0, new Rotation2d(180));
-        public static final Pose2d reefH = new Pose2d(0, 0, new Rotation2d(180));
-        public static final Pose2d reefI = new Pose2d(0, 0, new Rotation2d(240));
-        public static final Pose2d reefJ = new Pose2d(0, 0, new Rotation2d(240));
-        public static final Pose2d reefK = new Pose2d(0, 0, new Rotation2d(300));
-        public static final Pose2d reefL = new Pose2d(0, 0, new Rotation2d(300));
-        public static final Pose2d reefTroughAB = new Pose2d(0, 0, new Rotation2d(0));
-        public static final Pose2d reefTroughCD = new Pose2d(0, 0, new Rotation2d(60));
-        public static final Pose2d reefTroughEF = new Pose2d(0, 0, new Rotation2d(120));
-        public static final Pose2d reefTroughGH = new Pose2d(0, 0, new Rotation2d(180));
-        public static final Pose2d reefTroughIJ = new Pose2d(0, 0, new Rotation2d(240));
-        public static final Pose2d reefTroughKL = new Pose2d(0, 0, new Rotation2d(300));
+        public static final PosPose2d reefA = new PosPose2d(3.17, 4.19, new Rotation2d(0));
+        public static final PosPose2d reefB = new PosPose2d(3.17, 3.86, new Rotation2d(0));
+        public static final PosPose2d reefC = new PosPose2d(3.69, 2.97, new Rotation2d(60));
+        public static final PosPose2d reefD = new PosPose2d(0, 0, new Rotation2d(60));
+        public static final PosPose2d reefE = new PosPose2d(0, 0, new Rotation2d(120));
+        public static final PosPose2d reefF = new PosPose2d(0, 0, new Rotation2d(120));
+        public static final PosPose2d reefG = new PosPose2d(0, 0, new Rotation2d(180));
+        public static final PosPose2d reefH = new PosPose2d(0, 0, new Rotation2d(180));
+        public static final PosPose2d reefI = new PosPose2d(0, 0, new Rotation2d(240));
+        public static final PosPose2d reefJ = new PosPose2d(0, 0, new Rotation2d(240));
+        public static final PosPose2d reefK = new PosPose2d(0, 0, new Rotation2d(300));
+        public static final PosPose2d reefL = new PosPose2d(0, 0, new Rotation2d(300));
+        public static final PosPose2d reefTroughAB = new PosPose2d(0, 0, new Rotation2d(0));
+        public static final PosPose2d reefTroughCD = new PosPose2d(0, 0, new Rotation2d(60));
+        public static final PosPose2d reefTroughEF = new PosPose2d(0, 0, new Rotation2d(120));
+        public static final PosPose2d reefTroughGH = new PosPose2d(0, 0, new Rotation2d(180));
+        public static final PosPose2d reefTroughIJ = new PosPose2d(0, 0, new Rotation2d(240));
+        public static final PosPose2d reefTroughKL = new PosPose2d(0, 0, new Rotation2d(300));
     }
 
     public static final class TargetPosConstants {

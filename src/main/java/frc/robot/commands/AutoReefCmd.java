@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.CommandSequences;
 import frc.robot.Constants;
+import frc.robot.extras.PosPose2d;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -16,29 +16,40 @@ public class AutoReefCmd extends Command{
     int T, Q, P, reefLevel;     
     double X, Y; 
     double elevatorHeight;
-    Pose2d reefLocation; 
+    PosPose2d reefLocation; 
     Command placeCoralOnReef;
+    boolean calculate;
     public AutoReefCmd(CommandSequences commandSequences, CoralDispenserSubsystem coralDispenserSubsystem, ElevatorSubsystem elevatorSubsystem, SwerveSubsystem swerveSubsystem, int reefLevel) {
         this.commandSequences = commandSequences;
         this.coralDispenserSubsystem = coralDispenserSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
         this.swerveSubsystem = swerveSubsystem;
         this.reefLevel = reefLevel;
+        calculate = true;
         addRequirements(coralDispenserSubsystem, elevatorSubsystem, swerveSubsystem);
+    }
+    public AutoReefCmd(CommandSequences commandSequences, CoralDispenserSubsystem coralDispenserSubsystem, ElevatorSubsystem elevatorSubsystem, SwerveSubsystem swerveSubsystem, int reefLevel, PosPose2d reefLocation){
+        this(commandSequences, coralDispenserSubsystem, elevatorSubsystem, swerveSubsystem, reefLevel);
+        this.reefLocation = reefLocation;
+        calculate = false;
     }
 
     @Override
     public void initialize() {      
-        X = swerveSubsystem.getOdometer().getPoseMeters().getTranslation().getX();
-        Y = swerveSubsystem.getOdometer().getPoseMeters().getTranslation().getX();
-        X-= 4.5;// reef x center
-        Y-= 4.05;// reef y center
-        Q = findQ();
-        T = findT();
-        P = findP(); // also sets the reefLocation
+        if (calculate){
+            X = swerveSubsystem.getOdometer().getPoseMeters().getTranslation().getX();
+            Y = swerveSubsystem.getOdometer().getPoseMeters().getTranslation().getX();
+            X-= 4.5;// reef x center
+            Y-= 4.05;// reef y center
+            Q = findQ();
+            T = findT();
+            P = findP(); // also sets the reefLocation
+        } 
         if (reefLevel == 1){
             elevatorHeight = Constants.ElevatorConstants.kElevatorL1Height;
-            reefLocation = l1Trough();
+            if (calculate){
+                reefLocation = l1Trough();
+            }
         } else if (reefLevel == 2){
             elevatorHeight = Constants.ElevatorConstants.kElevatorL2Height;
         } else if (reefLevel == 3){
@@ -46,7 +57,7 @@ public class AutoReefCmd extends Command{
         } else {
             elevatorHeight = Constants.ElevatorConstants.kElevatorL4Height;
         }
-        placeCoralOnReef = commandSequences.placeCoralOnReef(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, reefLocation, elevatorHeight);
+        placeCoralOnReef = commandSequences.placeCoralOnReef(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, reefLocation, elevatorHeight, calculate);
         placeCoralOnReef.schedule();
 }
     @Override
@@ -132,7 +143,7 @@ public class AutoReefCmd extends Command{
         }
     }
 
-    private Pose2d l1Trough(){
+    private PosPose2d l1Trough(){
         if (P == 1 || P == 2){
             return Constants.ReefConstants.reefTroughAB;
         } else if (P == 3 || P == 4){

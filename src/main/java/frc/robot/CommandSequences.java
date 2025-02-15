@@ -15,10 +15,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
@@ -133,14 +135,15 @@ public class CommandSequences {
         return  Rotation2d.fromDegrees(degrees);
     }
     public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
-    CoralDispenserSubsystem coralDispenserSubsytem, Pose2d reefPosition, double reefLevel){
+    CoralDispenserSubsystem coralDispenserSubsytem, PosPose2d reefPosition, double reefLevel, boolean calculated){
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
-                //move to point (reefPosition)
+                new SwerveDriveToPointCmd(swerveSubsystem, reefPosition),
                 new AutoElevatorCommand(elevatorSubsystem, reefLevel)
             ),        
             new AutoCoralDispenseCommand(coralDispenserSubsytem),
-            new AutoElevatorCommand(elevatorSubsystem, 0.0) 
+            (calculated ? new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height) : null)
+                
         );
     }
 }
