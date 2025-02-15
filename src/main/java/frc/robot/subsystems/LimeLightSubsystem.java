@@ -10,7 +10,7 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class LimeLightSubsystem extends SubsystemBase {
 
-    private String[] LimeLights = { "limelight-two" };
+    private String[] LimeLights = { "limelight-front" };
     private double[] LimeLightConfidence = { 0 };
     private double[] LimeLightArea = { 0 };
     private double[] LimeLightDist = { 0 };
@@ -25,17 +25,12 @@ public class LimeLightSubsystem extends SubsystemBase {
         LimeLights[LimeLights.length] = name;
     }
 
-    @Override
-    public void periodic() {
+    public void fetchLimeLightData() {
 
         for (int i = 0; i < LimeLights.length; i++) {
 
-            // Send Gyro data to Limelight for higher accuracy
-            LimelightHelpers.SetRobotOrientation(LimeLights[i], SensorStatus.pigeonYaw,
-            0.0, SensorStatus.pigeonPitch, 0.0, SensorStatus.pigeonRoll, 0.0);
-
             // Get the pose estimates
-            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLights[i]);
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
 
             // System.out.println(estimate);
 
