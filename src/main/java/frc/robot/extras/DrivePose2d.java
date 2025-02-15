@@ -27,7 +27,7 @@ public class DrivePose2d extends Pose2d{
 
     public FieldPose2d toFieldPose2d() {
         if (SwerveSubsystem.isOnRed()) {
-            return new FieldPose2d(SensorConstants.sizeOfFieldMeters - getX(), getY(), getRotation());
+            return new FieldPose2d(SensorConstants.sizeOfFieldMetersX - getX(), getY(), getRotation());
         }
         return new FieldPose2d(getX(), Math.abs(getY()), getRotation());
     }
