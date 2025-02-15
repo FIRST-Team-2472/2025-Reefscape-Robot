@@ -133,7 +133,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem(Pigeon2 gyro, // This constructor is used for testing
             SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight,
             GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB,
-            GenericEntry pitchSB, PositionFilteringSubsystem positionFilteringSubsystem) {
+            GenericEntry pitchSB, PositionFilteringSubsystem positionFilteringSubsystem, int periods) {
         this.gyro = gyro;
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
@@ -144,6 +144,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this.rollSB = rollSB;
         this.pitchSB = pitchSB;
         this.positionFilteringSubsystem = positionFilteringSubsystem;
+        this.periods = periods;
     }
 
     public SwerveDriveOdometry getOdometer() {

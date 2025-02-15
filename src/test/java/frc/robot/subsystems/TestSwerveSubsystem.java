@@ -59,7 +59,7 @@ public class TestSwerveSubsystem {
 
         swerveSubsystem = new SwerveSubsystem(pigeon, 
         frontLeft, frontRight, backLeft, backRight, 
-        headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB, positionFilteringSubsystem);
+        headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB, positionFilteringSubsystem, -1);
     }
     private void mockSuffleBoard() {
         yawStatusSignal = mock();
