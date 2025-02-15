@@ -5,13 +5,19 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
 import frc.robot.commands.defaultCommands.ClimbCommand;
@@ -29,6 +35,13 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RobotContainer {
+  private final String testAuto = "testAuto", swervedtptest = "Swerve Drive to Point Test";
+
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private final CommandSequences commandSequences = new CommandSequences();
+
   //Add subsystems below this comment
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
@@ -53,8 +66,14 @@ public class RobotContainer {
       ()-> -leftJoystick.getY(),
       ()-> -rightJoystick.getX(),
       ()-> rightJoystick.getRawButton(1),
-      ()-> leftJoystick.getRawButton(1)
+      ()-> rightJoystick.getRawButton(4)
     ));
+
+    m_chooser.addOption(testAuto, testAuto);
+    m_chooser.addOption(swervedtptest, swervedtptest);
+
+    ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
+    driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
     () -> -xboxController.getLeftY(), 
@@ -70,8 +89,7 @@ public class RobotContainer {
     ));
      
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem, 
-    () -> leftJoystick.getRawButton(2), 
-    () -> leftJoystick.getRawAxis(3)
+    () -> leftJoystick.getRawButton(1)
     ));
     
     climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
@@ -88,6 +106,19 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    m_autoSelected = m_chooser.getSelected();
+
+    if(m_autoSelected == testAuto)
+        //return AutoBuilder.buildAuto("test");
+        return new SequentialCommandGroup(
+          commandSequences.test(swerveSubsystem)
+        );
+
+    if(m_autoSelected == swervedtptest)
+      return new SequentialCommandGroup(
+        commandSequences.swervePointTest(swerveSubsystem)
+      );
+
     return null;
   }
 }
