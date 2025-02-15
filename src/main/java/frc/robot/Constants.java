@@ -230,17 +230,6 @@ public final class Constants {
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
 
-    public static class SensorStatus {
-        public static boolean kLeftLimitSwitchValue = false;
-        public static boolean kMiddleLimitSwitchValue = false;
-        public static boolean kRightLimitSwitchValue = false;
-
-        public static double kElevatorHeight = 0;
-
-        public static double kTimeOfFlightDistance = 0;
-        public static double kClimberAngle = 0;
-        public static double kPivotAngle = 0;
-    }
     public static class LEDConstants {
         public static int kChannel1 = 0;
         public static int kChannel2 = 1;

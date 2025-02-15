@@ -20,6 +20,7 @@ public class AlgaeCollectionCommand extends Command{
         this.leftJoystickButtonFour = leftJoystickButtonFour;
         addRequirements(AlgaeSubsystem);
     }
+    
     @Override
     public void initialize() {}
 

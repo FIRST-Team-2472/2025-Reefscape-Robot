@@ -26,6 +26,9 @@ import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.AlgaeCollectionSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -43,7 +46,9 @@ public class RobotContainer {
   private final CommandSequences commandSequences = new CommandSequences();
 
   //Add subsystems below this comment
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
+  private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem(limeLightSubsystem);
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
