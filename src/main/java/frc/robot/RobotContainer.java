@@ -89,8 +89,7 @@ public class RobotContainer {
     ));
      
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem, 
-    () -> leftJoystick.getRawButton(2), 
-    () -> leftJoystick.getRawAxis(3)
+    () -> leftJoystick.getRawButton(1)
     ));
     
     climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
