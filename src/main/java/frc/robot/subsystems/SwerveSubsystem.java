@@ -100,16 +100,14 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }).start();
     }
-    public SwerveSubsystem(Pigeon2 gyro, 
-        //SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, 
+    public SwerveSubsystem(Pigeon2 gyro, //This constructor is used for testing
+        SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, 
         GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB, GenericEntry pitchSB) {
-        this.gyro = gyro;
-        /* 
+        this.gyro = gyro; 
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.backLeft = backLeft;
         this.backRight = backRight;
-        */
         this.headingShuffleBoard = headingShuffleBoard;
         this.odometerShuffleBoard = odometerShuffleBoard;
         this.rollSB = rollSB;
@@ -146,10 +144,7 @@ public class SwerveSubsystem extends SubsystemBase {
         if (ally.isPresent()) {
             return ally.get() == Alliance.Red;
         }
-
-        String choices = colorChooser.getSelected();
-        return choices == "Red";
-        // if no team selected on suffleboard, it will default to the field info
+        return false;
     }
 
     // gets our current velocity relative to the x of the field
