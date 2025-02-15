@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.SensorStatus;
+import frc.robot.SensorStatus;
 import frc.robot.subsystems.AlgaeCollectionSubsystem;
 
 public class AlgaeCollectionCommand extends Command{
