@@ -66,7 +66,7 @@ public class RobotContainer {
       ()-> -leftJoystick.getY(),
       ()-> -rightJoystick.getX(),
       ()-> rightJoystick.getRawButton(1),
-      ()-> leftJoystick.getRawButton(1)
+      ()-> rightJoystick.getRawButton(4)
     ));
 
     m_chooser.addOption(testAuto, testAuto);
