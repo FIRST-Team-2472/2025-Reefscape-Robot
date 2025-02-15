@@ -14,7 +14,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     private LEDStatusMode currentStatusMode;
 
-    private boolean disableLEDs,red,green,blue,yellow,purple,cyan;
+    private boolean disableLEDs;
 
     public Color color;
 
@@ -61,19 +61,6 @@ public class LEDSubsystem extends SubsystemBase {
     public void periodic() {
         int code = 0;
         if (!disableLEDs) {
-            if (green) {
-                LEDMode(LEDStatusMode.GREEN);
-            } else if (blue) {
-                LEDMode(LEDStatusMode.BLUE);
-            } else if (yellow) {
-                LEDMode(LEDStatusMode.YELLOW);
-            } else if (cyan) {
-                LEDMode(LEDStatusMode.CYAN);
-            } else if (purple) {
-                LEDMode(LEDStatusMode.PURPLE);
-            } else if (red) {
-                LEDMode(LEDStatusMode.RED);
-            }
             code = currentStatusMode.code;
         } else {
             // LEDs are disabled
@@ -110,8 +97,6 @@ public class LEDSubsystem extends SubsystemBase {
             default:
             color = new Color(0,0,0);
         }
-
-        
     }
 
     public void LEDMode(LEDStatusMode code) {
@@ -124,25 +109,5 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void enableLEDs() {
         disableLEDs = false;
-    }
-
-    public void climbAtAngle(boolean atangle) {
-        green = atangle;
-    }
-
-    public void runningAutonomistCommand(boolean running) {
-        blue = running;
-    }
-
-    public void coralCollected(boolean collected) {
-        yellow = collected;
-    }
-
-    public void elevatorCan(boolean can) {
-        cyan = can;
-    }
-
-    public void isClimbing(boolean climbing) {
-        red = climbing;
     }
 }
