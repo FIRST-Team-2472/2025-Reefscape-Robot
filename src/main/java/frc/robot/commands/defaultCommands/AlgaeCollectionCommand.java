@@ -15,6 +15,7 @@ public class AlgaeCollectionCommand extends Command{
         this.rightJoyStickBackButton = rightJoyStickBackButton;
         addRequirements(AlgaeSubsystem);
     }
+    
     @Override
     public void initialize() {}
 

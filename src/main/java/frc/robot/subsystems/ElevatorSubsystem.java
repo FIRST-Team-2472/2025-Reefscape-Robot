@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.SensorStatus;
+import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
 
 import com.revrobotics.spark.SparkMax;
