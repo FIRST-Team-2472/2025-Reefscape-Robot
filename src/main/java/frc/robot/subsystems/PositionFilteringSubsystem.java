@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Arrays;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +30,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
         double weightedX = 0;
         double weightedY = 0;
+        double weightedAngle = 0;
 
         odometryBotPose = odometer.getPoseMeters();
         limeLightBotPoses = limeLightSubsystem.getBotPoses();
@@ -78,10 +80,12 @@ public class PositionFilteringSubsystem extends SubsystemBase {
             weightedY += limeLightBotPoses[i].getY() * confs[i + 1];
             System.out.println("PositionFilteringSubsystem: LimeLightBotPose[" + i + "].Y: "
                     + limeLightBotPoses[i].getY() + ", Confidence: " + confs[i + 1]);
+            weightedAngle += limeLightBotPoses[i].getRotation().getRadians() * confs[i + 1];
         }
 
         weightedX += odometryBotPose.getX() * confs[0];
         weightedY += odometryBotPose.getY() * confs[0];
+        weightedAngle += odometryBotPose.getRotation().getRadians() * confs[0];
 
         System.out.println("PositionFilteringSubsystem: OdometryBotPose.X: " + odometryBotPose.getX() + ", Confidence: "
                 + confs[0]);
@@ -91,7 +95,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         System.out.println("PositionFilteringSubsystem: Weighted X: " + weightedX);
         System.out.println("PositionFilteringSubsystem: Weighted Y: " + weightedY);
 
-        filteredBotPose = new Pose2d(weightedX, weightedY, odometryBotPose.getRotation());
+        filteredBotPose = new Pose2d(weightedX, weightedY, new Rotation2d(weightedAngle));
 
         SmartDashboard.putNumber("Total Confidence", totalConfidence);
         SmartDashboard.putNumber("numLimeLights", numLimeLights);

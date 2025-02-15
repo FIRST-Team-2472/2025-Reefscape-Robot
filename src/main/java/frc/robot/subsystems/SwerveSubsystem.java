@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -408,6 +409,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
+        SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
+                odometer.getPoseMeters().getY() });
         SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
