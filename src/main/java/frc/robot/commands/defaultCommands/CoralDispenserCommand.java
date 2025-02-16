@@ -2,9 +2,11 @@ package frc.robot.commands.defaultCommands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.SensorStatus;
 
@@ -38,27 +40,26 @@ public class CoralDispenserCommand extends Command {
     @Override
     public void execute() {
         if (xboxControllerRightTrigger.get() > 0.5)
-            activateCoralDispenserUpperLevels();
+            dispenseCoral();
         else if (xboxControllerLeftTrigger.get() > 0.5) {
-            activateCoralDispenserLowestLevel();
+            reverseCoralDispenser();
         } else if (isNearCoralStation() && !coralDispenserSubsystem.hasCoralAlready()) {
             // TODO determine if we need lower or upper level to activate
             //Controlled by button
-            activateCoralDispenserUpperLevels();
+            dispenseCoral();
 
         } else
             // Do nothing with this as this stops motors
             coralDispenserSubsystem.runMotors(0, 0);
     }
 
-    // activateCoralDispenserLowestLevel() is Level 1
-    private void activateCoralDispenserLowestLevel() {
+    // reverse the dispenser
+    private void reverseCoralDispenser() {
         coralDispenserSubsystem.runMotors(-.3, .3);
     }
 
-    // activateCoralDispenserUpperLevels() is Levels 2, 3, 4
-    private void activateCoralDispenserUpperLevels() {
-        if (SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10)
+    private void dispenseCoral() {
+        if (SensorStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && SensorStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1)
             coralDispenserSubsystem.runMotors(.9, -.3);
         else
             coralDispenserSubsystem.runMotors(.8, -.8);// subject to change
@@ -76,14 +77,14 @@ public class CoralDispenserCommand extends Command {
     }
 
     public boolean isNearCoralStation() {
-        var currentRobotPos = swerveSubsystem.getPose();
-        var currentY = currentRobotPos.getY();
-        var currentX = currentRobotPos.getX();
+        Pose2d currentRobotPos = swerveSubsystem.getPose();
+        double currentY = currentRobotPos.getY();
+        double currentX = currentRobotPos.getX();
         // create variable to hold distance from corner or variable of y- field max or
         // min
         if ((currentY <= CORAL_STATION_1Y_RANGE || currentY >= CORAL_STATION_2Y_RANGE) &&
                 (currentX <= TRIGGER_DISTANCE + fieldMin
-                        || currentX >= SensorConstants.sizeOfFieldMeters - TRIGGER_DISTANCE)) {
+                        || currentX >= SensorConstants.sizeOfFieldMetersX - TRIGGER_DISTANCE)) {
             // assuming maxX is roughly 15
             return true;
         }

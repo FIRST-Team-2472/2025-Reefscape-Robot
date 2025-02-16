@@ -18,6 +18,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     private SparkMax leftMotor = new SparkMax(CoralDispenserConstants.kLeftMotorID, MotorType.kBrushless);
     private SparkMax rightMotor = new SparkMax(CoralDispenserConstants.kRightMotorID, MotorType.kBrushless);
     private LaserCan laserCan = new LaserCan(0);
+    public boolean hasCoral = true;
+    public boolean intakingCoral = true;
     
     public CoralDispenserSubsystem(){
 
@@ -38,21 +40,31 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     public void runMotors(double leftPower, double rightPower){
         leftMotor.set(leftPower);
         rightMotor.set(rightPower);
+        if(leftPower > 0 && rightPower < 0)
+            hasCoral = false;
     }
 
     @Override
     public void periodic() {
         LaserCan.Measurement measurement = laserCan.getMeasurement();
-        if (measurement != null && measurement.status ==LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+        if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
             double distance = measurement.distance_mm;
             SmartDashboard.putNumber("distance sensor", distance);
             SensorStatus.kTimeOfFlightDistance = distance;
         }else{
             System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
+
+        if(SensorStatus.kTimeOfFlightDistance < 40){ // 40 is in milimeters
+            intakingCoral = true;
+        }else if(intakingCoral){
+            hasCoral = true;
+            intakingCoral = false;
+        }else{
+            intakingCoral = false;
+        }
     }
     public boolean hasCoralAlready() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hasCoralAlready'");
+        return hasCoral;
     }
 }
