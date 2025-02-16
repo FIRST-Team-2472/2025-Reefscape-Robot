@@ -88,7 +88,8 @@ public class RobotContainer {
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem, 
     () -> xboxController.getRightTriggerAxis(),
-    () -> xboxController.getLeftTriggerAxis()
+    () -> xboxController.getLeftTriggerAxis(),
+    swerveSubsystem
     ));
      
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem, 
