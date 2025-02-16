@@ -26,8 +26,7 @@ public class AutoPrepForClimbCommand extends Command{
     public void initialize() {
         new ParallelCommandGroup(
             new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(angle)),
-            new AutoElevatorCommand(elevatorSubsystem, 0),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+            new AutoElevatorCommand(elevatorSubsystem, 0)
         ).schedule();
     }
 
