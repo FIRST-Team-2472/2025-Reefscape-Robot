@@ -55,6 +55,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
 
+
         if(SensorStatus.kTimeOfFlightDistance < 40){ // 40 is in milimeters
             intakingCoral = true;
         }else if(intakingCoral){
