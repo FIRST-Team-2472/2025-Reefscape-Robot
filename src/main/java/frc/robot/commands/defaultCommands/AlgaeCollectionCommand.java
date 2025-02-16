@@ -3,7 +3,6 @@ package frc.robot.commands.defaultCommands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.AlgaeCollectionSubsystem;
 
 public class AlgaeCollectionCommand extends Command{
