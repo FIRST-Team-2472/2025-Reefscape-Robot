@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,7 +32,7 @@ public class SwerveModule {
 
         driveMotor = new TalonFX(driveMotorId);
         turningMotor = new TalonFX(turningMotorId);
-
+        TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         driveMotor.getConfigurator().apply(new TalonFXConfiguration());
         turningMotor.getConfigurator().apply(new TalonFXConfiguration());
 
@@ -49,6 +50,12 @@ public class SwerveModule {
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();
+        setBrakeMode();
+    }
+
+    public void setBrakeMode() {
+        driveMotor.setNeutralMode(NeutralModeValue.Brake);
+        turningMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
     public double getDrivePosition() {
@@ -79,7 +86,6 @@ public class SwerveModule {
         angle *= absoluteEncoderReversed ? -1 : 1;
         
         return angle;
-        // return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
 
     public void resetEncoders() {
@@ -88,11 +94,11 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d().fromDegrees(getAbsolutePosition()));
+        return new SwerveModuleState(getDriveVelocity(), Rotation2d.fromDegrees(getAbsolutePosition()));
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsolutePosition()));
+        return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getAbsolutePosition()));
     }
 
     // a swerve module state is composed of a speed and direction
