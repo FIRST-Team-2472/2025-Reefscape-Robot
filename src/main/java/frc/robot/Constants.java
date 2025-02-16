@@ -2,9 +2,6 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -224,23 +221,13 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMeters = 17.55;
+        public static final double sizeOfFieldMetersX = 17.55;
+        public static final double sizeOfFieldMetersY = 8;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
 
-    public static class SensorStatus {
-        public static boolean kLeftLimitSwitchValue = false;
-        public static boolean kMiddleLimitSwitchValue = false;
-        public static boolean kRightLimitSwitchValue = false;
-
-        public static double kElevatorHeight = 0;
-
-        public static double kTimeOfFlightDistance = 0;
-        public static double kClimberAngle = 0;
-        public static double kPivotAngle = 0;
-    }
     public static class LEDConstants {
         public static int kChannel1 = 0;
         public static int kChannel2 = 1;

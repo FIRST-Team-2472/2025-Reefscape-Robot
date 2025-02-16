@@ -22,7 +22,7 @@ public class PositivePoint extends Translation2d {
 
     public FieldPoint toFieldPos() {
         if (SwerveSubsystem.isOnRed()) {
-            return new FieldPoint(SensorConstants.sizeOfFieldMeters - getX(), getY());
+            return new FieldPoint(SensorConstants.sizeOfFieldMetersX - getX(), getY());
         }
         return new FieldPoint(getX(), getY());
     }
