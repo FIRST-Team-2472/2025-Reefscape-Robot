@@ -4,10 +4,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.function.Supplier;
-import frc.robot.MotorPowerController;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.SensorStatus;
 
 public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
