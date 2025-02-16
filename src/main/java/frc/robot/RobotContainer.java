@@ -5,8 +5,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,8 +31,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.AlgaeCollectionSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralDispenserSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RobotContainer {
