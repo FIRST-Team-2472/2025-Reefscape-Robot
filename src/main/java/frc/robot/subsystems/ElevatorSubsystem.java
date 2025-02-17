@@ -26,6 +26,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double lastLeftElevatorReading = 0;
   public double lastRightElevatorReading = 0;
+  public double elevatorSetHeight = 0;
   MotorPowerController motorPowerController;
 
   public ElevatorSubsystem() {
@@ -50,19 +51,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   }
 
-  public void runElevatorMotors(double powerPercent){
-    rightElevatorMotor.set(powerPercent);
-  }
-  public void runElevatorMotorsWithMotorPowerController(double elevatorSetHeight){
-    double drive = -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight);
-    rightElevatorMotor.set(drive);
-    SmartDashboard.putNumber("Elevator Power", drive);
-  }
-
   @Override
   public void periodic() {
-    // updating the sensors status to be read by other files
+    //run the elevator to the correct height this is in the subsystem so it doesnt need a command to hold its height
+    runElevatorMotorsWithMotorPowerController(elevatorSetHeight);
 
+    // updating the sensors status to be read by other files
     // code to check that both motors are working and returning the other motors value if one isnt
     if (!leftElevatorMotor.hasActiveFault() && leftElevatorMotor.getEncoder().getPosition() != lastLeftElevatorReading) {
       SensorStatus.kElevatorHeight = leftElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
@@ -76,6 +70,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("elevatorHeight", SensorStatus.kElevatorHeight);
     SmartDashboard.putNumber("RightElevatorPower", rightElevatorMotor.getOutputCurrent());
     SmartDashboard.putNumber("LeftElevatorPower", leftElevatorMotor.getOutputCurrent());
+  }
+
+  public void runElevatorMotorsWithMotorPowerController(double setHeight){
+    double drive = -motorPowerController.calculate(setHeight, SensorStatus.kElevatorHeight);
+    rightElevatorMotor.set(drive);
+    SmartDashboard.putNumber("Elevator Power", drive);
+  }
+  public void setSetHeight(double newSetHeight){
+    // clamps the setpoint in case of error when deciding the setpoint
+    newSetHeight = Math.max(0, Math.min(ElevatorConstants.kElevatorMaxHeight, newSetHeight));
+    elevatorSetHeight = newSetHeight;
   }
 
   @Override

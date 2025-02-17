@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AlgaeCollectionSubsystem extends SubsystemBase {
-  private SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
-  private SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
+  public SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
+  public SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
   private MotorPowerController angleController = new MotorPowerController(.005, .05, .1, .5, 2, 120, 5);
   private double pivotAngleSetPoint = 120;
 
@@ -28,6 +28,8 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     config.smartCurrentLimit(35);
     config.idleMode(IdleMode.kCoast);
     pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    config.smartCurrentLimit(15);// it will burn at 10-13 so this is already semi pushing it
     spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     SensorStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read, converting it to degrees as
@@ -35,6 +37,10 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   }
 
   public void runPivotMotor(double powerPercent) {
+    if(SensorStatus.kPivotAngle > 200)
+      Math.max(0, powerPercent);// clamps it so it cant drive down when beyond this angle
+    else if(SensorStatus.kPivotAngle < 115)
+      Math.min(0, powerPercent);// clamps it so it cant drive up when beyond this angle
     pivotmotor.set(powerPercent);
   }
 
@@ -43,6 +49,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   }
 
   public void setAngleSetpoint(double angle) {
+    angle = Math.min(200, Math.max(120, angle)); // clamp betweein vertical and on the ground
     pivotAngleSetPoint = angle;
   }
 
@@ -52,8 +59,9 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     SensorStatus.kPivotAngle = (absoluteEncoder.get() * 360 + 180) % 360;// converting it to degrees and offsetting it
                                                                          // by 180
     SmartDashboard.putNumber("Algea Collector angle", SensorStatus.kPivotAngle);
+    SmartDashboard.putNumber("Spin motor output", spinmotor.getOutputCurrent());
 
     // driving it to hold its angle
-    pivotmotor.set(-angleController.calculateMotorPowerController(pivotAngleSetPoint, SensorStatus.kPivotAngle));
+    runPivotMotor(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
   }
 }

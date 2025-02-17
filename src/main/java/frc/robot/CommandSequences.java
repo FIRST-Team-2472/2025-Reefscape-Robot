@@ -3,11 +3,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,6 +22,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.AutoCoralDispenseCommand;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
+import frc.robot.commands.SwerveFollowTransitionCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.CoralDispenserSubsystem;
@@ -82,6 +78,13 @@ public class CommandSequences {
                 //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
             ),
             new AutoCoralDispenseCommand(coralDispenserSubsystem)
+        );
+    }
+    public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
+
+        return new SequentialCommandGroup(
+            new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
 

@@ -2,9 +2,6 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -36,7 +33,7 @@ public final class Constants {
         public static final double kElevatorL2Height = 17.5;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 57;
+        public static final double kElevatorMaxHeight = 57.5;
     }
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 19; // change later
