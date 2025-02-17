@@ -37,6 +37,10 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   }
 
   public void runPivotMotor(double powerPercent) {
+    if(SensorStatus.kPivotAngle > 200)
+      Math.max(0, powerPercent);// clamps it so it cant drive down when beyond this angle
+    else if(SensorStatus.kPivotAngle < 115)
+      Math.min(0, powerPercent);// clamps it so it cant drive up when beyond this angle
     pivotmotor.set(powerPercent);
   }
 
@@ -45,6 +49,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   }
 
   public void setAngleSetpoint(double angle) {
+    angle = Math.min(200, Math.max(120, angle)); // clamp betweein vertical and on the ground
     pivotAngleSetPoint = angle;
   }
 
@@ -57,6 +62,6 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Spin motor output", spinmotor.getOutputCurrent());
 
     // driving it to hold its angle
-    pivotmotor.set(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
+    runPivotMotor(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
   }
 }

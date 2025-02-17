@@ -78,6 +78,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Power", drive);
   }
   public void setSetHeight(double newSetHeight){
+    // clamps the setpoint in case of error when deciding the setpoint
+    newSetHeight = Math.max(0, Math.min(ElevatorConstants.kElevatorMaxHeight, newSetHeight));
     elevatorSetHeight = newSetHeight;
   }
 

@@ -33,7 +33,7 @@ public final class Constants {
         public static final double kElevatorL2Height = 17.5;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 57;
+        public static final double kElevatorMaxHeight = 57.5;
     }
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 19; // change later
