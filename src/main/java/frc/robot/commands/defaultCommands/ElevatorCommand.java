@@ -53,8 +53,7 @@ public class ElevatorCommand extends Command{
         elevatorSetHeight = 0;
 
     SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
-    elevatorSubsystem.runElevatorMotorsWithMotorPowerController(elevatorSetHeight); //negative because up is reverse
-    
+    elevatorSubsystem.setSetHeight(elevatorSetHeight); 
   }
 
   // Called once the command ends or is interrupted.
