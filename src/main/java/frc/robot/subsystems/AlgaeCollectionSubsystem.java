@@ -57,6 +57,6 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Spin motor output", spinmotor.getOutputCurrent());
 
     // driving it to hold its angle
-    pivotmotor.set(-angleController.calculateMotorPowerController(pivotAngleSetPoint, SensorStatus.kPivotAngle));
+    pivotmotor.set(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
   }
 }

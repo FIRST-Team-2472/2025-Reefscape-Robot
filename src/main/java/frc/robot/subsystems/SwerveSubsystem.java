@@ -274,8 +274,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
-        yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
+        xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        yPowerController.calculate(getPose().getY(), targetPosition.getY());
         // xLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
         // TargetPosConstants.kBackwardMaxAcceleration);
         // yLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
@@ -292,11 +292,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed = -xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
-        double ySpeed = -yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
+        double xSpeed = -xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        double ySpeed = -yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = -turningPowerController.calculateMotorPowerController(angleDifference.getRadians(), 0);
+        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
         // turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
         // turningSpeed);

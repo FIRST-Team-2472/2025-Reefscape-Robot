@@ -73,7 +73,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void runElevatorMotorsWithMotorPowerController(double setHeight){
-    double drive = -motorPowerController.calculateMotorPowerController(setHeight, SensorStatus.kElevatorHeight);
+    double drive = -motorPowerController.calculate(setHeight, SensorStatus.kElevatorHeight);
     rightElevatorMotor.set(drive);
     SmartDashboard.putNumber("Elevator Power", drive);
   }
