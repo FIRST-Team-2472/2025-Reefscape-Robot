@@ -2,11 +2,13 @@ package frc.robot.subsystems;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opencv.core.Point;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +18,7 @@ import java.math.RoundingMode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -33,6 +36,7 @@ public class TestSwerveSubsystem {
 
     private SwerveModule frontLeft, frontRight, backLeft, backRight;
     private BigDecimal allowedVariation = new BigDecimal(0.01);
+    private PositionFilteringSubsystem positionFilteringSubsystem;
 
     //This is the setup for the tests @BeforeEach means that this method will run before each test
     @BeforeEach
@@ -44,13 +48,18 @@ public class TestSwerveSubsystem {
         frontRight = mock();
         backLeft = mock();
         backRight = mock();
+        
+        positionFilteringSubsystem = mock();
+
+        when(positionFilteringSubsystem.getFilteredBotPose(any())).thenReturn(new Pose2d(0, 0, new Rotation2d(0)));
+
 
         //this is to appease shuffleboard in periodic 
         mockSuffleBoard();
 
         swerveSubsystem = new SwerveSubsystem(pigeon, 
         frontLeft, frontRight, backLeft, backRight, 
-        headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB);
+        headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB, positionFilteringSubsystem, -1);
     }
     private void mockSuffleBoard() {
         yawStatusSignal = mock();

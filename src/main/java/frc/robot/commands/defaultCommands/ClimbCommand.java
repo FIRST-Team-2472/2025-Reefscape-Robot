@@ -5,8 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.SensorStatus;
-import frc.robot.MotorPowerController;
+import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -48,10 +47,10 @@ public class ClimbCommand extends Command{
             anglingIn = false;
         }
         if(anglingIn){
-            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculate(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
         }
         if(anglingOut){
-            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculate(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
         ledSubsystem.isClimbing(y != 0);
         ledSubsystem.climbAtAngle(SensorStatus.kClimberAngle >= ClimberConstants.kClimberInAngle-20);

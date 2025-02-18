@@ -3,11 +3,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
+import frc.robot.commands.SwerveFollowTransitionCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -68,6 +64,13 @@ public class CommandSequences {
 
         return new SequentialCommandGroup(
           new SwerveDriveToPointCmd(swerveSubsystem, simplePose(1, 2, 90))  //X = 6.055, Y = 4.025, angle = 0
+        );
+    }
+    public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
+
+        return new SequentialCommandGroup(
+            new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
 
