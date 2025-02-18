@@ -36,7 +36,9 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 
 public class RobotContainer {
-  private final String twoCoral = "Swerve Drive to Point Test";
+  private final String twoCoral = "Swerve Drive to Point Test", drivensitmid = "Drive and Sit - Middle",
+  drivenplaceonefrommid = "Drive and place one from middle field", 
+  drivenplaceonefromleft = "Drive and place onr from left";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -73,6 +75,8 @@ public class RobotContainer {
     ));
 
     m_chooser.addOption(twoCoral, twoCoral);
+    m_chooser.addOption(drivensitmid, drivensitmid);
+    m_chooser.addOption(drivenplaceonefromleft, drivenplaceonefromleft);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -118,6 +122,16 @@ public class RobotContainer {
     if(m_autoSelected == twoCoral)
       return new SequentialCommandGroup(
         commandSequences.twoCoralCfourRoneHoneRfive(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
+
+      if(m_autoSelected == drivensitmid)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndSitFromMiddle(swerveSubsystem)
+      );
+
+      if(m_autoSelected == drivenplaceonefromleft)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceOneFromLeft(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
       );
     return null;
   }
