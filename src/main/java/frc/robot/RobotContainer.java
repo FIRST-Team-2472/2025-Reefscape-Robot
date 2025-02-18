@@ -79,7 +79,7 @@ public class RobotContainer {
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
-      ()-> xboxController.getLeftY(),
+      ()-> -xboxController.getLeftY(),
       ()-> xboxController.y().getAsBoolean(), 
       ()-> xboxController.b().getAsBoolean(), 
       ()-> xboxController.a().getAsBoolean(), 
