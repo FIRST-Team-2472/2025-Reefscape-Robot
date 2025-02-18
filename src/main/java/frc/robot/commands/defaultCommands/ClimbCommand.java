@@ -54,7 +54,7 @@ public class ClimbCommand extends Command{
         }
         ledSubsystem.isClimbing(y != 0);
         ledSubsystem.climbAtAngle(SensorStatus.kClimberAngle >= ClimberConstants.kClimberInAngle-20);
-        ledSubsystem.runningAutonomistCommand(anglingIn || anglingOut);
+        ledSubsystem.runningAutonomousCommand(anglingIn || anglingOut);
         
         climberSusbsystem.runClimberMotor(y);
     }

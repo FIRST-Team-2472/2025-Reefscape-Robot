@@ -128,7 +128,7 @@ public class LEDSubsystem extends SubsystemBase {
         green = atangle;
     }
 
-    public void runningAutonomistCommand(boolean running) {
+    public void runningAutonomousCommand(boolean running) {
         blue = running;
     }
 

@@ -14,7 +14,6 @@ public class ElevatorCommand extends Command {
     ElevatorSubsystem elevatorSubsystem;
     LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     Supplier<Double> joystickY;
-    MotorPowerController motorPowerController;
     double elevatorSetHeight = 0;
     Supplier<Boolean> XboxYPressed, XboxBPressed, XboxAPressed, XboxXPressed;
     boolean auto;
@@ -30,7 +29,7 @@ public class ElevatorCommand extends Command {
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-       
+
     }
 
     @Override
@@ -73,11 +72,8 @@ public class ElevatorCommand extends Command {
         if (timer.hasElapsed(2)) {
             auto = false;
         }
-    SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
-    elevatorSubsystem.setSetHeight(elevatorSetHeight); 
-  }
-
-        ledSubsystem.runningAutonomistCommand(auto);
+        
+        ledSubsystem.runningAutonomousCommand(auto);
 
         // Makes so cannot go past physical limits or below 0
         if (elevatorSetHeight > ElevatorConstants.kElevatorMaxHeight)
@@ -86,12 +82,7 @@ public class ElevatorCommand extends Command {
             elevatorSetHeight = 0;
 
         SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
-        SmartDashboard.putNumber("elevator drive factor",
-                -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight));
-        elevatorSubsystem.runElevatorMotors(Math.max(Math.min(
-                -motorPowerController.calculateMotorPowerController(elevatorSetHeight, SensorStatus.kElevatorHeight),
-                .6), -1)); // negative because up is reverse
-
+        elevatorSubsystem.setSetHeight(elevatorSetHeight);
     }
 
     // Called once the command ends or is interrupted.

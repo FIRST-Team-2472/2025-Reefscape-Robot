@@ -5,12 +5,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
 
 public class AutoElevatorCommand extends Command{
     Timer timer = new Timer();
     ElevatorSubsystem elevatorSubsystem;
-    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     MotorPowerController motorPowerController;
     double elevatorSetHeight;
     
@@ -24,14 +22,11 @@ public class AutoElevatorCommand extends Command{
     @Override
     public void initialize() {
         timer.reset();
-        ledSubsystem.runningAutonomistCommand(true);
         elevatorSubsystem.setSetHeight(elevatorSetHeight);
     }
 
     @Override
-    public void execute() {// nothing to do since the subsystem handles the driving of it
-        
-    }
+    public void execute() {}
 
     public void end(boolean interrupted) {
     }

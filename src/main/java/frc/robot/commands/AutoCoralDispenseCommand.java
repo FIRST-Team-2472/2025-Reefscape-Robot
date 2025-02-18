@@ -2,13 +2,11 @@ package frc.robot.commands;
 
 import frc.robot.MotorPowerController;
 import frc.robot.subsystems.CoralDispenserSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoCoralDispenseCommand extends Command{
     CoralDispenserSubsystem coralDispenserSubsystem;
-    LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     MotorPowerController motorPowerController;
     Timer timoutTimer;
 
@@ -21,7 +19,6 @@ public class AutoCoralDispenseCommand extends Command{
     @Override
     public void initialize() {
         timoutTimer.reset();
-        ledSubsystem.runningAutonomistCommand(true);
     }
 
     @Override
