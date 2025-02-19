@@ -53,7 +53,7 @@ public final class Constants {
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = .0977;
+        public static final double kWheelDiameterMeters = .097;
         // gear ratio is inversed (1/gear ratio) so we can multiply instead of dividing
         // the Rot to meter funtion
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -197,8 +197,8 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.2;// subject to change was 0.04
-        public static final double kAcceptableAngleError = 5;
+        public static final double kAcceptableDistanceError = 0.06;// subject to change was 0.04
+        public static final double kAcceptableAngleError = 3;
     }
 
     public static final class OperatorConstants {

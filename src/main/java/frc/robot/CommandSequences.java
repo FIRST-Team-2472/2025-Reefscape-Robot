@@ -54,7 +54,7 @@ public class CommandSequences {
         reefNodes[6] = simplePose(5.8, 3.85, 180); //Reef Position G
         reefNodes[7] = simplePose(5.8, 4.18, 180); //Reef Position H
         reefNodes[8] = simplePose(5.3, 5.05, 240); //Reef Position I
-        reefNodes[9] = simplePose(5, 5.2, 240); //Reef Position J
+        reefNodes[9] = simplePose(5.05, 5.3, 120); //Reef Position J // was 5, 
         reefNodes[10] = simplePose(3.98, 5.2, 300); //Reef Position K
         reefNodes[11] = simplePose(3.7, 5.05, 300); //Reef Position L
 
