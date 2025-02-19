@@ -7,12 +7,13 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.Constants.SensorConstants;
+import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
 
 public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     Supplier<Double> joystickY;
-   MotorPowerController motorPowerController;
+    MotorPowerController motorPowerController;
     double elevatorSetHeight = 0;
     Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed;
 

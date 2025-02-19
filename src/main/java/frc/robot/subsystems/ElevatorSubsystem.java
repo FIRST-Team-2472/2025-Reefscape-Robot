@@ -51,7 +51,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     //run the elevator to the correct height this is in the subsystem so it doesnt need a command to hold its height
-    runElevatorMotorsWithMotorPowerController(elevatorSetHeight);
 
     // updating the sensors status to be read by other files
     // code to check that both motors are working and returning the other motors value if one isnt
