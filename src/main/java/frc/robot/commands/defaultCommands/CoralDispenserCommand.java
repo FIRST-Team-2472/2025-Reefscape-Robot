@@ -16,7 +16,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class CoralDispenserCommand extends Command {
     private static final int CORAL_STATION_1Y_RANGE = 3;
     private static final int CORAL_STATION_2Y_RANGE = 5;
-    private static final int TRIGGER_DISTANCE = 1;
+    private static final int TRIGGER_DISTANCE = 2;
     CoralDispenserSubsystem coralDispenserSubsystem;
     Supplier<Double> xboxControllerRightTrigger, xboxControllerLeftTrigger;
     SwerveSubsystem swerveSubsystem;
@@ -39,12 +39,13 @@ public class CoralDispenserCommand extends Command {
 
     @Override
     public void execute() {
-        if (xboxControllerRightTrigger.get() > 0.5)
+        if (xboxControllerRightTrigger.get() > 0.5){
             dispenseCoral();
+            coralDispenserSubsystem.hasCoral = false;
+        }
         else if (xboxControllerLeftTrigger.get() > 0.5) {
             reverseCoralDispenser();
         } else if (isNearCoralStation() && !coralDispenserSubsystem.hasCoralAlready()) {
-            // TODO determine if we need lower or upper level to activate
             //Controlled by button
             dispenseCoral();
 

@@ -40,8 +40,6 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     public void runMotors(double leftPower, double rightPower){
         leftMotor.set(leftPower);
         rightMotor.set(rightPower);
-        if(leftPower > 0 && rightPower < 0)
-            hasCoral = false;
     }
 
     @Override
