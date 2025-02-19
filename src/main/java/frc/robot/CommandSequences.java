@@ -159,6 +159,13 @@ public class CommandSequences {
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
+    public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
+
+        return new SequentialCommandGroup(
+            new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
+        );
+    }
 
     // generates a path via points
     private static Command generatePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,

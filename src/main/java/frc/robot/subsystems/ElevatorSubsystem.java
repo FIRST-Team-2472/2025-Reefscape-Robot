@@ -1,15 +1,12 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.SensorStatus;
-import frc.robot.MotorPowerController;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -26,29 +23,29 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double lastLeftElevatorReading = 0;
   public double lastRightElevatorReading = 0;
-  public double elevatorSetHeight = 0;
-  MotorPowerController motorPowerController;
+
 
   public ElevatorSubsystem() {
     final LimitSwitchConfig limitSwitchConfig = new LimitSwitchConfig();
     limitSwitchConfig.forwardLimitSwitchEnabled(true);
     limitSwitchConfig.reverseLimitSwitchEnabled(true);
-
     limitSwitchConfig.forwardLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
     limitSwitchConfig.reverseLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
 
-    motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.smartCurrentLimit(35);
     config.idleMode(IdleMode.kCoast); //they didnt move on brake mode, we also dont really need it on that mode
     config.apply(limitSwitchConfig);
-
     rightElevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     config.follow(rightElevatorMotor);//change the config to copy the right motor before assigning it to the left
-
     leftElevatorMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+  }
+
+
+  public void runElevatorMotors(double powerPercent){
+    rightElevatorMotor.set(powerPercent);
   }
 
   @Override
@@ -66,21 +63,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     
     lastLeftElevatorReading = leftElevatorMotor.getEncoder().getPosition();
     lastRightElevatorReading = rightElevatorMotor.getEncoder().getPosition();
-
     SmartDashboard.putNumber("elevatorHeight", SensorStatus.kElevatorHeight);
     SmartDashboard.putNumber("RightElevatorPower", rightElevatorMotor.getOutputCurrent());
     SmartDashboard.putNumber("LeftElevatorPower", leftElevatorMotor.getOutputCurrent());
-  }
-
-  public void runElevatorMotorsWithMotorPowerController(double setHeight){
-    double drive = -motorPowerController.calculate(setHeight, SensorStatus.kElevatorHeight);
-    rightElevatorMotor.set(drive);
-    SmartDashboard.putNumber("Elevator Power", drive);
-  }
-  public void setSetHeight(double newSetHeight){
-    // clamps the setpoint in case of error when deciding the setpoint
-    newSetHeight = Math.max(0, Math.min(ElevatorConstants.kElevatorMaxHeight, newSetHeight));
-    elevatorSetHeight = newSetHeight;
   }
 
   @Override
@@ -88,3 +73,4 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
+

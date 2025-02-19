@@ -20,8 +20,8 @@ public class AutoElevatorCommand extends Command{
 
     @Override
     public void initialize() {
-        timer.reset();
-        elevatorSubsystem.setSetHeight(elevatorSetHeight);
+
+        timer.reset();// this is broken
     }
 
     @Override
