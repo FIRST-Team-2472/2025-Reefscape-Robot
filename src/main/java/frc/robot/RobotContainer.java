@@ -37,7 +37,9 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 
 public class RobotContainer {
-  private final String testAuto = "testAuto", swervedtptest = "Swerve Drive to Point Test";
+  private final String twoCoral = "Swerve Drive to Point Test", drivensitmid = "Drive and Sit - Middle",
+  drivenplaceonefrommid = "Drive and place one from middle field", 
+  drivenplaceonefromleft = "Drive and place onr from left";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -73,8 +75,9 @@ public class RobotContainer {
       ()-> rightJoystick.getRawButton(4)
     ));
 
-    m_chooser.addOption(testAuto, testAuto);
-    m_chooser.addOption(swervedtptest, swervedtptest);
+    m_chooser.addOption(twoCoral, twoCoral);
+    m_chooser.addOption(drivensitmid, drivensitmid);
+    m_chooser.addOption(drivenplaceonefromleft, drivenplaceonefromleft);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -119,17 +122,20 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     m_autoSelected = m_chooser.getSelected();
 
-    if(m_autoSelected == testAuto)
-        //return AutoBuilder.buildAuto("test");
-        return new SequentialCommandGroup(
-          commandSequences.test(swerveSubsystem)
-        );
-
-    if(m_autoSelected == swervedtptest)
+    if(m_autoSelected == twoCoral)
       return new SequentialCommandGroup(
-        commandSequences.swervePointTest(swerveSubsystem)
+        commandSequences.twoCoralCfourRoneHoneRfive(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
       );
 
+      if(m_autoSelected == drivensitmid)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndSitFromMiddle(swerveSubsystem)
+      );
+
+      if(m_autoSelected == drivenplaceonefromleft)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceOneFromLeft(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
     return null;
   }
 }

@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlgaeCollectionSubsystem extends SubsystemBase {
   public SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
   public SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
+
   private MotorPowerController angleController = new MotorPowerController(.003, .05, .1, .5, 2, 120, 5);
+
   private double pivotAngleSetPoint = 120;
 
   private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);

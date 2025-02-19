@@ -24,6 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double lastLeftElevatorReading = 0;
   public double lastRightElevatorReading = 0;
 
+
   public ElevatorSubsystem() {
     final LimitSwitchConfig limitSwitchConfig = new LimitSwitchConfig();
     limitSwitchConfig.forwardLimitSwitchEnabled(true);
@@ -42,14 +43,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   }
 
+
   public void runElevatorMotors(double powerPercent){
     rightElevatorMotor.set(powerPercent);
   }
 
   @Override
   public void periodic() {
-    // updating the sensors status to be read by other files
+    //run the elevator to the correct height this is in the subsystem so it doesnt need a command to hold its height
 
+    // updating the sensors status to be read by other files
     // code to check that both motors are working and returning the other motors value if one isnt
     if (!leftElevatorMotor.hasActiveFault() && leftElevatorMotor.getEncoder().getPosition() != lastLeftElevatorReading) {
       SensorStatus.kElevatorHeight = leftElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
@@ -63,4 +66,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RightElevatorPower", rightElevatorMotor.getOutputCurrent());
     SmartDashboard.putNumber("LeftElevatorPower", leftElevatorMotor.getOutputCurrent());
   }
+
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run during simulation
+  }
 }
+
