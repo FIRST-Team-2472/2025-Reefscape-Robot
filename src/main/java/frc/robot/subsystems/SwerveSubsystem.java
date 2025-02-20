@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -23,6 +24,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SensorConstants;
+import frc.robot.Constants.TargetPosConstants;
+import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.NewAccelerationLimiter;
 import frc.robot.Constants.AutoConstants;
@@ -30,6 +36,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
+import frc.robot.LimelightHelpers;
 import frc.robot.extras.AccelerationLimiter;
 import frc.robot.extras.SwerveModule;
 
@@ -77,6 +84,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), getModulePositions());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
+    private PositionFilteringSubsystem positionFilteringSubsystem;
+    private int periods = 0; // period counter used for limelight update timing
 
     private NewAccelerationLimiter xLimiter, yLimiter;
     public PIDController thetaController;
@@ -91,7 +100,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
-    public SwerveSubsystem() {
+    public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
+        this.positionFilteringSubsystem = positionFilteringSubsystem;
+
         // Gets tabs from Shuffleboard
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
 
@@ -105,9 +116,9 @@ public class SwerveSubsystem extends SubsystemBase {
         xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
         yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);//use this constant not maxspeed
 
-        xPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.1, 0.05, .3, 1, .1, 0, 1);
+        xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
+        yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -118,9 +129,11 @@ public class SwerveSubsystem extends SubsystemBase {
             }
         }).start();
     }
-    public SwerveSubsystem(Pigeon2 gyro, //This constructor is used for testing
-        SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, 
-        GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB, GenericEntry pitchSB) {
+
+    public SwerveSubsystem(Pigeon2 gyro, // This constructor is used for testing
+            SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight,
+            GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB,
+            GenericEntry pitchSB, PositionFilteringSubsystem positionFilteringSubsystem, int periods) {
         this.gyro = gyro;
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
@@ -130,17 +143,26 @@ public class SwerveSubsystem extends SubsystemBase {
         this.odometerShuffleBoard = odometerShuffleBoard;
         this.rollSB = rollSB;
         this.pitchSB = pitchSB;
+        this.positionFilteringSubsystem = positionFilteringSubsystem;
+        this.periods = periods;
     }
-    public SwerveDriveOdometry getOdometer(){
+
+    public SwerveDriveOdometry getOdometer() {
         return odometer;
     }
+
     // Just a quick method that zeros the IMU.
     public void zeroHeading() {
         gyro.setYaw(0);
     }
 
+    public void zeroOdometerHeading() {
+        odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(),
+                new Pose2d(odometer.getPoseMeters().getX(), odometer.getPoseMeters().getY(), new Rotation2d()));
+    }
+
     // Gets the yaw/heading of the robot. getting this right is very important for
-    // swerve 
+    // swerve
     public double getHeading() {
         // imu is backwards, so it is multiplied by negative one
         return gyro.getYaw().getValueAsDouble();
@@ -159,7 +181,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public static boolean isOnRed() {
         // gets the selected team color from the suffleboard
         Optional<Alliance> ally = DriverStation.getAlliance();
-        if(ally.isPresent()){
+        if (ally.isPresent()) {
             return ally.get() == Alliance.Red;
         }
 
@@ -176,8 +198,27 @@ public class SwerveSubsystem extends SubsystemBase {
         return temp.vxMetersPerSecond;
     }
 
+    /*
+     * public ChassisSpeeds getChassisSpeedsRobotRelative() {
+     * return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
+     * }
+     */
+
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
+    }
+    public boolean isStalling(){
+        int stallScount = 0;
+        if(frontLeft.isStalling())
+            stallScount++;
+        if(frontRight.isStalling())
+            stallScount++;
+        if(backLeft.isStalling())
+            stallScount++;
+        if(backRight.isStalling())
+            stallScount++;
+        return stallScount >=2;
+
     }
 
     // gets our current velocity relative to the x of the robot (front/back)
@@ -224,11 +265,11 @@ public class SwerveSubsystem extends SubsystemBase {
         return gyro.getRotation2d();
     }
 
-    public void zeroOdometry(){
+    public void zeroOdometry() {
         odometer.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d());
     }
 
-    public void setOdometry(Pose2d odometryPose){
+    public void setOdometry(Pose2d odometryPose) {
         odometer.resetPosition(getRotation2d(), getModulePositions(), odometryPose);
     }
 
@@ -236,7 +277,13 @@ public class SwerveSubsystem extends SubsystemBase {
     public Pose2d getPose() {
         return odometer.getPoseMeters();
     }
+    public Pose2d getFilteredPose() {
+        return this.positionFilteringSubsystem.getFilteredBotPose(odometer);
+    }
 
+    public void calibrateOdometry() {
+        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose());
+    }
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
         xPowerController.calculate(getPose().getX(), targetPosition.getX());
         yPowerController.calculate(getPose().getY(), targetPosition.getY());
@@ -271,8 +318,8 @@ public class SwerveSubsystem extends SubsystemBase {
         lastYDrive = ySpeed;
         // Converts robot speeds to speeds relative to field
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, getRotation2d());
-        
+                xSpeed, ySpeed, turningSpeed, odometer.getPoseMeters().getRotation());
+
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
@@ -301,18 +348,35 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
-
     public boolean isAtPoint(Translation2d targetDrivePos) {
-        return getPose().getTranslation().getDistance(targetDrivePos) //
-                <= TargetPosConstants.kAcceptableDistanceError; //
+        SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
+        boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
+
+        SmartDashboard.putBoolean("isAtPose", isAtPose);
+        return isAtPose;  
+    }
+    public boolean isNearPoint(Translation2d targetDrivePos) {
+        SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
+        boolean isNearPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError*2.5; //
+
+        SmartDashboard.putBoolean("isNearPose", isNearPose);
+        return isNearPose;
     }
 
     public boolean isAtAngle(Rotation2d angle) {
-        return Math.abs(getRotation2d().minus(angle).getDegrees()) //
-                <= TargetPosConstants.kAcceptableAngleError;
-    }
-    
+        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
+        SmartDashboard.putBoolean("isAtAngle", isAtAngle);
+        return isAtAngle;
+    }
+    public boolean isNearAngle(Rotation2d angle) {
+        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
+
+        SmartDashboard.putBoolean("isNearAngle", isNearAngle);
+        return isNearAngle;
+    }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // if their speed is larger then the physical max speed, it reduces all speeds
@@ -346,10 +410,33 @@ public class SwerveSubsystem extends SubsystemBase {
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
-        SmartDashboard.putNumber("frontLeft Encoder", frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("frontRight Encoder", frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+
+        SensorStatus.pigeonPitch = getPitch();
+        SensorStatus.pigeonRoll = getRoll();
+        SensorStatus.pigeonYaw = getHeading();
+
+        // Send Gyro data to Limelight for higher accuracy
+        LimelightHelpers.SetRobotOrientation("limelight-front", odometer.getPoseMeters().getRotation().getDegrees(),
+                0.0, 0.0, 0.0, 0.0, 0.0);
+
+        // Pose2d filteredBotPose = getFilteredPose();
+        // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
+        // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
+
+        if (periods == 0) {
+            calibrateOdometry();
+            periods = 10;
+        }
+
+        periods--;
+
+        SmartDashboard.putNumber("frontLeft Encoder",
+                frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("frontRight Encoder",
+                frontRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("BackRight Encoder", backRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("BackRight Encoder",
+                backRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
 
         SmartDashboard.putNumber("read frontLeft Encoder", frontLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());
@@ -357,7 +444,15 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
+        SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
+                odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().getRadians() });
+        SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
+
+        SmartDashboard.putNumber("frontLeftCurrent", frontLeft.getCurrent());
+        SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
+        SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
+        SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
     }
 }

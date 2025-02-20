@@ -18,12 +18,12 @@ public class AutoCoralDispenseCommand extends Command{
     
     @Override
     public void initialize() {
-        timoutTimer.reset();
+        timoutTimer.restart();
     }
 
     @Override
     public void execute() {
-        coralDispenserSubsystem.runMotors(-1, 1);
+        coralDispenserSubsystem.runMotors(1, -1);
     }
 
     @Override

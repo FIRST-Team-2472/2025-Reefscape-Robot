@@ -1,21 +1,22 @@
 package frc.robot.subsystems;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -33,6 +34,7 @@ public class TestSwerveSubsystem {
 
     private SwerveModule frontLeft, frontRight, backLeft, backRight;
     private BigDecimal allowedVariation = new BigDecimal(0.01);
+    private PositionFilteringSubsystem positionFilteringSubsystem;
 
     //This is the setup for the tests @BeforeEach means that this method will run before each test
     @BeforeEach
@@ -44,13 +46,18 @@ public class TestSwerveSubsystem {
         frontRight = mock();
         backLeft = mock();
         backRight = mock();
+        
+        positionFilteringSubsystem = mock();
+
+        when(positionFilteringSubsystem.getFilteredBotPose(any())).thenReturn(new Pose2d(0, 0, new Rotation2d(0)));
+
 
         //this is to appease shuffleboard in periodic 
         mockSuffleBoard();
 
         swerveSubsystem = new SwerveSubsystem(pigeon, 
         frontLeft, frontRight, backLeft, backRight, 
-        headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB);
+        headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB, positionFilteringSubsystem, -1);
     }
     private void mockSuffleBoard() {
         yawStatusSignal = mock();
@@ -73,12 +80,31 @@ public class TestSwerveSubsystem {
         when(backLeft.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
         when(backRight.absoluteEncoder.getAbsolutePosition()).thenReturn(absEncodedrSignal);
     }
+    
     @Test
-    public void testIsAtAngle(){ //runs test for isAtAngle method
-        assertTrue(swerveSubsystem.isAtAngle(new Rotation2d()));
+    public void testIsAtAngle(){ // Updated test for isAtAngle method with proper odometer updates
+        // Provide default module positions so odometer updates correctly.
+        when(frontLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));
+        when(frontRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));
+        when(backLeft.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));
+        when(backRight.getPosition()).thenReturn(new SwerveModulePosition(0.0, Rotation2d.fromDegrees(0)));
+        
+        // With zero difference, should pass.
+        when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(0));
+        swerveSubsystem.periodic();
+        assertTrue(swerveSubsystem.isAtAngle(new Rotation2d(0)));
+
+        // With a small error (1.6°), still acceptable.
         when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(1.6));
-        assertFalse(swerveSubsystem.isAtAngle(new Rotation2d()));
+        swerveSubsystem.periodic();
+        assertTrue(swerveSubsystem.isAtAngle(new Rotation2d(0)));
+
+        // With a larger error (3.0°), should fail.
+        when(pigeon.getRotation2d()).thenReturn(Rotation2d.fromDegrees(3.0));
+        swerveSubsystem.periodic();
+        assertFalse(swerveSubsystem.isAtAngle(new Rotation2d(0)));
     }
+
     @Test
     public void testIsAtPoint(){ //runs test for isAtPoint method
         Translation2d targetDrivePos = new Translation2d();

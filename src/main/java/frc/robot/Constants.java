@@ -2,9 +2,6 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -32,11 +29,11 @@ public final class Constants {
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
         public static final double kElevatorL4Height = 57;
-        public static final double kElevatorL3Height = 33.5;
-        public static final double kElevatorL2Height = 17.5;
+        public static final double kElevatorL3Height = 32;
+        public static final double kElevatorL2Height = 16;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 57;
+        public static final double kElevatorMaxHeight = 57.5;
     }
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 19; // change later
@@ -56,7 +53,7 @@ public final class Constants {
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = .0977;
+        public static final double kWheelDiameterMeters = .097;
         // gear ratio is inversed (1/gear ratio) so we can multiply instead of dividing
         // the Rot to meter funtion
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -200,8 +197,8 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.04;
-        public static final double kAcceptableAngleError = 1.5;
+        public static final double kAcceptableDistanceError = 0.06;// subject to change was 0.04
+        public static final double kAcceptableAngleError = 3;
     }
 
     public static final class OperatorConstants {
@@ -224,23 +221,13 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMeters = 17.55;
+        public static final double sizeOfFieldMetersX = 17.55;
+        public static final double sizeOfFieldMetersY = 8;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
 
-    public static class SensorStatus {
-        public static boolean kLeftLimitSwitchValue = false;
-        public static boolean kMiddleLimitSwitchValue = false;
-        public static boolean kRightLimitSwitchValue = false;
-
-        public static double kElevatorHeight = 0;
-
-        public static double kTimeOfFlightDistance = 0;
-        public static double kClimberAngle = 0;
-        public static double kPivotAngle = 0;
-    }
     public static class LEDConstants {
         public static int kChannel1 = 0;
         public static int kChannel2 = 1;
