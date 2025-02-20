@@ -36,14 +36,8 @@ public class AlgaeCollectionCommand extends Command{
             currentSetAngle = 175;
 
         }else if(leftJoystickButtonFour.get()){
-            currentSetAngle = 160;
-
-            if(Math.abs(SensorStatus.kPivotAngle - 160) < 3){
-                AlgaeSubsystem.runSpinMotor(-1);
-                hasAlgea = false;
-            }else{
-                AlgaeSubsystem.runSpinMotor(0.2);
-            }
+            currentSetAngle = 170;
+            AlgaeSubsystem.runSpinMotor(-1);
 
         }else{
             if(hasAlgea){
