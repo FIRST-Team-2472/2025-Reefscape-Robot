@@ -70,12 +70,12 @@ public class CommandSequences {
     }
     public Command driveAndSitFromMiddle(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[6]);
     }
     public Command driveAndPlaceOneFromMiddle(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[6]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem)
         );
@@ -83,7 +83,7 @@ public class CommandSequences {
     public Command driveAndPlaceOneFromLeft(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
         return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[9]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
             new AutoElevatorCommand(elevatorSubsystem, 0)
@@ -92,7 +92,7 @@ public class CommandSequences {
     public Command driveAndPlaceOneFromRight(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(cageNodes[5].toFieldPose2d());
         return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('E')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[4]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
             new AutoElevatorCommand(elevatorSubsystem, 0)
@@ -101,13 +101,13 @@ public class CommandSequences {
     public Command driveAndPlaceTwoFromLeft(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
         return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[9]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
             new AutoElevatorCommand(elevatorSubsystem, 0),
             new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1),
             new CollectCoralCmd(coralDispenserSubsystem),// this command is missing stuff
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('L')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[11]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
             new AutoElevatorCommand(elevatorSubsystem, 0)
@@ -116,13 +116,13 @@ public class CommandSequences {
     public Command driveAndPlaceTwoFromRight(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
         return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('E')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[4]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
             new AutoElevatorCommand(elevatorSubsystem, 0),
             new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1),
             new CollectCoralCmd(coralDispenserSubsystem),// this command is missing stuff
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('C')),
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[2]),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
             new AutoElevatorCommand(elevatorSubsystem, 0)
@@ -161,92 +161,10 @@ public class CommandSequences {
         );
     }
 
-    // generates a path via points
-    private static Command generatePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,
-            List<PositivePoint> midPoints,
-            PosPose2d endPoint) {
-        // 1. Create trajectory settings
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(DriveConstants.kDriveKinematics);
-
-        Pose2d driveStartPoint = startPoint.toFieldPose2d();
-        Pose2d driveEndPoint = endPoint.toFieldPose2d();
-        List<Translation2d> driveMidPoints = new ArrayList<Translation2d>();
-        for (int i = 0; i < midPoints.size(); i++)
-            driveMidPoints.add(midPoints.get(i).toFieldPos());
-
-        // 2. Generate trajectory
-        // Generates trajectory. Need to feed start point, a series of inbetween points,
-        // and end point
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                driveStartPoint,
-                driveMidPoints,
-                driveEndPoint,
-                trajectoryConfig);
-
-        // 3. Define PID controllers for tracking trajectory
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        // 4. Construct command to follow trajectory
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                trajectory,
-                // swerveSubsystm::getPose is same as () -> swerveSubsystem.getPose()
-                swerveSubsystem::getPose,
-                DriveConstants.kDriveKinematics,
-                xController,
-                yController,
-                thetaController,
-                swerveSubsystem::setModuleStates,
-                swerveSubsystem);
-
-        // 5. Add some init and wrap-up, and return everything
-        // creates a Command list that will reset the Odometry, then move the path, then
-        // stop
-        return new SequentialCommandGroup(
-                swerveControllerCommand,
-                new InstantCommand(() -> swerveSubsystem.stopModules()));
-    }
-
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
-    public PosPose2d reefNode(char NodeLetter){
-        switch (NodeLetter) {
-            case 'A':
-                return reefNodes[0];
-            case 'B':
-                return reefNodes[1];
-            case 'C':  
-                return reefNodes[2];
-            case 'D':
-                return reefNodes[3];
-            case 'E':
-                return reefNodes[4];
-            case 'F':
-                return reefNodes[5];
-            case 'G':
-                return reefNodes[6];
-            case 'H':
-                return reefNodes[7];
-            case 'I':
-                return reefNodes[8];
-            case 'J':
-                return reefNodes[9];
-            case 'K':
-                return reefNodes[10];
-            case 'L':
-                return reefNodes[11];
-            default:
-                return reefNodes[0];
-        }
 
-    }
     public static Rotation2d teamChangeAngle(double degrees){
         if(SwerveSubsystem.isOnRed())
                 return  Rotation2d.fromDegrees(degrees+180);
