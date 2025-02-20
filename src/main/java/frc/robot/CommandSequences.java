@@ -59,6 +59,7 @@ public class CommandSequences {
         reefNodes[11] = simplePose(3.69, 5.1, 60); //Reef Position L
 
 
+
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
         middle =  simplePose(7.58, 4, 180);
