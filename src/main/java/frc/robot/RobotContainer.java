@@ -101,7 +101,7 @@ public class RobotContainer {
     ));
     
     climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
-    () -> xboxController.getRightY(), 
+    () -> -xboxController.getRightY(), 
     () -> xboxController.leftBumper().getAsBoolean(), 
     () -> xboxController.rightBumper().getAsBoolean()
     ));

@@ -19,7 +19,7 @@ public class ClimbSubsystem extends SubsystemBase{
     public ClimbSubsystem() {
         
       SparkMaxConfig config = new SparkMaxConfig();
-          config.smartCurrentLimit(35);
+          config.smartCurrentLimit(40);
           config.idleMode(IdleMode.kBrake);
       climberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
