@@ -22,14 +22,14 @@ public class FieldPoint extends Translation2d {
 
     public DrivePoint toDrivePos() {
         if (SwerveSubsystem.isOnRed()) {
-            return new DrivePoint(SensorConstants.sizeOfFieldMeters - getX(), getY());
+            return new DrivePoint(SensorConstants.sizeOfFieldMetersX - getX(), getY());
         }
         return new DrivePoint(getX(), -Math.abs(getY()));
     }
 
     public PositivePoint toPositivePos() {
         if (SwerveSubsystem.isOnRed()) {
-            return new PositivePoint(SensorConstants.sizeOfFieldMeters - getX(), getY());
+            return new PositivePoint(SensorConstants.sizeOfFieldMetersX - getX(), getY());
         }
         return new PositivePoint(getX(), getY());
     }

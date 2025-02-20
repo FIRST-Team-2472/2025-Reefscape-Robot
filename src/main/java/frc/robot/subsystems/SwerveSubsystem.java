@@ -115,9 +115,9 @@ public class SwerveSubsystem extends SubsystemBase {
         yLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAccelerationUnitsPerSecond);
         turningLimiter = new AccelerationLimiter(TeleDriveConstants.kMaxAngularAccelerationUnitsPerSecond);
 
-        xPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.2, 0.05, .5, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.1, 0.05, .3, 1, .1, 0, 1);
+        xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
+        yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
 
         yController = new PIDController(TargetPosConstants.kPDriveController, 0, 0);
         thetaController = new PIDController(TargetPosConstants.kPAngleController, 0.08, 0.02);
@@ -209,6 +209,19 @@ public class SwerveSubsystem extends SubsystemBase {
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }
+    public boolean isStalling(){
+        int stallScount = 0;
+        if(frontLeft.isStalling())
+            stallScount++;
+        if(frontRight.isStalling())
+            stallScount++;
+        if(backLeft.isStalling())
+            stallScount++;
+        if(backRight.isStalling())
+            stallScount++;
+        return stallScount >=2;
+
+    }
 
     // gets our current velocity relative to the x of the robot (front/back)
     public double getXSpeedRobotRel() {
@@ -276,8 +289,13 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
-        yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
+        xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        yPowerController.calculate(getPose().getY(), targetPosition.getY());
+
+        Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        turningPowerController.calculate(angleDifference.getRadians(), 0);
+        
+
         // xLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
         // TargetPosConstants.kBackwardMaxAcceleration);
         // yLimiter.setLimit(TargetPosConstants.kForwardMaxAcceleration,
@@ -294,11 +312,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed = -xPowerController.calculateMotorPowerController(getPose().getX(), targetPosition.getX());
-        double ySpeed = -yPowerController.calculateMotorPowerController(getPose().getY(), targetPosition.getY());
+        double xSpeed = -xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        double ySpeed = -yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = -turningPowerController.calculateMotorPowerController(angleDifference.getRadians(), 0);
+        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
         // turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
         // turningSpeed);
@@ -358,13 +376,33 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public boolean isAtPoint(Translation2d targetDrivePos) {
-        return getPose().getTranslation().getDistance(targetDrivePos) //
-                <= TargetPosConstants.kAcceptableDistanceError; //
+        SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
+        boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
+
+        SmartDashboard.putBoolean("isAtPose", isAtPose);
+        return isAtPose;  
+    }
+    public boolean isNearPoint(Translation2d targetDrivePos) {
+        SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
+        boolean isNearPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError*2.5; //
+
+        SmartDashboard.putBoolean("isNearPose", isNearPose);
+        return isNearPose;
     }
 
     public boolean isAtAngle(Rotation2d angle) {
-        return Math.abs(getRotation2d().minus(angle).getDegrees()) //
-                <= TargetPosConstants.kAcceptableAngleError;
+        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+
+        SmartDashboard.putBoolean("isAtAngle", isAtAngle);
+        return isAtAngle;
+    }
+    public boolean isNearAngle(Rotation2d angle) {
+        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
+
+        SmartDashboard.putBoolean("isNearAngle", isNearAngle);
+        return isNearAngle;
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -442,5 +480,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
+
+        SmartDashboard.putNumber("frontLeftCurrent", frontLeft.getCurrent());
+        SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
+        SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
+        SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
     }
 }

@@ -44,10 +44,10 @@ public class ClimbCommand extends Command{
             anglingIn = false;
         }
         if(anglingIn){
-            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculate(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
         }
         if(anglingOut){
-            y = climberMotorPowerController.calculateMotorPowerController(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
+            y = climberMotorPowerController.calculate(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
         climberSusbsystem.runClimberMotor(y);

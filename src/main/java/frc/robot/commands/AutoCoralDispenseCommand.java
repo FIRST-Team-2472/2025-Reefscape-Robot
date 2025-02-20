@@ -20,15 +20,12 @@ public class AutoCoralDispenseCommand extends Command{
     
     @Override
     public void initialize() {
-        timoutTimer.reset();
+        timoutTimer.restart();
     }
 
     @Override
     public void execute() {
-        if(SensorStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && SensorStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1)
-                coralDispenserSubsystem.runMotors(.9, -.3);
-            else 
-                coralDispenserSubsystem.runMotors(.8, -.8);
+        coralDispenserSubsystem.runMotors(1, -1);
     }
 
     @Override

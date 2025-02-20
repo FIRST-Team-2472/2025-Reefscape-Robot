@@ -2,12 +2,7 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -36,11 +31,11 @@ public final class Constants {
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
         public static final double kElevatorL4Height = 57;
-        public static final double kElevatorL3Height = 33.5;
-        public static final double kElevatorL2Height = 17.5;
+        public static final double kElevatorL3Height = 32;
+        public static final double kElevatorL2Height = 16;
         public static final double kElevatorL1Height = 9;
 
-        public static final double kElevatorMaxHeight = 57;
+        public static final double kElevatorMaxHeight = 57.5;
     }
     public static final class ClimberConstants {
         public static final int kClimberMotorID = 19; // change later
@@ -60,7 +55,7 @@ public final class Constants {
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = .0977;
+        public static final double kWheelDiameterMeters = .097;
         // gear ratio is inversed (1/gear ratio) so we can multiply instead of dividing
         // the Rot to meter funtion
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -189,18 +184,6 @@ public final class Constants {
     }
 
     public static final class ReefConstants {
-        public static final PosPose2d reefA = new PosPose2d(3.17, 4.19, new Rotation2d(0));
-        public static final PosPose2d reefB = new PosPose2d(3.17, 3.86, new Rotation2d(0));
-        public static final PosPose2d reefC = new PosPose2d(3.69, 2.97, new Rotation2d(60));
-        public static final PosPose2d reefD = new PosPose2d(0, 0, new Rotation2d(60));
-        public static final PosPose2d reefE = new PosPose2d(0, 0, new Rotation2d(120));
-        public static final PosPose2d reefF = new PosPose2d(0, 0, new Rotation2d(120));
-        public static final PosPose2d reefG = new PosPose2d(0, 0, new Rotation2d(180));
-        public static final PosPose2d reefH = new PosPose2d(0, 0, new Rotation2d(180));
-        public static final PosPose2d reefI = new PosPose2d(0, 0, new Rotation2d(240));
-        public static final PosPose2d reefJ = new PosPose2d(0, 0, new Rotation2d(240));
-        public static final PosPose2d reefK = new PosPose2d(0, 0, new Rotation2d(300));
-        public static final PosPose2d reefL = new PosPose2d(0, 0, new Rotation2d(300));
         public static final PosPose2d reefTroughAB = new PosPose2d(0, 0, new Rotation2d(0));
         public static final PosPose2d reefTroughCD = new PosPose2d(0, 0, new Rotation2d(60));
         public static final PosPose2d reefTroughEF = new PosPose2d(0, 0, new Rotation2d(120));
@@ -225,8 +208,8 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.04;
-        public static final double kAcceptableAngleError = 1.5;
+        public static final double kAcceptableDistanceError = 0.06;// subject to change was 0.04
+        public static final double kAcceptableAngleError = 3;
     }
 
     public static final class OperatorConstants {
@@ -249,7 +232,8 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMeters = 17.55;
+        public static final double sizeOfFieldMetersX = 17.55;
+        public static final double sizeOfFieldMetersY = 8;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later

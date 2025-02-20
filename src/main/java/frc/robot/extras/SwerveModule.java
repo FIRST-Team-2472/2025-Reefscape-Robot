@@ -57,6 +57,12 @@ public class SwerveModule {
         driveMotor.setNeutralMode(NeutralModeValue.Brake);
         turningMotor.setNeutralMode(NeutralModeValue.Brake);
     }
+    public boolean isStalling(){
+        return driveMotor.getTorqueCurrent().getValueAsDouble() > 5;
+    }
+    public double getCurrent(){
+        return driveMotor.getTorqueCurrent().getValueAsDouble();
+    }
 
     public double getDrivePosition() {
         return driveMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kDriveEncoderRot2Meter;
