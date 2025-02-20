@@ -159,7 +159,7 @@ public class CommandSequences {
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
-
+    /*
     // generates a path via points
     private static Command generatePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,
             List<PositivePoint> midPoints,
@@ -211,7 +211,7 @@ public class CommandSequences {
                 swerveControllerCommand,
                 new InstantCommand(() -> swerveSubsystem.stopModules()));
     }
-
+    */
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
