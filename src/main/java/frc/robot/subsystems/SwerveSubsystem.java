@@ -294,7 +294,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
         double xSpeed =  -xPowerController.calculate(getPose().getX(), targetPosition.getX());
         double ySpeed =  -yPowerController.calculate(getPose().getY(), targetPosition.getY());
-
+        xSpeed = 1;
+        ySpeed = 0;
         //angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
         double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
@@ -316,6 +317,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
         lastXDrive = xSpeed;
         lastYDrive = ySpeed;
+        xSpeed = xLimiter.calculate(xSpeed);
+        ySpeed = yLimiter.calculate(ySpeed);
         // Converts robot speeds to speeds relative to field
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, odometer.getPoseMeters().getRotation());

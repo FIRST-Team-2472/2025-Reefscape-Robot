@@ -42,8 +42,8 @@ public class SwerveJoystickCmd extends Command {
         // System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
         // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
+        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed > 0.0 ? 1: -1: 0.0;
+        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed > 0.0 ? 1: -1: 0.0;
         turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
 
         // 3. Apply polynomial function or slowmode to joystick values
@@ -77,7 +77,8 @@ public class SwerveJoystickCmd extends Command {
     }
     // alters the joystick input according to a polynomial function for more precise control
     public static double input_2_speed(double x) {
-        return 19.4175 * Math.pow(x, 13) - 103.7677 * Math.pow(x, 11) + 195.0857 * Math.pow(x, 9)
-                - 165.5452 * Math.pow(x, 7) + 61.8185 * Math.pow(x, 5) - 6.5099 * Math.pow(x, 3) + 0.5009 * x;
+        return x;
+        //return 19.4175 * Math.pow(x, 13) - 103.7677 * Math.pow(x, 11) + 195.0857 * Math.pow(x, 9)
+        //        - 165.5452 * Math.pow(x, 7) + 61.8185 * Math.pow(x, 5) - 6.5099 * Math.pow(x, 3) + 0.5009 * x;
     }
 }
