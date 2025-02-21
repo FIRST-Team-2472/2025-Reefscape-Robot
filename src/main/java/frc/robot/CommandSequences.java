@@ -58,8 +58,6 @@ public class CommandSequences {
         reefNodes[10] = simplePose(3.99, 5.24, 60); //Reef Position K
         reefNodes[11] = simplePose(3.69, 5.1, 60); //Reef Position L
 
-
-
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
         middle =  simplePose(7.58, 4, 180);
@@ -195,11 +193,5 @@ public class CommandSequences {
 
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
-    }
-
-    public static Rotation2d teamChangeAngle(double degrees){
-        if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(degrees+180);
-        return  Rotation2d.fromDegrees(degrees);
     }
 }
