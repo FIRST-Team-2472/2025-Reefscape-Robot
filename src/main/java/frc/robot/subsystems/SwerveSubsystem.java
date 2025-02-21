@@ -380,7 +380,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // if their speed is larger then the physical max speed, it reduces all speeds
         // until they are smaller than physical max speed
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, 4.72);//DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         // sets the modules to desired states
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
