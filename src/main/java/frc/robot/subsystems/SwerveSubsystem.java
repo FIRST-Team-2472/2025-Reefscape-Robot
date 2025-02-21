@@ -37,7 +37,6 @@ import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
-import frc.robot.extras.AccelerationLimiter;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
