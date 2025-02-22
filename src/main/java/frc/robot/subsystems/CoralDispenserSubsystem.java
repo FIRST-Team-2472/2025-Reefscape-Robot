@@ -45,7 +45,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     }
 
     public void autoIntake() {
-        if (fails < 5) {
+        if (fails < 7) {
             if (seecoral && SensorStatus.kTimeOfFlightDistance > 80) {
                 hascoral = true;
                 seecoral = false;
@@ -67,6 +67,9 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             double distance = measurement.distance_mm;
             SmartDashboard.putNumber("distance sensor", distance);
             SensorStatus.kTimeOfFlightDistance = distance;
+            if (fails > 0) {
+                fails--;
+            }
         }else{
             fails++;
             System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
