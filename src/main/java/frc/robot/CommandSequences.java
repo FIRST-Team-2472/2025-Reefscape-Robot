@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -28,6 +29,7 @@ import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
@@ -70,6 +72,7 @@ public class CommandSequences {
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
+    
     public Command driveAndPlaceOneFromMiddle(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SequentialCommandGroup(
@@ -159,6 +162,14 @@ public class CommandSequences {
         );
     }
 
+    // TODO: Works on Blue but not Red
+    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
+        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        swerveSubsystem.calibrateOdometry(0.0f);
+        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
+    }
+  
     public PosPose2d reefNode(char NodeLetter){
         switch (NodeLetter) {
             case 'A':

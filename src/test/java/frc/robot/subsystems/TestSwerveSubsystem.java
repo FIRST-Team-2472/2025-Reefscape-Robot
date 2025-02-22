@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -49,7 +50,7 @@ public class TestSwerveSubsystem {
         
         positionFilteringSubsystem = mock();
 
-        when(positionFilteringSubsystem.getFilteredBotPose(any())).thenReturn(new Pose2d(0, 0, new Rotation2d(0)));
+        when(positionFilteringSubsystem.getFilteredBotPose(any(), anyDouble())).thenReturn(new Pose2d(0, 0, new Rotation2d(0)));
 
 
         //this is to appease shuffleboard in periodic 

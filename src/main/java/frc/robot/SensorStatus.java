@@ -20,7 +20,7 @@ public class SensorStatus {
 
     public static Pose2d filteredBotPose;
 
-    public static double kTimeOfFlightDistance = 0;
+    public static double kTimeOfFlightDistance = -1;
     public static double kClimberAngle = 0;
     public static double kPivotAngle = 0;
 }
