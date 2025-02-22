@@ -300,8 +300,8 @@ public class SwerveSubsystem extends SubsystemBase {
         //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
 
-        xSpeed = xLimiter.calculate(xSpeed);
-        ySpeed = yLimiter.calculate(ySpeed);
+        //xSpeed = xLimiter.calculate(xSpeed);
+        //ySpeed = yLimiter.calculate(ySpeed);
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 

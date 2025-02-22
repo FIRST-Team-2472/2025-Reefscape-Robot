@@ -142,7 +142,7 @@ public final class Constants {
 
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 1; // was 9.44; (changed 2/20/25)//was 4 before 9.44 (changed somtime before 2/20/25)
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44; // was 9.44; (changed 2/20/25)//was 4 before 9.44 (changed somtime before 2/20/25)
         public static final double kMaxAngularSpeedRadiansPerSecond = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 14;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;// was 5.5
