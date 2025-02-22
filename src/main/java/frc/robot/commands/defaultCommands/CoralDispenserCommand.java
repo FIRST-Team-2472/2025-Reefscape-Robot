@@ -23,15 +23,28 @@ public class CoralDispenserCommand extends Command{
     @Override
     public void execute() {
         if(xboxControllerRightTrigger.get() > 0.5)
-            if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10)
+            if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10) {
                 coralDispenserSubsytem.runMotors(.9, -.3);
-            else 
+                coralDispenserSubsytem.hascoral = false;
+            }
+            else if (SensorStatus.kElevatorHeight < 3) {
+                if (!coralDispenserSubsytem.hascoral) {
+                    coralDispenserSubsytem.runMotors(1, -1);
+                } else {
+                    coralDispenserSubsytem.runMotors(0, 0);
+                }
+            }
+            else {
                 coralDispenserSubsytem.runMotors(.8, -.8);//subject to change
-        else if(xboxControllerLeftTrigger.get() > 0.5){
-                coralDispenserSubsytem.runMotors(-.3, .3);
+                coralDispenserSubsytem.hascoral = false;
+            }
+        else if(xboxControllerLeftTrigger.get() > 0.5) {
+            coralDispenserSubsytem.runMotors(-.3, .3);
+            coralDispenserSubsytem.hascoral = false;
         }
         else
             coralDispenserSubsytem.runMotors(0, 0);
+        
     }
 
     @Override
