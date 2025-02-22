@@ -55,9 +55,9 @@ public class SwerveDriveToPointCmd extends Command {
       System.out.println("Finished Driving");
       return true;
     }
-    else if(timer.hasElapsed(3))
+    if(timer.hasElapsed(3))
       return true;
-      
+
     return false;
   }
 }

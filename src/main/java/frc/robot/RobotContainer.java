@@ -41,7 +41,8 @@ public class RobotContainer {
   drivenplaceonefrommid = "Drive and place one on G from middle", 
   drivenplaceonefromleft = "Drive and place one on J from Cage 1",
   driveforward = "Drive forward", driveAndPlaceOneFromRight = "Drive and place one on E from Cage 5",
-  driveAndPlaceTwoFromLeft = "Drive and place two from cage 1";
+  driveAndPlaceTwoFromLeft = "Drive and place on J and L from cage 1",
+  driveAndPlaceTwoFromRight = "Drive and place two on E and C from Cage 1";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -81,6 +82,10 @@ public class RobotContainer {
     m_chooser.addOption(drivensitmid, drivensitmid);
     m_chooser.addOption(drivenplaceonefromleft, drivenplaceonefromleft);
     m_chooser.addOption(driveforward, driveforward);
+    m_chooser.addOption(drivenplaceonefrommid, drivenplaceonefrommid);
+    m_chooser.addOption(driveAndPlaceOneFromRight, driveAndPlaceOneFromRight);
+    m_chooser.addOption(driveAndPlaceTwoFromLeft, driveAndPlaceTwoFromLeft);
+    m_chooser.addOption(driveAndPlaceTwoFromRight, driveAndPlaceTwoFromRight);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -145,6 +150,26 @@ public class RobotContainer {
         commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem)
       );
 
-    return null;
+      if(m_autoSelected == drivenplaceonefrommid)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceOneFromMiddle(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
+
+      if(m_autoSelected == driveAndPlaceOneFromRight)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceOneFromRight(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
+
+      if(m_autoSelected == driveAndPlaceTwoFromLeft)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceTwoFromLeft(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
+
+      if(m_autoSelected == driveAndPlaceTwoFromRight)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceTwoFromRight(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
+
+    return commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
   }
 }
