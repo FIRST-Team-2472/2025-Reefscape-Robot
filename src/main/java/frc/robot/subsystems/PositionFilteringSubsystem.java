@@ -25,7 +25,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         this.limeLightSubsystem = limeLightSubsystem;
     }
 
-    public Pose2d getFilteredBotPose(SwerveDriveOdometry odometer) {
+    public Pose2d getFilteredBotPose(SwerveDriveOdometry odometer, double odometryConfidence) {
+        this.odometryConfidence = odometryConfidence;
         limeLightSubsystem.fetchLimeLightData();
 
         numLimeLights = limeLightSubsystem.getNumLimeLights();

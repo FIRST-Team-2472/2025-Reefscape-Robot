@@ -28,6 +28,7 @@ import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
@@ -70,6 +71,7 @@ public class CommandSequences {
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
+    
     public Command driveAndPlaceOneFromMiddle(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SequentialCommandGroup(
@@ -157,6 +159,12 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
+    }
+
+    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
+        swerveSubsystem.calibrateOdometry(0.0f);
+        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), 180));
     }
   
     public PosPose2d reefNode(char NodeLetter){

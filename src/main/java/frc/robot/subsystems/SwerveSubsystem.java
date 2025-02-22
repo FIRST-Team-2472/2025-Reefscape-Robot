@@ -276,13 +276,19 @@ public class SwerveSubsystem extends SubsystemBase {
     public Pose2d getPose() {
         return odometer.getPoseMeters();
     }
-    public Pose2d getFilteredPose() {
-        return this.positionFilteringSubsystem.getFilteredBotPose(odometer);
+
+    public Pose2d getFilteredPose(double odometryConfidence) {
+        return this.positionFilteringSubsystem.getFilteredBotPose(odometer, odometryConfidence);
+    }
+
+    public void calibrateOdometry(double odometryConfidence) {
+        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(odometryConfidence));
     }
 
     public void calibrateOdometry() {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose());
+        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(1.0));
     }
+
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
         xPowerController.calculate(getPose().getX(), targetPosition.getX());
         yPowerController.calculate(getPose().getY(), targetPosition.getY());

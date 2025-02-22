@@ -49,7 +49,7 @@ public class TestSwerveSubsystem {
         
         positionFilteringSubsystem = mock();
 
-        when(positionFilteringSubsystem.getFilteredBotPose(any())).thenReturn(new Pose2d(0, 0, new Rotation2d(0)));
+        when(positionFilteringSubsystem.getFilteredBotPose(any(), any())).thenReturn(new Pose2d(0, 0, new Rotation2d(0)));
 
 
         //this is to appease shuffleboard in periodic 
