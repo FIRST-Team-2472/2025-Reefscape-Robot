@@ -159,6 +159,10 @@ public class CommandSequences {
         );
     }
 
+    public PosPose2d simplePose(double x, double y, double angleDegrees) {
+        return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
+    }
+  
     public PosPose2d reefNode(char NodeLetter){
         switch (NodeLetter) {
             case 'A':
