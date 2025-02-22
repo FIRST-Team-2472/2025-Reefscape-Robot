@@ -67,6 +67,11 @@ public class PositionFilteringSubsystem extends SubsystemBase {
             totalConfidence += conf;
         }
 
+        if (totalConfidence == 0.0d) {
+            System.out.println("PositionFilteringSubsystem: Total Confidence is 0, returning odometry pose");
+            return odometryBotPose;
+        }
+
         System.out.println("PositionFilteringSubsystem: Total Confidence: " + totalConfidence);
 
         for (int i = 0; i < confs.length; i++) {

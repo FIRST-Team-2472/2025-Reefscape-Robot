@@ -81,7 +81,7 @@ public class RobotContainer {
     m_chooser.addOption(twoCoral, twoCoral);
     m_chooser.addOption(drivensitmid, drivensitmid);
     m_chooser.addOption(drivenplaceonefromleft, drivenplaceonefromleft);
-    m_chooser.addOption(driveforward, driveforward);
+    //m_chooser.addOption(driveforward, driveforward);
     m_chooser.addOption(drivenplaceonefrommid, drivenplaceonefrommid);
     m_chooser.addOption(driveAndPlaceOneFromRight, driveAndPlaceOneFromRight);
     m_chooser.addOption(driveAndPlaceTwoFromLeft, driveAndPlaceTwoFromLeft);

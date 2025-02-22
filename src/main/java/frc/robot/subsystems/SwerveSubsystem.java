@@ -432,6 +432,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 calibrateOdometry();
                 periods = 10;
             }
+            
             periods--;
         } catch (Exception NullPointerException) {
             // TODO: handle exception
