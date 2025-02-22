@@ -14,10 +14,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+
+
 public class CoralDispenserSubsystem extends SubsystemBase{
     private SparkMax leftMotor = new SparkMax(CoralDispenserConstants.kLeftMotorID, MotorType.kBrushless);
     private SparkMax rightMotor = new SparkMax(CoralDispenserConstants.kRightMotorID, MotorType.kBrushless);
     private LaserCan laserCan = new LaserCan(0);
+    int fails = 0;
+    public boolean seecoral, hascoral = false;
     
     public CoralDispenserSubsystem(){
 
@@ -40,6 +44,22 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         rightMotor.set(rightPower);
     }
 
+    public void autoIntake() {
+        if (fails < 7) {
+            if (seecoral && SensorStatus.kTimeOfFlightDistance > 80) {
+                hascoral = true;
+                seecoral = false;
+            }
+            if (SensorStatus.kTimeOfFlightDistance < 80) {
+                seecoral = true;
+            }
+        } else {
+            hascoral = false;
+            seecoral = false;
+            System.out.println("fail");
+        }
+    }
+
     @Override
     public void periodic() {
         LaserCan.Measurement measurement = laserCan.getMeasurement();
@@ -47,9 +67,16 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             double distance = measurement.distance_mm;
             SmartDashboard.putNumber("distance sensor", distance);
             SensorStatus.kTimeOfFlightDistance = distance;
+            if (fails > 0) {
+                fails--;
+            }
         }else{
+            fails++;
             System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
+        autoIntake();
+        SmartDashboard.putBoolean("seeCoral", seecoral);
+        SmartDashboard.putBoolean("hasCoral", hascoral);
     }
 
 }
