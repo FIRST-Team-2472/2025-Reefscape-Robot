@@ -46,18 +46,17 @@ public class CoralDispenserSubsystem extends SubsystemBase{
 
     public void autoIntake() {
         if (fails < 5) {
-            if (seecoral && !(SensorStatus.kTimeOfFlightDistance < 80)) {
+            if (seecoral && SensorStatus.kTimeOfFlightDistance > 80) {
                 hascoral = true;
                 seecoral = false;
             }
             if (SensorStatus.kTimeOfFlightDistance < 80) {
                 seecoral = true;
-            } else {
-                seecoral = false;
             }
         } else {
             hascoral = false;
             seecoral = false;
+            System.out.println("fail");
         }
     }
 
@@ -73,6 +72,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
         autoIntake();
+        SmartDashboard.putBoolean("seeCoral", seecoral);
+        SmartDashboard.putBoolean("hasCoral", hascoral);
     }
 
 }

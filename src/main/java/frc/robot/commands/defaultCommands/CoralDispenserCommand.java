@@ -29,7 +29,7 @@ public class CoralDispenserCommand extends Command{
             }
             else if (SensorStatus.kElevatorHeight < 3) {
                 if (!coralDispenserSubsytem.hascoral) {
-                    coralDispenserSubsytem.runMotors(1, -1);
+                    coralDispenserSubsytem.runMotors(.5, -.5);
                 } else {
                     coralDispenserSubsytem.runMotors(0, 0);
                 }
