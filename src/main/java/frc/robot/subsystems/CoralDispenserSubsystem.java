@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralDispenserConstants;
 import frc.robot.SensorStatus;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.ConfigurationFailedException;
@@ -22,7 +21,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     private SparkMax rightMotor = new SparkMax(CoralDispenserConstants.kRightMotorID, MotorType.kBrushless);
     private LaserCan laserCan = new LaserCan(0);
     int fails = 0;
-    public boolean seecoral, hascoral;
+    public boolean seecoral, hascoral = false;
     
     public CoralDispenserSubsystem(){
 
