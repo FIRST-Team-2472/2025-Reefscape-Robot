@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralCollectionSubsystem extends SubsystemBase{
-    Servo intakeServo = new Servo(0);
+    Servo intakeServo = new Servo(9);
     public CoralCollectionSubsystem() {
         intakeServo.setAngle(0);
 

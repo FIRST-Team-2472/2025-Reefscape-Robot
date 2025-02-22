@@ -58,7 +58,8 @@ public class SwerveModule {
         turningMotor.setNeutralMode(NeutralModeValue.Brake);
     }
     public boolean isStalling(){
-        return driveMotor.getTorqueCurrent().getValueAsDouble() > 5;
+        //return driveMotor.getTorqueCurrent().getValueAsDouble() > 5;
+        return driveMotor.getVelocity().getValueAsDouble() < 0.1;
     }
     public double getCurrent(){
         return driveMotor.getTorqueCurrent().getValueAsDouble();
