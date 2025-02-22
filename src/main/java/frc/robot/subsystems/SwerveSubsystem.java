@@ -425,9 +425,10 @@ public class SwerveSubsystem extends SubsystemBase {
         if (periods == 0) {
             calibrateOdometry();
             periods = 10;
-        }
+        } 
 
         periods--;
+        
 
         SmartDashboard.putNumber("frontLeft Encoder",
                 frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());

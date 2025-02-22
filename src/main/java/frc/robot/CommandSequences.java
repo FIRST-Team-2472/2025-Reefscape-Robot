@@ -47,17 +47,16 @@ public class CommandSequences {
 
         reefNodes[0] = simplePose(3.15, 4.18, 0); //Reef Position A
         reefNodes[1] = simplePose(3.15, 3.85, 0); //Reef Position B
-        reefNodes[2] = simplePose(3.7, 2.94, 300); //Reef Position C
-        reefNodes[3] = simplePose(3.98, 2.78, 300); //Reef Position D
-        reefNodes[4] = simplePose(5, 2.78, 240); //Reef Position E
-        reefNodes[5] = simplePose(5.3, 2.960, 240); //Reef Position F
+        reefNodes[2] = simplePose(3.7, 2.94, 60); //Reef Position C
+        reefNodes[3] = simplePose(3.98, 2.78, 60); //Reef Position D
+        reefNodes[4] = simplePose(5, 2.78, 120); //Reef Position E
+        reefNodes[5] = simplePose(5.3, 2.960, 120); //Reef Position F
         reefNodes[6] = simplePose(5.8, 3.85, 180); //Reef Position G
         reefNodes[7] = simplePose(5.8, 4.18, 180); //Reef Position H
-        reefNodes[8] = simplePose(5.3, 5.09, 120); //Reef Position I
-        reefNodes[9] = simplePose(5.01, 5.25, 120); //Reef Position J // was 5, 
-        reefNodes[10] = simplePose(3.99, 5.24, 60); //Reef Position K
-        reefNodes[11] = simplePose(3.69, 5.1, 60); //Reef Position L
-
+        reefNodes[8] = simplePose(5.3, 5.09, 240); //Reef Position I
+        reefNodes[9] = simplePose(5.01, 5.25, 240); //Reef Position J // was 5, 
+        reefNodes[10] = simplePose(3.99, 5.24, 300); //Reef Position K
+        reefNodes[11] = simplePose(3.69, 5.1, 300); //Reef Position L
 
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
@@ -159,62 +158,7 @@ public class CommandSequences {
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
-    /*
-    // generates a path via points
-    private static Command generatePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,
-            List<PositivePoint> midPoints,
-            PosPose2d endPoint) {
-        // 1. Create trajectory settings
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(DriveConstants.kDriveKinematics);
-
-        Pose2d driveStartPoint = startPoint.toFieldPose2d();
-        Pose2d driveEndPoint = endPoint.toFieldPose2d();
-        List<Translation2d> driveMidPoints = new ArrayList<Translation2d>();
-        for (int i = 0; i < midPoints.size(); i++)
-            driveMidPoints.add(midPoints.get(i).toFieldPos());
-
-        // 2. Generate trajectory
-        // Generates trajectory. Need to feed start point, a series of inbetween points,
-        // and end point
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                driveStartPoint,
-                driveMidPoints,
-                driveEndPoint,
-                trajectoryConfig);
-
-        // 3. Define PID controllers for tracking trajectory
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        // 4. Construct command to follow trajectory
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                trajectory,
-                // swerveSubsystm::getPose is same as () -> swerveSubsystem.getPose()
-                swerveSubsystem::getPose,
-                DriveConstants.kDriveKinematics,
-                xController,
-                yController,
-                thetaController,
-                swerveSubsystem::setModuleStates,
-                swerveSubsystem);
-
-        // 5. Add some init and wrap-up, and return everything
-        // creates a Command list that will reset the Odometry, then move the path, then
-        // stop
-        return new SequentialCommandGroup(
-                swerveControllerCommand,
-                new InstantCommand(() -> swerveSubsystem.stopModules()));
-    }
-    */
-    public PosPose2d simplePose(double x, double y, double angleDegrees) {
-        return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
-    }
+  
     public PosPose2d reefNode(char NodeLetter){
         switch (NodeLetter) {
             case 'A':
@@ -246,9 +190,8 @@ public class CommandSequences {
         }
 
     }
-    public static Rotation2d teamChangeAngle(double degrees){
-        if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(degrees+180);
-        return  Rotation2d.fromDegrees(degrees);
+
+    public PosPose2d simplePose(double x, double y, double angleDegrees) {
+        return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
 }
