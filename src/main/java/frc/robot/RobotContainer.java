@@ -38,9 +38,10 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class RobotContainer {
   private final String twoCoral = "Swerve Drive to Point Test", drivensitmid = "Drive and Sit - Middle",
-  drivenplaceonefrommid = "Drive and place one from middle field", 
-  drivenplaceonefromleft = "Drive and place onr from left",
-  driveforward = "Drive forward";
+  drivenplaceonefrommid = "Drive and place one on G from middle", 
+  drivenplaceonefromleft = "Drive and place one on J from Cage 1",
+  driveforward = "Drive forward", driveAndPlaceOneFromRight = "Drive and place one on E from Cage 5",
+  driveAndPlaceTwoFromLeft = "Drive and place two from cage 1";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
