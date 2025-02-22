@@ -158,10 +158,6 @@ public class CommandSequences {
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
-
-    public PosPose2d simplePose(double x, double y, double angleDegrees) {
-        return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
-    }
   
     public PosPose2d reefNode(char NodeLetter){
         switch (NodeLetter) {
