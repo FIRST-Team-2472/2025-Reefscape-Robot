@@ -55,7 +55,7 @@ public final class Constants {
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = .097;
+        public static final double kWheelDiameterMeters = .0989191;
         // gear ratio is inversed (1/gear ratio) so we can multiply instead of dividing
         // the Rot to meter funtion
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -144,7 +144,7 @@ public final class Constants {
 
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44;//was 4
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44; // was 9.44; (changed 2/20/25)//was 4 before 9.44 (changed somtime before 2/20/25)
         public static final double kMaxAngularSpeedRadiansPerSecond = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 14;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;// was 5.5
@@ -194,12 +194,12 @@ public final class Constants {
 
     public static final class TargetPosConstants {
         // Motion constants for target position drive mode
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 1;//was 4 (changed 2/20/25);
         public static final double kMaxAngularSpeed = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 16;
 
-        public static final double kForwardMaxAcceleration = 2;
-        public static final double kBackwardMaxAcceleration = -12;
+        public static final double kForwardMaxAcceleration = .4;
+        public static final double kBackwardMaxAcceleration = -.4;
         public static final double kMaxAngularAcceleration = Math.PI / 3;
         public static final double kBackwardAngularAcceleration = -Math.PI * 9;
 

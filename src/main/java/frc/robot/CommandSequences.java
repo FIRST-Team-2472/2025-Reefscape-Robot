@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -28,6 +29,7 @@ import frc.robot.extras.PosPose2d;
 import frc.robot.extras.PositivePoint;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.AutoCoralDispenseCommand;
 import frc.robot.commands.AutoElevatorCommand;
@@ -47,18 +49,18 @@ public class CommandSequences {
         cageNodes[4] = simplePose(7.58, 1.898, 180); //Cage Position 5
         cageNodes[5] = simplePose(7.58, 0.794, 180); //Cage on far right from driver POV
 
-        reefNodes[0] = simplePose(3.224, 4.18, 0); //Reef Position A
-        reefNodes[1] = simplePose(3.224, 3.85, 0); //Reef Position B
-        reefNodes[2] = simplePose(3.7, 2.987, 60); //Reef Position C
-        reefNodes[3] = simplePose(3.98, 2.832, 60); //Reef Position D
-        reefNodes[4] = simplePose(5, 2.832, 120); //Reef Position E
+        reefNodes[0] = simplePose(3.15, 4.18, 0); //Reef Position A
+        reefNodes[1] = simplePose(3.15, 3.85, 0); //Reef Position B
+        reefNodes[2] = simplePose(3.7, 2.94, 60); //Reef Position C
+        reefNodes[3] = simplePose(3.98, 2.78, 60); //Reef Position D
+        reefNodes[4] = simplePose(5, 2.78, 120); //Reef Position E
         reefNodes[5] = simplePose(5.3, 2.960, 120); //Reef Position F
         reefNodes[6] = simplePose(5.8, 3.85, 180); //Reef Position G
         reefNodes[7] = simplePose(5.8, 4.18, 180); //Reef Position H
-        reefNodes[8] = simplePose(5.3, 5.05, 240); //Reef Position I
-        reefNodes[9] = simplePose(5.05, 5.3, 240); //Reef Position J // was 5, 
-        reefNodes[10] = simplePose(3.98, 5.2, 300); //Reef Position K
-        reefNodes[11] = simplePose(3.7, 5.05, 300); //Reef Position L
+        reefNodes[8] = simplePose(5.3, 5.09, 240); //Reef Position I
+        reefNodes[9] = simplePose(5.01, 5.25, 240); //Reef Position J // was 5, 
+        reefNodes[10] = simplePose(3.99, 5.24, 300); //Reef Position K
+        reefNodes[11] = simplePose(3.69, 5.1, 300); //Reef Position L
         reefNodes[12] = simplePose(0, 0, 0); //Reef Trough Position AB
         reefNodes[13] = simplePose(0, 0, 60); //Reef Trough Position CD
         reefNodes[14] = simplePose(0, 0, 120); //Reef Trough Position EF
@@ -78,6 +80,7 @@ public class CommandSequences {
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
+    
     public Command driveAndPlaceOneFromMiddle(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SequentialCommandGroup(
@@ -167,61 +170,14 @@ public class CommandSequences {
         );
     }
 
-    // generates a path via points
-    private static Command generatePath(SwerveSubsystem swerveSubsystem, PosPose2d startPoint,
-            List<PositivePoint> midPoints,
-            PosPose2d endPoint) {
-        // 1. Create trajectory settings
-        TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(DriveConstants.kDriveKinematics);
-
-        Pose2d driveStartPoint = startPoint.toFieldPose2d();
-        Pose2d driveEndPoint = endPoint.toFieldPose2d();
-        List<Translation2d> driveMidPoints = new ArrayList<Translation2d>();
-        for (int i = 0; i < midPoints.size(); i++)
-            driveMidPoints.add(midPoints.get(i).toFieldPos());
-
-        // 2. Generate trajectory
-        // Generates trajectory. Need to feed start point, a series of inbetween points,
-        // and end point
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                driveStartPoint,
-                driveMidPoints,
-                driveEndPoint,
-                trajectoryConfig);
-
-        // 3. Define PID controllers for tracking trajectory
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        // 4. Construct command to follow trajectory
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                trajectory,
-                // swerveSubsystm::getPose is same as () -> swerveSubsystem.getPose()
-                swerveSubsystem::getPose,
-                DriveConstants.kDriveKinematics,
-                xController,
-                yController,
-                thetaController,
-                swerveSubsystem::setModuleStates,
-                swerveSubsystem);
-
-        // 5. Add some init and wrap-up, and return everything
-        // creates a Command list that will reset the Odometry, then move the path, then
-        // stop
-        return new SequentialCommandGroup(
-                swerveControllerCommand,
-                new InstantCommand(() -> swerveSubsystem.stopModules()));
+    // TODO: Works on Blue but not Red
+    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
+        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        swerveSubsystem.calibrateOdometry(0.0f);
+        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }
-
-    public PosPose2d simplePose(double x, double y, double angleDegrees) {
-        return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
-    }
+  
     public PosPose2d reefNode(char NodeLetter){
         switch (NodeLetter) {
             case 'A':
@@ -265,10 +221,9 @@ public class CommandSequences {
         }
 
     }
-    public static Rotation2d teamChangeAngle(double degrees){
-        if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(degrees+180);
-        return  Rotation2d.fromDegrees(degrees);
+
+    public PosPose2d simplePose(double x, double y, double angleDegrees) {
+        return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
     public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
     CoralDispenserSubsystem coralDispenserSubsytem, char reefPosition, double reefLevel, boolean calculated){

@@ -25,7 +25,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         this.limeLightSubsystem = limeLightSubsystem;
     }
 
-    public Pose2d getFilteredBotPose(SwerveDriveOdometry odometer) {
+    public Pose2d getFilteredBotPose(SwerveDriveOdometry odometer, double odometryConfidence) {
+        this.odometryConfidence = odometryConfidence;
         limeLightSubsystem.fetchLimeLightData();
 
         numLimeLights = limeLightSubsystem.getNumLimeLights();
@@ -64,6 +65,11 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         double totalConfidence = 0d;
         for (double conf : confs) {
             totalConfidence += conf;
+        }
+
+        if (totalConfidence == 0.0d) {
+            System.out.println("PositionFilteringSubsystem: Total Confidence is 0, returning odometry pose");
+            return odometryBotPose;
         }
 
         System.out.println("PositionFilteringSubsystem: Total Confidence: " + totalConfidence);
