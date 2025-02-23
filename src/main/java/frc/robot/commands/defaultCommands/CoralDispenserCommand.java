@@ -7,14 +7,14 @@ import frc.robot.SensorStatus;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class CoralDispenserCommand extends Command{
-    CoralDispenserSubsystem coralDispenserSubsytem;
+    CoralDispenserSubsystem coralDispenserSubsystem;
     Supplier<Double> xboxControllerRightTrigger, xboxControllerLeftTrigger;
 
-    public CoralDispenserCommand(CoralDispenserSubsystem coralDispenserSubsytem, Supplier<Double> xboxControllerRightTrigger, Supplier<Double> xboxControllerLeftTrigger){
-        this.coralDispenserSubsytem = coralDispenserSubsytem;
+    public CoralDispenserCommand(CoralDispenserSubsystem coralDispenserSubsystem, Supplier<Double> xboxControllerRightTrigger, Supplier<Double> xboxControllerLeftTrigger){
+        this.coralDispenserSubsystem = coralDispenserSubsystem;
         this.xboxControllerRightTrigger = xboxControllerRightTrigger;
         this.xboxControllerLeftTrigger = xboxControllerLeftTrigger;
-        addRequirements(coralDispenserSubsytem);
+        addRequirements(coralDispenserSubsystem);
     }
 
     @Override
@@ -24,26 +24,26 @@ public class CoralDispenserCommand extends Command{
     public void execute() {
         if(xboxControllerRightTrigger.get() > 0.5)
             if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10) {
-                coralDispenserSubsytem.runMotors(.9, -.3);
-                coralDispenserSubsytem.hascoral = false;
+                coralDispenserSubsystem.runMotors(.9, -.3);
+                coralDispenserSubsystem.hascoral = false;
             }
             else if (SensorStatus.kElevatorHeight < 3) {
-                if (!coralDispenserSubsytem.hascoral) {
-                    coralDispenserSubsytem.runMotors(.5, -.5);
+                if (!coralDispenserSubsystem.hascoral) {
+                    coralDispenserSubsystem.runMotors(.5, -.5);
                 } else {
-                    coralDispenserSubsytem.runMotors(0, 0);
+                    coralDispenserSubsystem.runMotors(0, 0);
                 }
             }
             else {
-                coralDispenserSubsytem.runMotors(.8, -.8);//subject to change
-                coralDispenserSubsytem.hascoral = false;
+                coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
+                coralDispenserSubsystem.hascoral = false;
             }
         else if(xboxControllerLeftTrigger.get() > 0.5) {
-            coralDispenserSubsytem.runMotors(-.3, .3);
-            coralDispenserSubsytem.hascoral = false;
+            coralDispenserSubsystem.runMotors(-.3, .3);
+            coralDispenserSubsystem.hascoral = false;
         }
         else
-            coralDispenserSubsytem.runMotors(0, 0);
+            coralDispenserSubsystem.runMotors(0, 0);
         
     }
 
