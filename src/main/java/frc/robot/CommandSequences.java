@@ -31,10 +31,12 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.AutoCoralDispenseCommand;
+import frc.robot.commands.AutoElevatorCommand;
 
 public class CommandSequences {
     PosPose2d[] cageNodes = new PosPose2d[6];
-    PosPose2d[] reefNodes = new PosPose2d[12];
+    PosPose2d[] reefNodes = new PosPose2d[18];
     PosPose2d leftHumanPlayer, rightHumanPlayer, middle, rightReefPassage, leftReefPassage;
     PosPose2d processor;
 
@@ -59,6 +61,12 @@ public class CommandSequences {
         reefNodes[9] = simplePose(5.01, 5.25, 240); //Reef Position J // was 5, 
         reefNodes[10] = simplePose(3.99, 5.24, 300); //Reef Position K
         reefNodes[11] = simplePose(3.69, 5.1, 300); //Reef Position L
+        reefNodes[12] = simplePose(0, 0, 0); //Reef Trough Position AB
+        reefNodes[13] = simplePose(0, 0, 60); //Reef Trough Position CD
+        reefNodes[14] = simplePose(0, 0, 120); //Reef Trough Position EF
+        reefNodes[15] = simplePose(0, 0, 180); //Reef Trough Position GH
+        reefNodes[16] = simplePose(0, 0, 240); //Reef Trough Position IJ
+        reefNodes[17] = simplePose(0, 0, 300); //Reef Trough Position KL
 
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
@@ -250,6 +258,18 @@ public class CommandSequences {
                 return reefNodes[10];
             case 'L':
                 return reefNodes[11];
+            case 'R':
+                return reefNodes[12];
+            case 'S':
+                return reefNodes[13];
+            case 'T':
+                return reefNodes[14];
+            case 'U':
+                return reefNodes[15];
+            case 'V':
+                return reefNodes[16];
+            case 'W':
+                return reefNodes[17];
             default:
                 return reefNodes[0];
         }
@@ -258,5 +278,17 @@ public class CommandSequences {
 
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
+    }
+    public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
+    CoralDispenserSubsystem coralDispenserSubsytem, char reefPosition, double reefLevel, boolean calculated){
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new SwerveDriveToPointCmd(swerveSubsystem, reefNode(reefPosition)),
+                new AutoElevatorCommand(elevatorSubsystem, reefLevel)
+            ),        
+            new AutoCoralDispenseCommand(coralDispenserSubsytem),
+            (calculated ? new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height) : null)
+                
+        );
     }
 }
