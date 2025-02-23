@@ -23,7 +23,13 @@ public class AutoCoralDispenseCommand extends Command{
 
     @Override
     public void execute() {
-        coralDispenserSubsystem.runMotors(1, -1);
+        if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10) {
+            coralDispenserSubsytem.runMotors(.9, -.3);
+            coralDispenserSubsytem.hascoral = false;
+        } else {
+            coralDispenserSubsystem.runMotors(1, -1);
+            coralDispenserSubsytem.hascoral = false;
+        }
     }
 
     @Override
