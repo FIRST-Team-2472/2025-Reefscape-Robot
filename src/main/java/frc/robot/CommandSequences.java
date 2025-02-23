@@ -208,20 +208,20 @@ public class CommandSequences {
 
     //Things below this comment are not used in the code and need testing
 
-     // TODO: Works on Blue but not Red
-    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
-        swerveSubsystem.calibrateOdometry(0.0f);
-        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
-        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
-    }
-
     public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
 
         return new SequentialCommandGroup(
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
+    }
+
+    // TODO: Works on Blue but not Red
+    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
+        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        swerveSubsystem.calibrateOdometry(0.0f);
+        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }
   
     public PosPose2d reefNode(char NodeLetter){
