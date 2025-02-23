@@ -37,12 +37,12 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 
 public class RobotContainer {
-  private final String twoCoral = "Swerve Drive to Point Test", drivensitmid = "Drive and Sit - Middle",
+  private final String drivensitmid = "Drive and Sit - Middle",
   drivenplaceonefrommid = "Drive and place one on G from middle", 
   drivenplaceonefromleft = "Drive and place one on J from Cage 1",
   driveforward = "Drive forward", driveAndPlaceOneFromRight = "Drive and place one on E from Cage 5",
   driveAndPlaceTwoFromLeft = "Drive and place on J and L from cage 1",
-  driveAndPlaceTwoFromRight = "Drive and place two on E and C from Cage 1";
+  driveAndPlaceTwoFromRight = "Drive and place two on E and C from Cage 1", driveAndPlaceTwoOnG = "Drive and place two on G from Middle";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -78,7 +78,6 @@ public class RobotContainer {
       ()-> rightJoystick.getRawButton(4)
     ));
 
-    m_chooser.addOption(twoCoral, twoCoral);
     m_chooser.addOption(drivensitmid, drivensitmid);
     m_chooser.addOption(drivenplaceonefromleft, drivenplaceonefromleft);
     //m_chooser.addOption(driveforward, driveforward);
@@ -86,6 +85,7 @@ public class RobotContainer {
     m_chooser.addOption(driveAndPlaceOneFromRight, driveAndPlaceOneFromRight);
     m_chooser.addOption(driveAndPlaceTwoFromLeft, driveAndPlaceTwoFromLeft);
     m_chooser.addOption(driveAndPlaceTwoFromRight, driveAndPlaceTwoFromRight);
+    m_chooser.addOption(driveAndPlaceTwoOnG, driveAndPlaceTwoOnG);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -130,11 +130,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     m_autoSelected = m_chooser.getSelected();
 
-    if(m_autoSelected == twoCoral)
-      return new SequentialCommandGroup(
-        commandSequences.twoCoralCfourRoneHoneRfive(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
-      );
-
       if(m_autoSelected == drivensitmid)
       return new SequentialCommandGroup(
         commandSequences.driveAndSitFromMiddle(swerveSubsystem)
@@ -170,6 +165,11 @@ public class RobotContainer {
         commandSequences.driveAndPlaceTwoFromRight(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
       );
 
-    return commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
+      if(m_autoSelected == driveAndPlaceTwoOnG)
+      return new SequentialCommandGroup(
+        commandSequences.driveAndPlaceTwoOnG(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem)
+      );
+
+    return null;
   }
 }

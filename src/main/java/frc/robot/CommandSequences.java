@@ -129,31 +129,7 @@ public class CommandSequences {
             new AutoElevatorCommand(elevatorSubsystem, 0)
         );
     }
-    // prob doesnt work anymore
-    public Command twoCoralCfourRoneHoneRfive(SwerveSubsystem swerveSubsystem, 
-    ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
 
-        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
-
-        return new SequentialCommandGroup(
-
-            //new ParallelCommandGroup(
-                new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[0]),
-                //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
-            //),
-            //new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new ParallelCommandGroup(
-                new SwerveDriveToPointCmd(swerveSubsystem, simplePose(6.350, 6.245, 0))
-                //new AutoElevatorCommand(elevatorSubsystem, 0)
-            ),
-            new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer),
-            new ParallelCommandGroup(
-                //new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[4])
-                //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
-            ),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
-        );
-    }
     public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
 
@@ -168,6 +144,22 @@ public class CommandSequences {
         swerveSubsystem.calibrateOdometry(0.0f);
         Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
+    }
+
+    public Command driveAndPlaceTwoOnG(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
+        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        return new SequentialCommandGroup(
+            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H')),
+            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height),
+            new AutoCoralDispenseCommand(coralDispenserSubsystem),
+            new AutoElevatorCommand(elevatorSubsystem, 0),
+            new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1),
+            new CollectCoralCmd(coralDispenserSubsystem),// this command is missing stuff
+            new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, reefNodes[7], 0),
+            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
+            new AutoCoralDispenseCommand(coralDispenserSubsystem),
+            new AutoElevatorCommand(elevatorSubsystem, 0)
+        );
     }
   
     public PosPose2d reefNode(char NodeLetter){
