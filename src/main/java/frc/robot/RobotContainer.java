@@ -37,11 +37,30 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 
 public class RobotContainer {
-  private final String MiddleToH = "Drive from Middle and Sit", driveforward = "Drive forward",
-  MiddleToHL1 = "Drive from Middle and Place on H L1", MiddleToHL4 = "Drive from Middle and Place on H L4";
+  private final String CageOneToH = "Drive from Cage One to H", CageOneToI = "Drive from Cage One to I",
+  CageTwoToH = "Drive from Cage Two to H", CageTwoToI = "Cage Two to I", CageThreeToH = "Drive from Cage Three to H",
+  CageThreeToG = "Drive from Cage Three to G", MiddleToH = "Drive from Middle to H", MiddleToG = "Drive from Middle to G",
+  CageFourToG = "Drive from Cage Four to G", CageFourToF = "Drive from Cage Four to F", CageFiveToG = "Drive from Cage Five to G",
+  CageFiveToF = "Drive from Cage Five to F", CageSixToG = "Drive from Cage Six to G", CageSixToF = "Drive from Cage Six to F",
+  driveforward = "Drive forward";
 
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private final String PlaceOnL4 = "Place on Level 4", PlaceOnL3 = "Place on Level 3", PlaceOnL2 = "Place on Level 2", PlaceOnL1 = "Place on Level 1";
+
+  private final String HToLeftPlayer = "H to Left Player", GToRightPlayer = "G to Right Player", FToRightPlayer = "F to Right Player", IToRightPlayr = "I to Right Player";
+
+  private final String LeftPlayerToL = "Left Player to L", LeftPlayerToK = "Left Player to K", RightPlayerToC = "Right Player to C", RightPlayerToD = "Right Player to D";
+
+  private String AutoStepOne;
+  private String AutoStepTwo;
+  private String AutoStepThree;
+  private String AutoStepFour;
+  private String AutoStepFive;
+
+  private final SendableChooser<String> AutoStepOneChooser = new SendableChooser<>();
+  private final SendableChooser<String> AutoStepTwoChooser = new SendableChooser<>();
+  private final SendableChooser<String> AutoStepThreeChooser = new SendableChooser<>();
+  private final SendableChooser<String> AutoStepFourChooser = new SendableChooser<>();
+  private final SendableChooser<String> AutoStepFiveChooser = new SendableChooser<>();
 
   private final CommandSequences commandSequences = new CommandSequences();
 
@@ -74,13 +93,59 @@ public class RobotContainer {
       ()-> rightJoystick.getRawButton(4)
     ));
 
-    m_chooser.addOption(MiddleToH, MiddleToH);
-    m_chooser.addOption(MiddleToHL1, MiddleToHL1);
-    m_chooser.addOption(MiddleToHL4, MiddleToHL4);
+    //Step One Options for Autos
+
+    AutoStepOneChooser.addOption(CageOneToH, CageOneToH);
+    AutoStepOneChooser.addOption(CageOneToI, CageOneToI);
+    AutoStepOneChooser.addOption(CageTwoToH, CageTwoToH);
+    AutoStepOneChooser.addOption(CageTwoToI, CageTwoToI);
+    AutoStepOneChooser.addOption(CageThreeToH, CageThreeToH);
+    AutoStepOneChooser.addOption(CageThreeToG, CageThreeToG);
+    AutoStepOneChooser.addOption(MiddleToH, MiddleToH);
+    AutoStepOneChooser.addOption(MiddleToG, MiddleToG);
+    AutoStepOneChooser.addOption(CageFourToG, CageFourToG);
+    AutoStepOneChooser.addOption(CageFourToF, CageFourToF);
+    AutoStepOneChooser.addOption(CageFiveToG, CageFiveToG);
+    AutoStepOneChooser.addOption(CageFiveToF, CageFiveToF);
+    AutoStepOneChooser.addOption(CageSixToG, CageSixToG);
+    AutoStepOneChooser.addOption(CageSixToF, CageSixToF);
+
+    //Step Two Options for Autos
+
+    AutoStepTwoChooser.addOption(PlaceOnL4, PlaceOnL4);
+    AutoStepTwoChooser.addOption(PlaceOnL3, PlaceOnL3);
+    AutoStepTwoChooser.addOption(PlaceOnL2, PlaceOnL2);
+    AutoStepTwoChooser.addOption(PlaceOnL1, PlaceOnL1);
+
+    //Step Three Options for Autos
+
+    AutoStepThreeChooser.addOption(HToLeftPlayer, HToLeftPlayer);
+    AutoStepThreeChooser.addOption(GToRightPlayer, GToRightPlayer);
+    AutoStepThreeChooser.addOption(FToRightPlayer, FToRightPlayer);
+    AutoStepThreeChooser.addOption(IToRightPlayr, IToRightPlayr);
+
+    //Step Four Options for Autos
+
+    AutoStepFourChooser.addOption(LeftPlayerToL, LeftPlayerToL);
+    AutoStepFourChooser.addOption(LeftPlayerToK, LeftPlayerToK);
+    AutoStepFourChooser.addOption(RightPlayerToC, RightPlayerToC);
+    AutoStepFourChooser.addOption(RightPlayerToD, RightPlayerToD);
+
+    //Step Five Options for Autos
+
+    AutoStepFiveChooser.addOption(PlaceOnL4, PlaceOnL4);
+    AutoStepFiveChooser.addOption(PlaceOnL3, PlaceOnL3);
+    AutoStepFiveChooser.addOption(PlaceOnL2, PlaceOnL2);
+    AutoStepFiveChooser.addOption(PlaceOnL1, PlaceOnL1);
+
     //m_chooser.addOption(driveforward, driveforward);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
-    driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    driverBoard.add("Auto Step One", AutoStepOneChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    driverBoard.add("Auto Step Two", AutoStepTwoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    driverBoard.add("Auto Step Three", AutoStepThreeChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    driverBoard.add("Auto Step Four", AutoStepFourChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    driverBoard.add("Auto Step Five", AutoStepFiveChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
       ()-> -xboxController.getLeftY(),
@@ -120,29 +185,135 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    m_autoSelected = m_chooser.getSelected();
+    AutoStepOne = AutoStepOneChooser.getSelected();
+    AutoStepTwo = AutoStepTwoChooser.getSelected();
+    AutoStepThree = AutoStepThreeChooser.getSelected();
 
-      if(m_autoSelected == MiddleToH)
-      return new SequentialCommandGroup(
-        commandSequences.MiddleToH(swerveSubsystem)
-      );
+    Command autoCommand = null;
+    Command autoCommand2 = null;
+    Command autoCommand3 = null;
+    Command autoCommand4 = null;
+    Command autoCommand5 = null;
 
-      if(m_autoSelected == driveforward)
-      return new SequentialCommandGroup(
-        commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem)
-      );
+    switch (AutoStepOne) {
+      case CageOneToH:
+        autoCommand = commandSequences.CageOneToH(swerveSubsystem);
+        break;
+      case CageOneToI:
+        autoCommand = commandSequences.CageOneToI(swerveSubsystem);
+        break;
+      case CageTwoToH:
+        autoCommand = commandSequences.CageTwoToH(swerveSubsystem);
+        break;
+      case CageTwoToI:
+        autoCommand = commandSequences.CageTwoToI(swerveSubsystem);
+        break;
+      case CageThreeToH:
+        autoCommand = commandSequences.CageThreeToH(swerveSubsystem);
+        break;
+      case CageThreeToG:
+        autoCommand = commandSequences.CageThreeToG(swerveSubsystem);
+        break;
+      case MiddleToH:
+        autoCommand = commandSequences.MiddleToH(swerveSubsystem);
+        break;
+      case MiddleToG:
+        autoCommand = commandSequences.MiddleToG(swerveSubsystem);
+        break;
+      case CageFourToG:
+        autoCommand = commandSequences.CageFourToG(swerveSubsystem);
+        break;
+      case CageFourToF:
+        autoCommand = commandSequences.CageFourToF(swerveSubsystem);
+        break;
+      case CageFiveToG:
+        autoCommand = commandSequences.CageFiveToG(swerveSubsystem);
+        break;
+      case CageFiveToF:
+        autoCommand = commandSequences.CageFiveToF(swerveSubsystem);
+        break;
+      case CageSixToG:
+        autoCommand = commandSequences.CageSixToG(swerveSubsystem);
+        break;
+      case CageSixToF:
+        autoCommand = commandSequences.CageSixToF(swerveSubsystem);
+        break;
+      default:
+        autoCommand = commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
+        break;
+    }
 
-      if(m_autoSelected == MiddleToHL1)
-        return new SequentialCommandGroup(
-          commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
-        );
+    switch (AutoStepTwo) {
+      case PlaceOnL4:
+        autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      case PlaceOnL3:
+        autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL3(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      case PlaceOnL2:
+        autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL2(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      case PlaceOnL1:
+        autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      default:
+        autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+    }
 
-      if(m_autoSelected == MiddleToHL4)
-        return new SequentialCommandGroup(
-          commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
-        );
+    switch (AutoStepThree) {
+      case HToLeftPlayer:
+        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.HToLeftPlayer(swerveSubsystem));
+        break;
+      case GToRightPlayer:
+        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.GToRightPlayer(swerveSubsystem));
+        break;
+      case FToRightPlayer:
+        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.FToRightPlayer(swerveSubsystem));
+        break;
+      case IToRightPlayr:
+        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.IToRightPlayer(swerveSubsystem));
+        break;
+      default:
+        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.IToRightPlayer(swerveSubsystem));
+        break;
+    }
+
+    switch (AutoStepFour) {
+      case LeftPlayerToL:
+        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.LeftPlayerToL(swerveSubsystem));
+        break;
+      case LeftPlayerToK:
+        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.LeftPlayerToK(swerveSubsystem));
+        break;
+      case RightPlayerToC:
+        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.RightPlayerToC(swerveSubsystem));
+        break;
+      case RightPlayerToD:
+        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.RightPlayerToD(swerveSubsystem));
+        break;
+      default:
+        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.RightPlayerToD(swerveSubsystem));
+        break;
+    }
+
+    switch (AutoStepFive) {
+      case PlaceOnL4:
+        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      case PlaceOnL3:
+        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL3(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      case PlaceOnL2:
+        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL2(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      case PlaceOnL1:
+        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+      default:
+        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
+        break;
+    }
 
     return null;
   }
