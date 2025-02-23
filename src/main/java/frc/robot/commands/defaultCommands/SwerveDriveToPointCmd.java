@@ -53,7 +53,6 @@ public class SwerveDriveToPointCmd extends Command {
     // use this function if you overide the command to finish it
     if (swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.05 && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond < 0.05)
       return true;
-
     if(timer.hasElapsed(3))
       return true;
 
