@@ -188,41 +188,6 @@ public class CommandSequences {
         return new CollectCoralCmd(coralDispenserSubsystem);
     }
 
-    //Elevator Commands
-
-    public Command PlaceOnL4(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
-        );
-    }
-
-    public Command PlaceOnL3(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL3Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
-        );
-    }
-
-    public Command PlaceOnL2(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL2Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
-        );
-    }
-
-    public Command PlaceOnL1(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
-        );
-    }
-
-    //Coral Dispenser Command
-
-    public Command dispenseCoral(CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new AutoCoralDispenseCommand(coralDispenserSubsystem);
-    }
 
     //Things below this comment are not used in the code and need testing
 

@@ -122,27 +122,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     m_autoSelected = m_chooser.getSelected();
 
-      if(m_autoSelected == MiddleToH)
+      
+    
+    if(m_autoSelected == MiddleToH)
       return new SequentialCommandGroup(
         commandSequences.MiddleToH(swerveSubsystem)
-      );
-
-      if(m_autoSelected == driveforward)
-      return new SequentialCommandGroup(
-        commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem)
-      );
-
-      if(m_autoSelected == MiddleToHL1)
-        return new SequentialCommandGroup(
-          commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
-        );
-
-      if(m_autoSelected == MiddleToHL4)
-        return new SequentialCommandGroup(
-          commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
-        );
+    );
 
     return null;
   }
