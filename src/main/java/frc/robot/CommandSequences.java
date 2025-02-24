@@ -40,30 +40,30 @@ public class CommandSequences {
 
     public CommandSequences() {
         // x is centered on starting line
-        cageNodes[0] = simplePose(7.108, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.108, 6.145, 180); //Cage Position 2
-        cageNodes[2] = simplePose(7.108, 5.077, 180); //Cage Position 3
-        cageNodes[3] = simplePose(7.108, 2.929, 180); //Cage Position 4
-        cageNodes[4] = simplePose(7.108, 1.898, 180); //Cage Position 5
-        cageNodes[5] = simplePose(7.108, 0.794, 180); //Cage on far right from driver POV
+        cageNodes[0] = simplePose(7.125, 7.279, 180); //Cage on far left from driver POV
+        cageNodes[1] = simplePose(7.125, 6.145, 180); //Cage Position 2
+        cageNodes[2] = simplePose(7.125, 5.077, 180); //Cage Position 3
+        cageNodes[3] = simplePose(7.125, 2.929, 180); //Cage Position 4
+        cageNodes[4] = simplePose(7.125, 1.898, 180); //Cage Position 5
+        cageNodes[5] = simplePose(7.125, 0.794, 180); //Cage on far right from driver POV
 
-        reefNodes[0] = simplePose(3.15, 4.18, 0); //Reef Position A
-        reefNodes[1] = simplePose(3.15, 3.85, 0); //Reef Position B
-        reefNodes[2] = simplePose(3.7, 2.94, 60); //Reef Position C
-        reefNodes[3] = simplePose(3.98, 2.78, 60); //Reef Position D
-        reefNodes[4] = simplePose(5, 2.78, 120); //Reef Position E
-        reefNodes[5] = simplePose(5.3, 2.960, 120); //Reef Position F
-        reefNodes[6] = simplePose(5.8, 3.85, 180); //Reef Position G
-        reefNodes[7] = simplePose(5.8, 4.18, 180); //Reef Position H
-        reefNodes[8] = simplePose(5.3, 5.09, 240); //Reef Position I
-        reefNodes[9] = simplePose(5.01, 5.25, 240); //Reef Position J // was 5, 
-        reefNodes[10] = simplePose(3.99, 5.24, 300); //Reef Position K
-        reefNodes[11] = simplePose(3.69, 5.1, 300); //Reef Position L
+        reefNodes[0] = simplePose(3.145, 4.185, 0); //Reef Position A
+        reefNodes[1] = simplePose(3.145, 3.855, 0); //Reef Position B
+        reefNodes[2] = simplePose(3.676, 2.947, 60); //Reef Position C
+        reefNodes[3] = simplePose(3.961, 2.78, 60); //Reef Position D
+        reefNodes[4] = simplePose(5.018, 2.772, 120); //Reef Position E
+        reefNodes[5] = simplePose(5.302, 2.941, 120); //Reef Position F
+        reefNodes[6] = simplePose(5.81, 3.852, 180); //Reef Position G
+        reefNodes[7] = simplePose(5.809, 3.859, 180); //Reef Position H
+        reefNodes[8] = simplePose(5.29, 5.088, 240); //Reef Position I
+        reefNodes[9] = simplePose(5.004, 5.249, 240); //Reef Position J // was 5, 
+        reefNodes[10] = simplePose(3.971, 5.252, 300); //Reef Position K
+        reefNodes[11] = simplePose(3.684, 5.088, 300); //Reef Position L
 
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
 
-        middle =  simplePose(7.108, 4, 180);
+        middle =  simplePose(7.125, 4, 180);
         rightReefPassage = simplePose(5, 1, 75);
         leftReefPassage = simplePose(5, 7, 285);
 
