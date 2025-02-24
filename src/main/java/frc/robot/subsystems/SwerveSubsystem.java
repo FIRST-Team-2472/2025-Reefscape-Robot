@@ -354,11 +354,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public boolean isExactlyInPosition(Pose2d targetPosition) {
-        return isAtPoint(targetDrivePos.getTranslation()) && isAtAngle(targetPosition.getRotation());
+        return isAtPoint(targetPosition.getTranslation()) && isAtAngle(targetPosition.getRotation());
     }
 
     public boolean isNearlyInPosition(Pose2d targetPosition) {
-        return isNearPoint(targetDrivePos.getTranslation()) && isNearAngle(targetDriveAngle.getRotation());
+        return isNearPoint(targetPosition.getTranslation()) && isNearAngle(targetPosition.getRotation());
     }
 
     public boolean isAtPoint(Translation2d targetDrivePos) {
