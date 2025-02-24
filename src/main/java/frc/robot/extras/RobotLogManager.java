@@ -19,7 +19,7 @@ Log files are initially named FRC_TBD_{random}.wpilog until the DS connects. Aft
 
 On startup, all existing log files where a DS has not been connected will be deleted. If there is less than 50 MB of free space on the target storage, FRC_ log files are deleted (oldest to newest) until there is 50 MB free OR there are 10 files remaining.
  */
-public class LogManager {
+public class RobotLogManager {
 
 
     // Logs at this message should be our most granular and only used for debugging purposes

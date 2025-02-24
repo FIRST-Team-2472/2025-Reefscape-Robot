@@ -353,6 +353,14 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
+    public boolean isExactlyInPosition(Pose2d targetPosition) {
+        return isAtPoint(targetDrivePos.getTranslation()) && isAtAngle(targetPosition.getRotation());
+    }
+
+    public boolean isNearlyInPosition(Pose2d targetPosition) {
+        return isNearPoint(targetDrivePos.getTranslation()) && isNearAngle(targetDriveAngle.getRotation());
+    }
+
     public boolean isAtPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
         boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
