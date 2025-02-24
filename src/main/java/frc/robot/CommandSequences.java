@@ -122,6 +122,11 @@ public class CommandSequences {
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
 
+    public Command CageFourToH(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H'));
+    }
+
     public Command CageFourToG(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
