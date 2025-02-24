@@ -239,7 +239,7 @@ public class RobotContainer {
         autoCommand = commandSequences.CageSixToF(swerveSubsystem);
         break;
       default:
-        autoCommand = commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
+        autoCommand = null;
         break;
     }
 
@@ -257,7 +257,7 @@ public class RobotContainer {
         autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
         break;
       default:
-        autoCommand2 = autoCommand.andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
+        autoCommand2 = autoCommand.andThen(null);
         break;
     }
 
@@ -275,7 +275,7 @@ public class RobotContainer {
         autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.IToRightPlayer(swerveSubsystem));
         break;
       default:
-        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(commandSequences.IToRightPlayer(swerveSubsystem));
+        autoCommand3 = autoCommand.andThen(autoCommand2).andThen(null);
         break;
     }
 
@@ -293,7 +293,7 @@ public class RobotContainer {
         autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.RightPlayerToD(swerveSubsystem));
         break;
       default:
-        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(commandSequences.RightPlayerToD(swerveSubsystem));
+        autoCommand4 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(null);
         break;
     }
 
@@ -311,7 +311,7 @@ public class RobotContainer {
         autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
         break;
       default:
-        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem));
+        autoCommand5 = autoCommand.andThen(autoCommand2).andThen(autoCommand3).andThen(autoCommand4).andThen(null);
         break;
     }
 
