@@ -52,13 +52,13 @@ public class CommandSequences {
         reefNodes[2] = simplePose(3.676, 2.947, 60); //Reef Position C
         reefNodes[3] = simplePose(3.961, 2.78, 60); //Reef Position D
         reefNodes[4] = simplePose(5.018, 2.772, 120); //Reef Position E
-        reefNodes[5] = simplePose(5.302, 2.941, 120); //Reef Position F
-        reefNodes[6] = simplePose(5.81, 3.852, 180); //Reef Position G
-        reefNodes[7] = simplePose(5.809, 3.859, 180); //Reef Position H
-        reefNodes[8] = simplePose(5.29, 5.088, 240); //Reef Position I
-        reefNodes[9] = simplePose(5.004, 5.249, 240); //Reef Position J // was 5, 
-        reefNodes[10] = simplePose(3.971, 5.252, 300); //Reef Position K
-        reefNodes[11] = simplePose(3.684, 5.088, 300); //Reef Position L
+        reefNodes[5] = simplePose(5.297, 2.951, 120); //Reef Position F
+        reefNodes[6] = simplePose(5.823, 3.86, 180); //Reef Position G
+        reefNodes[7] = simplePose(5.823, 4.192, 180); //Reef Position H
+        reefNodes[8] = simplePose(5.298, 5.099, 240); //Reef Position I
+        reefNodes[9] = simplePose(5.012, 5.262, 240); //Reef Position J // was 5, 
+        reefNodes[10] = simplePose(3.962, 5.263, 300); //Reef Position K
+        reefNodes[11] = simplePose(3.677, 5.1, 300); //Reef Position L
 
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
