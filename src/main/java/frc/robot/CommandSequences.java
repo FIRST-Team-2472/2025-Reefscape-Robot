@@ -70,6 +70,16 @@ public class CommandSequences {
         processor = simplePose(2, 7,90);
     }
 
+    //test auto to show how coral collection works not to be used
+    public Command coralcollectionautotest(CoralDispenserSubsystem coralDispenserSubsystem){
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new CollectCoralCmd(coralDispenserSubsystem),
+                coralDispenserSubsystem.seecoral == true ?
+                    new SwerveDriveToPointCmd(null, reefNode('C')) : null
+            )
+        );
+    }
     //Starting Position to reef
 
     public Command CageOneToH(SwerveSubsystem swerveSubsystem){
