@@ -177,9 +177,31 @@ public class CommandSequences {
         return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
     }
 
-    public Command IToRightPlayrt(SwerveSubsystem swerveSubsystem){
+    public Command IToRightPlayer(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(reefNode('I').toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+    }
+
+    //Source to Reed
+
+    public Command LeftPlayerToL(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(leftHumanPlayer.toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('L'));
+    }
+
+    public Command LeftPlayerToK(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(leftHumanPlayer.toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('K'));
+    }
+
+    public Command RightPlayerToC(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(rightHumanPlayer.toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('C'));
+    }
+
+    public Command RightPlayerToD(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(rightHumanPlayer.toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('D'));
     }
 
     //Intake Coral
