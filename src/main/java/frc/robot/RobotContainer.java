@@ -505,7 +505,7 @@ public class RobotContainer {
         break;
     }
     if (numCoral == 1) {
-      return commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1);
+      return new SequentialCommandGroup (commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1));
     } else if (numCoral == 1.5) {
       return commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1, coralStation1);
     } else if (numCoral == 2) {
