@@ -23,6 +23,6 @@ public class CollectCoralCmd extends Command{
     }
     @Override
     public boolean isFinished() {
-        return coralDispenserSubsystem.hascoral == true;
+        return coralDispenserSubsystem.hascoral;
     }
 }
