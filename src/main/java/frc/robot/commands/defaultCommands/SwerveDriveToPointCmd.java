@@ -34,8 +34,8 @@ public class SwerveDriveToPointCmd extends Command {
   @Override
   public void initialize() {
     swerveSubsystem.initializeDriveToPointAndRotate(targetPosition);
-    RobotLogManager.debug("robot pose" + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
-    RobotLogManager.debug("target pose" + targetPosition.getX()+", "+ targetPosition.getY());
+    RobotLogManager.debug("robot pose: " + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
+    RobotLogManager.debug("target pose: " + targetPosition.getX()+", "+ targetPosition.getY());
     timer.restart();
   }
 
@@ -52,11 +52,11 @@ public class SwerveDriveToPointCmd extends Command {
   @Override
   public boolean isFinished() {
     if (swerveSubsystem.isExactlyInPosition(targetPosition) || swerveSubsystem.isNearlyInPosition(targetPosition) || swerveSubsystem.isStalling()){
-      RobotLogManager.info("Successfully finished Driving - " + "robot pose" + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
+      RobotLogManager.info("Successfully finished Driving - " + "robot pose: " + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
       return true;
     }
     if(timer.hasElapsed(3)){
-      RobotLogManager.debug("Timed out - ending pose" + targetPosition.getX()+", "+ targetPosition.getY());
+      RobotLogManager.debug("Timed out - ending pose: " + targetPosition.getX()+", "+ targetPosition.getY());
       return true;
     }
 
