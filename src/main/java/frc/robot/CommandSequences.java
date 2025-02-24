@@ -40,12 +40,12 @@ public class CommandSequences {
 
     public CommandSequences() {
         // x is centered on starting line
-        cageNodes[0] = simplePose(7.58, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.58, 6.145, 180); //Cage Position 2
-        cageNodes[2] = simplePose(7.58, 5.077, 180); //Cage Position 3
-        cageNodes[3] = simplePose(7.58, 2.929, 180); //Cage Position 4
-        cageNodes[4] = simplePose(7.58, 1.898, 180); //Cage Position 5
-        cageNodes[5] = simplePose(7.58, 0.794, 180); //Cage on far right from driver POV
+        cageNodes[0] = simplePose(7.108, 7.279, 180); //Cage on far left from driver POV
+        cageNodes[1] = simplePose(7.108, 6.145, 180); //Cage Position 2
+        cageNodes[2] = simplePose(7.108, 5.077, 180); //Cage Position 3
+        cageNodes[3] = simplePose(7.108, 2.929, 180); //Cage Position 4
+        cageNodes[4] = simplePose(7.108, 1.898, 180); //Cage Position 5
+        cageNodes[5] = simplePose(7.108, 0.794, 180); //Cage on far right from driver POV
 
         reefNodes[0] = simplePose(3.15, 4.18, 0); //Reef Position A
         reefNodes[1] = simplePose(3.15, 3.85, 0); //Reef Position B
@@ -63,7 +63,7 @@ public class CommandSequences {
         leftHumanPlayer = simplePose(1.097, 6.991, 306);
         rightHumanPlayer = simplePose(1.127, 0.962, 54);
 
-        middle =  simplePose(7.58, 4, 180);
+        middle =  simplePose(7.108, 4, 180);
         rightReefPassage = simplePose(5, 1, 75);
         leftReefPassage = simplePose(5, 7, 285);
 

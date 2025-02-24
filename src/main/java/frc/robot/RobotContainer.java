@@ -38,7 +38,9 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class RobotContainer {
   private final String MiddleToH = "Drive from Middle and Sit", driveforward = "Drive forward",
-  MiddleToHL1 = "Drive from Middle and Place on H L1", MiddleToHL4 = "Drive from Middle and Place on H L4";
+  MiddleToHL1 = "Drive from Middle and Place on H L1", MiddleToHL4 = "Drive from Middle and Place on H L4",
+  CageThreeToHL1 = "Drive from Cage 3 and Place on H L1", CageTwoToIL4 = "Drive from Cage 2 and Place on I L4",
+  coralcollectionautotest = "Test Coral Collection - TEST FIRST!!!";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -74,9 +76,12 @@ public class RobotContainer {
       ()-> rightJoystick.getRawButton(4)
     ));
 
+    m_chooser.addOption(coralcollectionautotest, coralcollectionautotest);
     m_chooser.addOption(MiddleToH, MiddleToH);
     m_chooser.addOption(MiddleToHL1, MiddleToHL1);
     m_chooser.addOption(MiddleToHL4, MiddleToHL4);
+    m_chooser.addOption(CageThreeToHL1, CageThreeToHL1);
+    m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
     //m_chooser.addOption(driveforward, driveforward);
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
@@ -142,6 +147,23 @@ public class RobotContainer {
         return new SequentialCommandGroup(
           commandSequences.MiddleToH(swerveSubsystem),
           commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
+        );
+
+      if(m_autoSelected == CageThreeToHL1)
+        return new SequentialCommandGroup(
+          commandSequences.CageThreeToH(swerveSubsystem),
+          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
+        );
+
+      if(m_autoSelected == CageTwoToIL4)
+        return new SequentialCommandGroup(
+          commandSequences.CageTwoToI(swerveSubsystem),
+          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
+        );
+
+      if(m_autoSelected == coralcollectionautotest)
+        return new SequentialCommandGroup(
+          commandSequences.coralcollectionautotest(coralDispenserSubsystem)
         );
 
     return null;
