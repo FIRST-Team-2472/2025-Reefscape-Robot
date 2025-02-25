@@ -244,14 +244,14 @@ public class RobotContainer {
 
     double numCoral = 0;
     int startPos = 12;
-    char reefPos1 = 'z';
-    double reefHeight1 = 0.0;
-    int coralStation1 = 5;
-    char reefPos2 = 'z';
-    double reefHeight2 = 0.0;
-    int coralStation2 = 5;
-    char reefPos3 = 'z';
-    double reefHeight3 = 0.0;
+    char reefPos1 = getReefPos(BranchPosition1);
+    double reefHeight1 = getReefHeight(BranchLevel1);
+    int coralStation1 = getCoralStation(HumanStation1);
+    char reefPos2 = getReefPos(BranchPosition2);
+    double reefHeight2 = getReefHeight(BranchLevel2);
+    int coralStation2 = getCoralStation(HumanStation2);
+    char reefPos3 = getReefPos(BranchPosition3);
+    double reefHeight3 = getReefHeight(BranchLevel3);
 
     switch (CoralAmmount) {
       case One:
@@ -271,7 +271,6 @@ public class RobotContainer {
         break;
       default:
         numCoral = 0;
-        break;
     }
 
     switch (BeginingPosition) {
@@ -298,214 +297,14 @@ public class RobotContainer {
         break;
       default:
         startPos = 12;
-        break;
     }
 
-    switch (BranchPosition1) {
-      case A:
-        reefPos1 = 'A';
-        break;
-      case B:
-        reefPos1 = 'B';
-        break;
-      case C:
-        reefPos1 = 'C';
-        break;
-      case D:
-        reefPos1 = 'D';
-        break;
-      case E:
-        reefPos1 = 'E';
-        break;
-      case F:
-        reefPos1 = 'F';
-        break;
-      case G:
-        reefPos1 = 'G';
-        break;
-      case H:
-        reefPos1 = 'H';
-        break;
-      case I:
-        reefPos1 = 'I';
-        break;
-      case J:
-        reefPos1 = 'J';
-        break;
-      case K:
-        reefPos1 = 'K';
-        break;
-      case L:
-        reefPos1 = 'L';
-        break;
-      default:
-        reefPos1 = 'z';
-        break;
-    }
-
-    switch (BranchLevel1) {
-      case L4:
-        reefHeight1 = ElevatorConstants.kElevatorL4Height;
-        break;
-      case L3:
-        reefHeight1 = ElevatorConstants.kElevatorL3Height;
-        break;
-      case L2:
-        reefHeight1 = ElevatorConstants.kElevatorL2Height;
-        break;
-      case L1:
-        reefHeight1 = ElevatorConstants.kElevatorL1Height;
-        break;
-      default:
-        reefHeight1 = 0;
-        break;
-    }
-
-    switch (HumanStation1) {
-      case LeftCoralStation:
-        coralStation1 = 0;
-        break;
-      case RightCoralStation:
-        coralStation1 = 1;
-        break;
-      default:
-        coralStation1 = 5;
-        break;
-    }
-
-    switch (BranchPosition2) {
-      case A:
-        reefPos2 = 'A';
-        break;
-      case B:
-        reefPos2 = 'B';
-        break;
-      case C:
-        reefPos2 = 'C';
-        break;
-      case D:
-        reefPos2 = 'D';
-        break;
-      case E:
-        reefPos2 = 'E';
-        break;
-      case F:
-        reefPos2 = 'F';
-        break;
-      case G:
-        reefPos2 = 'G';
-        break;
-      case H:
-        reefPos2 = 'H';
-        break;
-      case I:
-        reefPos2 = 'I';
-        break;
-      case J:
-        reefPos2 = 'J';
-        break;
-      case K:
-        reefPos2 = 'K';
-        break;
-      case L:
-        reefPos2 = 'L';
-        break;
-      default:
-        reefPos2 = 'z';
-        break;
-    }
-
-    switch (BranchLevel2) {
-      case L4:
-        reefHeight2 = ElevatorConstants.kElevatorL4Height;
-        break;
-      case L3:
-        reefHeight2 = ElevatorConstants.kElevatorL3Height;
-        break;
-      case L2:
-        reefHeight2 = ElevatorConstants.kElevatorL2Height;
-        break;
-      case L1:
-        reefHeight2 = ElevatorConstants.kElevatorL1Height;
-        break;
-      default:
-        reefHeight2 = 0;
-        break;
-    }
-
-    switch (HumanStation2) {
-      case LeftCoralStation:
-        coralStation2 = 0;
-        break;
-      case RightCoralStation:
-        coralStation2 = 1;
-        break;
-      default:
-        coralStation2 = 5;
-        break;
-    }
-
-    switch (BranchPosition3) {
-      case A:
-        reefPos3 = 'A';
-        break;
-      case B:
-        reefPos3 = 'B';
-        break;
-      case C:
-        reefPos3 = 'C';
-        break;
-      case D:
-        reefPos3 = 'D';
-        break;
-      case E:
-        reefPos3 = 'E';
-        break;
-      case F:
-        reefPos3 = 'F';
-        break;
-      case G:
-        reefPos3 = 'G';
-        break;
-      case H:
-        reefPos3 = 'H';
-        break;
-      case I:
-        reefPos3 = 'I';
-        break;
-      case J:
-        reefPos3 = 'J';
-        break;
-      case K:
-        reefPos3 = 'K';
-        break;
-      case L:
-        reefPos3 = 'L';
-        break;
-      default:
-        reefPos3 = 'z';
-        break;
-    }
-
-    switch (BranchLevel3) {
-      case L4:
-        reefHeight3 = ElevatorConstants.kElevatorL4Height;
-        break;
-      case L3:
-        reefHeight3 = ElevatorConstants.kElevatorL3Height;
-        break;
-      case L2:
-        reefHeight3 = ElevatorConstants.kElevatorL2Height;
-        break;
-      case L1:
-        reefHeight3 = ElevatorConstants.kElevatorL1Height;
-        break;
-      default:
-        reefHeight3 = 0;
-        break;
-    }
+    //idea for adding logic to auto for multi point drivetopoint and other items
+    //would return the commmandSequences.driverSelectedAuto with the correct parameters
+    //return autoLogic.get(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, numCoral, startPos, reefPos1, reefHeight1, coralStation1, reefPos2, reefHeight2, coralStation2, reefPos3, reefHeight3);
+    
     if (numCoral == 1) {
-      return new SequentialCommandGroup (commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1));
+      return commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1);
     } else if (numCoral == 1.5) {
       return commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1, coralStation1);
     } else if (numCoral == 2) {
@@ -516,6 +315,60 @@ public class RobotContainer {
       return commandSequences.driverSelectedAuto(swerveSubsystem, elevatorSubsystem, coralDispenserSubsystem, startPos, reefPos1, reefHeight1, coralStation1, reefPos2, reefHeight2, coralStation2, reefPos3, reefHeight3);
     } else {
       return commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
+    }
+  }
+  public char getReefPos(String reefPos){
+    switch (reefPos) {
+      case A:
+        return 'A';
+      case B:
+        return 'B';
+      case C:
+        return 'C';
+      case D:
+        return 'D';
+      case E:
+        return 'E';
+      case F:
+        return 'F';
+      case G:
+        return 'G';
+      case H:
+        return 'H';
+      case I:
+        return 'I';
+      case J:
+        return 'J';
+      case K:
+        return 'K';
+      case L:
+        return 'L';
+      default:
+        return 'z';
+    }
+  }
+  public double getReefHeight(String reefHeight){
+    switch (reefHeight) {
+      case L4:
+        return ElevatorConstants.kElevatorL4Height;
+      case L3:
+        return ElevatorConstants.kElevatorL3Height;
+      case L2:
+        return ElevatorConstants.kElevatorL2Height;
+      case L1:
+        return ElevatorConstants.kElevatorL1Height;
+      default:
+        return 0;
+    }
+  }
+  public int getCoralStation(String coralStation){
+    switch (coralStation) {
+      case LeftCoralStation:
+        return 0;
+      case RightCoralStation:
+        return 1;
+      default:
+        return 5;
     }
   }
 }
