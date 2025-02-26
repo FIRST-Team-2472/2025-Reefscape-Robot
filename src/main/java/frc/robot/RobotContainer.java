@@ -85,28 +85,28 @@ public class RobotContainer {
     ));
 
     
-    m_chooser.addOption(coralcollectionautotest, coralcollectionautotest);
+    //m_chooser.addOption(coralcollectionautotest, coralcollectionautotest);
     m_chooser.addOption(MiddleToH, MiddleToH);
     m_chooser.addOption(MiddleToHL1, MiddleToHL1);
     m_chooser.addOption(MiddleToHL4, MiddleToHL4);
-    m_chooser.addOption(CageThreeToHL1, CageThreeToHL1);
-    m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
-    m_chooser.addOption(MiddleToGL1, MiddleToGL1);
-    m_chooser.addOption(MiddleToGL4, MiddleToGL4);
-    m_chooser.addOption(CageThreeToHL4, CageThreeToHL4);
-    m_chooser.addOption(CageThreeToGL1, CageThreeToGL1);
-    m_chooser.addOption(CageThreeToGL4, CageThreeToGL1);
-    m_chooser.addOption(CageFourToHL1, CageFourToHL1);
-    m_chooser.addOption(CageFourToHL4, CageFourToHL4);
-    m_chooser.addOption(CageFourToGL1, CageFourToGL1);
-    m_chooser.addOption(CageFourToGL4, CageFourToGL4); 
-    m_chooser.addOption(CageOneToIL1, CageOneToIL1);
-    m_chooser.addOption(CageOneToIL4, CageOneToIL4);
-    m_chooser.addOption(CageTwoToIL1, CageTwoToIL1); 
-    m_chooser.addOption(CageFiveToFL1, CageFiveToFL1);
-    m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
-    m_chooser.addOption(CageSixToFL1, CageSixToFL1);
-    m_chooser.addOption(CageSixToFL4, CageSixToFL4);
+    // m_chooser.addOption(CageThreeToHL1, CageThreeToHL1);
+    // m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
+    // m_chooser.addOption(MiddleToGL1, MiddleToGL1);
+    // m_chooser.addOption(MiddleToGL4, MiddleToGL4);
+    // m_chooser.addOption(CageThreeToHL4, CageThreeToHL4);
+    // m_chooser.addOption(CageThreeToGL1, CageThreeToGL1);
+    // m_chooser.addOption(CageThreeToGL4, CageThreeToGL1);
+    // m_chooser.addOption(CageFourToHL1, CageFourToHL1);
+    // m_chooser.addOption(CageFourToHL4, CageFourToHL4);
+    // m_chooser.addOption(CageFourToGL1, CageFourToGL1);
+    // m_chooser.addOption(CageFourToGL4, CageFourToGL4); 
+    // m_chooser.addOption(CageOneToIL1, CageOneToIL1);
+    // m_chooser.addOption(CageOneToIL4, CageOneToIL4);
+    // m_chooser.addOption(CageTwoToIL1, CageTwoToIL1); 
+    // m_chooser.addOption(CageFiveToFL1, CageFiveToFL1);
+    // m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
+    // m_chooser.addOption(CageSixToFL1, CageSixToFL1);
+    // m_chooser.addOption(CageSixToFL4, CageSixToFL4);
     //m_chooser.addOption(driveforward, driveforward);
     
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
