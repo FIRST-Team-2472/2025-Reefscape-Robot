@@ -8,7 +8,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -99,8 +98,6 @@ public class SwerveSubsystem extends SubsystemBase {
     double lastYDrive = 0;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
-
-    private Transform2d odometryOffset = new Transform2d();
 
     public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
         this.positionFilteringSubsystem = positionFilteringSubsystem;
@@ -276,29 +273,20 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     // Gets our drive position aka where the odometer thinks we are
-    public Pose2d getOdometryPose() {
+    public Pose2d getPose() {
         return odometer.getPoseMeters();
     }
 
-    public Pose2d calculateFilteredPose(double odometryConfidence) {
+    public Pose2d getFilteredPose(double odometryConfidence) {
         return this.positionFilteringSubsystem.getFilteredBotPose(odometer, odometryConfidence);
     }
 
-    public Pose2d getPose() {
-        return this.getOdometryPose().transformBy(this.odometryOffset);
-    }
-
     public void calibrateOdometry(double odometryConfidence) {
-        Pose2d filteredPose = calculateFilteredPose(odometryConfidence);
-
-        // Calculate difference between odometry pose and filtered pose
-        // and set the odometry offset to that difference
-
-        this.odometryOffset = filteredPose.minus(this.getOdometryPose());
+        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(odometryConfidence));
     }
 
     public void calibrateOdometry() {
-        this.calibrateOdometry(1.0f);
+        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(1.0));
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
