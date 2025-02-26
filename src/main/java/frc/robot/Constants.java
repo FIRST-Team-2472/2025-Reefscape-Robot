@@ -94,7 +94,7 @@ public final class Constants {
 
         // Positive should be counter clockwise
         public static final boolean kFrontLeftTurningEncoderReversed = false;
-        public static final boolean kBackLeftTurningEncoderReversed = false;
+        public static final boolean kBackLeftTurningEncoderReversed = false; 
         public static final boolean kFrontRightTurningEncoderReversed = false;
         public static final boolean kBackRightTurningEncoderReversed = false;
 
@@ -115,9 +115,9 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
         // To find set the motors forward record the value (don't inverse the value)
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 180;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 180; 
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 180;
         public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180;
 
         // Max physical speed of our motors. Required for motor speed caculations
