@@ -40,120 +40,191 @@ public class CommandSequences {
 
     public CommandSequences() {
         // x is centered on starting line
-        cageNodes[0] = simplePose(7.58, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.58, 6.145, 180); //Cage Position 2
-        cageNodes[2] = simplePose(7.58, 5.077, 180); //Cage Position 3
-        cageNodes[3] = simplePose(7.58, 2.929, 180); //Cage Position 4
-        cageNodes[4] = simplePose(7.58, 1.898, 180); //Cage Position 5
-        cageNodes[5] = simplePose(7.58, 0.794, 180); //Cage on far right from driver POV
+        cageNodes[0] = simplePose(7.114, 7.279, 180); //Cage on far left from driver POV
+        cageNodes[1] = simplePose(7.114, 6.145, 180); //Cage Position 2
+        cageNodes[2] = simplePose(7.114, 5.077, 180); //Cage Position 3
+        cageNodes[3] = simplePose(7.114, 2.929, 180); //Cage Position 4
+        cageNodes[4] = simplePose(7.114, 1.898, 180); //Cage Position 5
+        cageNodes[5] = simplePose(7.114, 0.794, 180); //Cage on far right from driver POV
 
-        reefNodes[0] = simplePose(3.15, 4.18, 0); //Reef Position A
-        reefNodes[1] = simplePose(3.15, 3.85, 0); //Reef Position B
-        reefNodes[2] = simplePose(3.7, 2.94, 60); //Reef Position C
-        reefNodes[3] = simplePose(3.98, 2.78, 60); //Reef Position D
-        reefNodes[4] = simplePose(5, 2.78, 120); //Reef Position E
-        reefNodes[5] = simplePose(5.3, 2.960, 120); //Reef Position F
-        reefNodes[6] = simplePose(5.8, 3.85, 180); //Reef Position G
-        reefNodes[7] = simplePose(5.8, 4.18, 180); //Reef Position H
-        reefNodes[8] = simplePose(5.3, 5.09, 240); //Reef Position I
-        reefNodes[9] = simplePose(5.01, 5.25, 240); //Reef Position J // was 5, 
-        reefNodes[10] = simplePose(3.99, 5.24, 300); //Reef Position K
-        reefNodes[11] = simplePose(3.69, 5.1, 300); //Reef Position L
 
-        rightHumanPlayer = simplePose(1.127, 0.962, 54);
-        leftHumanPlayer = simplePose(1.097, 6.991, 306);
-        middle =  simplePose(7.58, 4, 180);
-        rightReefPassage = simplePose(5, 1, 75);
-        leftReefPassage = simplePose(5, 7, 285);
+        reefNodes[0] = simplePose(3.168, 4.190, 0); //Reef Position A
+        reefNodes[1] = simplePose(3.168, 3.860, 0); //Reef Position B
+        reefNodes[2] = simplePose(3.682, 2.958, 60); //Reef Position C
+        reefNodes[3] = simplePose(3.97, 2.798, 60); //Reef Position D
+        reefNodes[4] = simplePose(5.003, 2.796, 120); //Reef Position E
+        reefNodes[5] = simplePose(5.294, 2.962, 120); //Reef Position F
+        reefNodes[6] = simplePose(5.81, 3.86, 180); //Reef Position G
+        reefNodes[7] = simplePose(5.81, 4.192, 180); //Reef Position H
+        reefNodes[8] = simplePose(5.288, 5.084, 240); //Reef Position I
+        reefNodes[9] = simplePose(5.006, 5.253, 240); //Reef Position J // was 5, 
+        reefNodes[10] = simplePose(3.972, 5.249, 300); //Reef Position K
+        reefNodes[11] = simplePose(3.686, 5.085, 300); //Reef Position L
 
-        processor = simplePose(2, 7,90);
+
+        leftHumanPlayer = simplePose(1.127, 6.982, 306);
+        rightHumanPlayer = simplePose(1.127, 1.035, 54);
+
+        middle =  simplePose(7.115, 4, 180);
+        rightReefPassage = simplePose(5.8, 1.7, 75);
+        leftReefPassage = simplePose(5.8, 7, 285);
+
+        processor = simplePose(6.350, 0.550,270);
     }
-    public Command driveAndSitFromMiddle(SwerveSubsystem swerveSubsystem){
+
+    //test auto to show how coral collection works not to be used
+    public Command coralcollectionautotest(CoralDispenserSubsystem coralDispenserSubsystem){
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new CollectCoralCmd(coralDispenserSubsystem),
+                coralDispenserSubsystem.seecoral == true ?
+                    new SwerveDriveToPointCmd(null, reefNode('C')) : null
+            )
+        );
+    }
+    //Starting Position to reef
+
+    public Command CageOneToH(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H'));
+    }
+
+    public Command CageOneToI(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('I'));
+    }
+
+    public Command CageTwoToH(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[1].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H'));
+    }
+
+    public Command CageTwoToI(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[1].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('I'));
+    }
+
+    public Command CageThreeToH(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H'));
+    }
+
+    public Command CageThreeToG(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
+    }
+
+    public Command MiddleToH(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H'));
+    }
+    
+    public Command MiddleToG(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(middle.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
-    
-    public Command driveAndPlaceOneFromMiddle(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
-        return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
-        );
+
+    public Command CageFourToH(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('H'));
     }
-    public Command driveAndPlaceOneFromLeft(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
-        return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new AutoElevatorCommand(elevatorSubsystem, 0)
-        );
+
+    public Command CageFourToG(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
-    public Command driveAndPlaceOneFromRight(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
+
+    public Command CageFourToF(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('F'));
+    }
+
+    public Command CageFiveToG(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[4].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
+    }
+
+    public Command CageFiveToF(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[4].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('F'));
+    }
+
+    public Command CageSixToG(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(cageNodes[5].toFieldPose2d());
-        return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('E')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new AutoElevatorCommand(elevatorSubsystem, 0)
-        );
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
-    public Command driveAndPlaceTwoFromLeft(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
-        return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new AutoElevatorCommand(elevatorSubsystem, 0),
-            new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1),
-            new CollectCoralCmd(coralDispenserSubsystem),// this command is missing stuff
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('L')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new AutoElevatorCommand(elevatorSubsystem, 0)
-        );
+
+    public Command CageSixToF(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(cageNodes[5].toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('F'));
     }
-    public Command driveAndPlaceTwoFromRight(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
-        return new SequentialCommandGroup(
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('E')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new AutoElevatorCommand(elevatorSubsystem, 0),
-            new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1),
-            new CollectCoralCmd(coralDispenserSubsystem),// this command is missing stuff
-            new SwerveDriveToPointCmd(swerveSubsystem, reefNode('C')),
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new AutoElevatorCommand(elevatorSubsystem, 0)
-        );
+
+    //Reef to Source
+    
+    public Command HToLeftPlayer(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(reefNode('H').toFieldPose2d());
+        return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
     }
-    // prob doesnt work anymore
-    public Command twoCoralCfourRoneHoneRfive(SwerveSubsystem swerveSubsystem, 
-    ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
 
-        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
+    public Command GToRightPlayer(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(reefNode('G').toFieldPose2d());
+        return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
+    }
 
+    public Command FToRightPlayer(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(reefNode('F').toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+    }
+
+    public Command IToRightPlayrt(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(reefNode('I').toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+    }
+
+    //Intake Coral
+
+    public Command collectCoral(CoralDispenserSubsystem coralDispenserSubsystem){
+        return new CollectCoralCmd(coralDispenserSubsystem);
+    }
+
+    //Elevator Commands
+
+    public Command PlaceOnL4(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
         return new SequentialCommandGroup(
-
-            //new ParallelCommandGroup(
-                new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[0]),
-                //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
-            //),
-            //new AutoCoralDispenseCommand(coralDispenserSubsystem),
-            new ParallelCommandGroup(
-                new SwerveDriveToPointCmd(swerveSubsystem, simplePose(6.350, 6.245, 0))
-                //new AutoElevatorCommand(elevatorSubsystem, 0)
-            ),
-            new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer),
-            new ParallelCommandGroup(
-                //new SwerveDriveToPointCmd(swerveSubsystem, reefNodes[4])
-                //new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height)
-            ),
+            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem)
         );
     }
+
+    public Command PlaceOnL3(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
+        return new SequentialCommandGroup(
+            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL3Height),
+            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+        );
+    }
+
+    public Command PlaceOnL2(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
+        return new SequentialCommandGroup(
+            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL2Height),
+            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+        );
+    }
+
+    public Command PlaceOnL1(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
+        return new SequentialCommandGroup(
+            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height),
+            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+        );
+    }
+
+    //Coral Dispenser Command
+
+    public Command dispenseCoral(CoralDispenserSubsystem coralDispenserSubsystem) {
+        return new AutoCoralDispenseCommand(coralDispenserSubsystem);
+    }
+
+    //Things below this comment are not used in the code and need testing
+
     public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
 

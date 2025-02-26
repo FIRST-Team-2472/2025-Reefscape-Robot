@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.extras.FieldPose2d;
 import frc.robot.extras.PosPose2d;
@@ -10,6 +11,8 @@ public class SwerveFollowTransitionCmd extends Command {
     SwerveSubsystem swerveSubsystem;
     FieldPose2d startPose, endPose, targetPose;
     double xTransitionPerFrame, yTransitionPerFrame, angleTransitionPerFrame;
+
+    Timer timer = new Timer();
 
     /**
      * @param swerveSubsystem the swerve subsystem
@@ -28,10 +31,13 @@ public class SwerveFollowTransitionCmd extends Command {
         xTransitionPerFrame = (endPose.getX()-startPose.getX())/50/transitionTime;// 50 is code refreshes per second
         yTransitionPerFrame = (endPose.getY()-startPose.getY())/50/transitionTime;
         angleTransitionPerFrame = endPose.getRotation().minus(startPose.getRotation()).getDegrees()/50/transitionTime;
+
+        timer = new Timer();
     }
 
     @Override
     public void initialize() {
+        timer.restart();
         swerveSubsystem.initializeDriveToPointAndRotate(startPose);
     }
 
@@ -58,6 +64,12 @@ public class SwerveFollowTransitionCmd extends Command {
     @Override
     public boolean isFinished() {
         // use this function if you overide the command to finsih it
-        return swerveSubsystem.isAtPoint(endPose.getTranslation()) && swerveSubsystem.isAtAngle(endPose.getRotation());
+        if (swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.05 && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond < 0.05)
+        return true;
+  
+        if(timer.hasElapsed(3))
+        return true;
+  
+        return false;    
     }
 }
