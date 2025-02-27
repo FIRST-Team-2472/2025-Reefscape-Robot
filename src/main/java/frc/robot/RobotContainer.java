@@ -244,13 +244,13 @@ public class RobotContainer {
 
     double numCoral = 0;
     int startPos = 12;
-    char reefPos1 = getReefPos(BranchPosition1);
+    int reefPos1 = getReefPos(BranchPosition1);
     double reefHeight1 = getReefHeight(BranchLevel1);
     int coralStation1 = getCoralStation(HumanStation1);
-    char reefPos2 = getReefPos(BranchPosition2);
+    int reefPos2 = getReefPos(BranchPosition2);
     double reefHeight2 = getReefHeight(BranchLevel2);
     int coralStation2 = getCoralStation(HumanStation2);
-    char reefPos3 = getReefPos(BranchPosition3);
+    int reefPos3 = getReefPos(BranchPosition3);
     double reefHeight3 = getReefHeight(BranchLevel3);
 
     switch (CoralAmmount) {
@@ -317,34 +317,34 @@ public class RobotContainer {
       return commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
     }
   }
-  public char getReefPos(String reefPos){
+  public int getReefPos(String reefPos){
     switch (reefPos) {
       case A:
-        return 'A';
+        return 0;
       case B:
-        return 'B';
+        return 1;
       case C:
-        return 'C';
+        return 2;
       case D:
-        return 'D';
+        return 3;
       case E:
-        return 'E';
+        return 4;
       case F:
-        return 'F';
+        return 5;
       case G:
-        return 'G';
+        return 6;
       case H:
-        return 'H';
+        return 7;
       case I:
-        return 'I';
+        return 8;
       case J:
-        return 'J';
+        return 9;
       case K:
-        return 'K';
+        return 10;
       case L:
-        return 'L';
+        return 11;
       default:
-        return 'z';
+        return 25;
     }
   }
   public double getReefHeight(String reefHeight){
