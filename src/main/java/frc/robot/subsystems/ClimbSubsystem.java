@@ -21,7 +21,7 @@ public class ClimbSubsystem extends SubsystemBase{
       SparkMaxConfig config = new SparkMaxConfig();
           config.smartCurrentLimit(35);
           config.idleMode(IdleMode.kBrake);
-      climberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        climberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
       SensorStatus.kClimberAngle = absoluteEncoder.get()*360;// setting it before the pid reads it and multiplying it by 360 to convert it from rotations to degrees
     }
