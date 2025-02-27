@@ -294,6 +294,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
         xPowerController.calculate(getPose().getX(), targetPosition.getX());
         yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        turningPowerController.calculate(angleDifference.getRadians(), 0);
         xLimiter.setInitialSpeed(lastXDrive);
         yLimiter.setInitialSpeed(lastYDrive);
     }
@@ -379,7 +381,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     public boolean isNearAngle(Rotation2d angle) {
         SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
+        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isNearAngle", isNearAngle);
         return isNearAngle;
