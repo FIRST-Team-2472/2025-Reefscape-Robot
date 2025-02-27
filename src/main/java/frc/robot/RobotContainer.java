@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoPrepForClimbCommand;
+import frc.robot.commands.AutoRemoveAlgaeCmd;
 import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
 import frc.robot.commands.defaultCommands.ClimbCommand;
 import frc.robot.commands.defaultCommands.CoralDispenserCommand;
@@ -142,6 +143,7 @@ public class RobotContainer {
   private void configureBindings() {
     xboxController.povUp().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(0)));
     xboxController.povDown().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(180)));
+    xboxController.povRight().onTrue(new AutoRemoveAlgaeCmd(commandSequences, elevatorSubsystem, swerveSubsystem));//algae arm subsystem when implemented
     //Controllers need to be added
     /*
     xboxController.a().onTrue(new AutoPrepForClimbCommand(coralCollectionSubsystem, 30));

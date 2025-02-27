@@ -35,6 +35,11 @@ public final class Constants {
         public static final double kElevatorL2Height = 16;
         public static final double kElevatorL1Height = 9;
 
+        public static final double kElevatorL3AlgaeTop = 0;
+        public static final double kElevatorL2AlgaeTop = 0;
+        public static final double kElevatorL3AlgaeBottom = 0;
+        public static final double kElevatorL2AlgaeBottom = 0;
+
         public static final double kElevatorMaxHeight = 57.5;
     }
     public static final class ClimberConstants {
@@ -181,15 +186,6 @@ public final class Constants {
             ROTATION_KI,
             ROTATION_KD) //Time between code runs
         ); */
-    }
-
-    public static final class ReefConstants {
-        public static final PosPose2d reefTroughAB = new PosPose2d(0, 0, new Rotation2d(0));
-        public static final PosPose2d reefTroughCD = new PosPose2d(0, 0, new Rotation2d(60));
-        public static final PosPose2d reefTroughEF = new PosPose2d(0, 0, new Rotation2d(120));
-        public static final PosPose2d reefTroughGH = new PosPose2d(0, 0, new Rotation2d(180));
-        public static final PosPose2d reefTroughIJ = new PosPose2d(0, 0, new Rotation2d(240));
-        public static final PosPose2d reefTroughKL = new PosPose2d(0, 0, new Rotation2d(300));
     }
 
     public static final class TargetPosConstants {

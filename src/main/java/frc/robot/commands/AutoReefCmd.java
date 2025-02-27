@@ -28,9 +28,9 @@ public class AutoReefCmd extends Command{
         calculate = true;
         addRequirements(coralDispenserSubsystem, elevatorSubsystem, swerveSubsystem);
     }
-    public AutoReefCmd(CommandSequences commandSequences, CoralDispenserSubsystem coralDispenserSubsystem, ElevatorSubsystem elevatorSubsystem, SwerveSubsystem swerveSubsystem, int reefLevel, String reefLocation){
+    public AutoReefCmd(CommandSequences commandSequences, CoralDispenserSubsystem coralDispenserSubsystem, ElevatorSubsystem elevatorSubsystem, SwerveSubsystem swerveSubsystem, int reefLevel, char reefLocation){
         this(commandSequences, coralDispenserSubsystem, elevatorSubsystem, swerveSubsystem, reefLevel);
-        this.reefLocation = reefLocation.charAt(0);
+        this.reefLocation = reefLocation;
         calculate = false;
     }
 
@@ -98,46 +98,46 @@ public class AutoReefCmd extends Command{
     private int findP() {
         if (Q == 2){
             if (T == 3){
-                reefLocation = "K".charAt(0);
+                reefLocation = 'K';
                 return 11;
             } else if (T == 2){
-                reefLocation = "L".charAt(0);
+                reefLocation = 'L';
                 return 12;
             } else {
-                reefLocation = "A".charAt(0);
+                reefLocation = 'A';
                 return 1;
             }
         } else if (Q == 3){
             if (T == 1){
-                reefLocation = "B".charAt(0);
+                reefLocation = 'B';
                 return 2;
             } else if (T == 2){
-                reefLocation = "C".charAt(0);
+                reefLocation = 'C';
                 return 3;
             } else {
-                reefLocation = "D".charAt(0);
+                reefLocation = 'D';
                 return 4;
             }
         } else if (Q == 4){
             if (T == 3){
-                reefLocation = "E".charAt(0);
+                reefLocation = 'E';
                 return 5;
             } else if (T == 2){
-                reefLocation = "F".charAt(0);
+                reefLocation = 'F';
                 return 6;
             } else {
-                reefLocation = "G".charAt(0);
+                reefLocation = 'G';
                 return 7;
             } 
         }else {
             if (T == 1){
-                reefLocation = "H".charAt(0);
+                reefLocation = 'H';
                 return 8;
             } else if (T == 2){
-                reefLocation = "I".charAt(0);
+                reefLocation = 'I';
                 return 9;
             } else {
-                reefLocation = "J".charAt(0);
+                reefLocation = 'J';
                 return 10;
             }
         }
@@ -145,17 +145,17 @@ public class AutoReefCmd extends Command{
 
     private char l1Trough(){
         if (P == 1 || P == 2){
-            return "R".charAt(0);
+            return 'R';
         } else if (P == 3 || P == 4){
-            return "S".charAt(0);
+            return 'S';
         } else if (P == 5 || P == 6){
-            return "T".charAt(0);
+            return 'T';
         } else if (P == 7 || P == 8){
-            return "U".charAt(0);
+            return 'U';
         } else if (P == 9 || P == 10){
-            return "V".charAt(0);
+            return 'V';
         } else {
-            return "W".charAt(0);
+            return 'W';
         }
     }
 }

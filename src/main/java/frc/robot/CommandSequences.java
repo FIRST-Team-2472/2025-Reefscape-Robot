@@ -37,6 +37,8 @@ import frc.robot.commands.AutoElevatorCommand;
 public class CommandSequences {
     PosPose2d[] cageNodes = new PosPose2d[6];
     PosPose2d[] reefNodes = new PosPose2d[18];
+    PosPose2d[] algaeNodes = new PosPose2d[6];
+    PosPose2d[] algaeNodes2 = new PosPose2d[6]; 
     PosPose2d leftHumanPlayer, rightHumanPlayer, middle, rightReefPassage, leftReefPassage;
     PosPose2d processor;
 
@@ -48,7 +50,6 @@ public class CommandSequences {
         cageNodes[3] = simplePose(7.114, 2.929, 180); //Cage Position 4
         cageNodes[4] = simplePose(7.114, 1.898, 180); //Cage Position 5
         cageNodes[5] = simplePose(7.114, 0.794, 180); //Cage on far right from driver POV
-
 
         reefNodes[0] = simplePose(3.168, 4.190, 0); //Reef Position A
         reefNodes[1] = simplePose(3.168, 3.860, 0); //Reef Position B
@@ -63,6 +64,20 @@ public class CommandSequences {
         reefNodes[10] = simplePose(3.972, 5.249, 300); //Reef Position K
         reefNodes[11] = simplePose(3.686, 5.085, 300); //Reef Position L
 
+        //Algae Nodes need to be adjusted once actual position of wheel is known (Rn values are bs)
+        algaeNodes[0] = simplePose(1.127, 4.982, 0); //Algae AB
+        algaeNodes[1] = simplePose(1.127, 3.982, 0); //Algae CD
+        algaeNodes[2] = simplePose(1.127, 2.982, 0); //Algae EF
+        algaeNodes[3] = simplePose(1.127, 1.982, 0); //Algae GH
+        algaeNodes[4] = simplePose(1.127, 0.982, 0); //Algae IJ
+        algaeNodes[5] = simplePose(1.127, 5.982, 0); //Algae KL
+
+        algaeNodes2[0] = simplePose(1.127, 4.982, 0); //Algae AB Slightly further back
+        algaeNodes2[1] = simplePose(1.127, 3.982, 0); //Algae CD Slightly further back
+        algaeNodes2[2] = simplePose(1.127, 2.982, 0); //Algae EF Slightly further back
+        algaeNodes2[3] = simplePose(1.127, 1.982, 0); //Algae GH Slightly further back
+        algaeNodes2[4] = simplePose(1.127, 0.982, 0); //Algae IJ Slightly further back
+        algaeNodes2[5] = simplePose(1.127, 5.982, 0); //Algae KL Slightly further back
 
         leftHumanPlayer = simplePose(1.127, 6.982, 306);
         rightHumanPlayer = simplePose(1.127, 1.035, 54);
@@ -288,6 +303,20 @@ public class CommandSequences {
             new AutoCoralDispenseCommand(coralDispenserSubsytem),
             (calculated ? new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height) : null)
                 
+        );
+    }
+    public Command removeAlgae(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, int algaeLocation, double startElevatorHeight, double endElevatorHeight){//algae arm subsystem when implemented
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new SwerveDriveToPointCmd(swerveSubsystem, algaeNodes[algaeLocation]),
+                new AutoElevatorCommand(elevatorSubsystem, startElevatorHeight)
+                //algae arm when implemented
+            ),
+            new ParallelCommandGroup(
+                new SwerveDriveToPointCmd(swerveSubsystem, algaeNodes2[algaeLocation]),
+                new AutoElevatorCommand(elevatorSubsystem, endElevatorHeight)
+            )
+            //algae arm when implemented
         );
     }
 }
