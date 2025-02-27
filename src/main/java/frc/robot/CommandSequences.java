@@ -31,10 +31,12 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.AutoCoralDispenseCommand;
+import frc.robot.commands.AutoElevatorCommand;
 
 public class CommandSequences {
     PosPose2d[] cageNodes = new PosPose2d[6];
-    PosPose2d[] reefNodes = new PosPose2d[12];
+    PosPose2d[] reefNodes = new PosPose2d[18];
     PosPose2d leftHumanPlayer, rightHumanPlayer, middle, rightReefPassage, leftReefPassage;
     PosPose2d processor;
 
@@ -275,5 +277,17 @@ public class CommandSequences {
 
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
+    }
+    public Command placeCoralOnReef(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, 
+    CoralDispenserSubsystem coralDispenserSubsytem, char reefPosition, double reefLevel, boolean calculated){
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new SwerveDriveToPointCmd(swerveSubsystem, reefNode(reefPosition)),
+                new AutoElevatorCommand(elevatorSubsystem, reefLevel)
+            ),        
+            new AutoCoralDispenseCommand(coralDispenserSubsytem),
+            (calculated ? new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height) : null)
+                
+        );
     }
 }

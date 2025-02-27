@@ -2,10 +2,12 @@ package frc.robot;
 
 import java.lang.System.Logger.Level;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.extras.PosPose2d;
 
 public final class Constants {
     /**
@@ -179,6 +181,15 @@ public final class Constants {
             ROTATION_KI,
             ROTATION_KD) //Time between code runs
         ); */
+    }
+
+    public static final class ReefConstants {
+        public static final PosPose2d reefTroughAB = new PosPose2d(0, 0, new Rotation2d(0));
+        public static final PosPose2d reefTroughCD = new PosPose2d(0, 0, new Rotation2d(60));
+        public static final PosPose2d reefTroughEF = new PosPose2d(0, 0, new Rotation2d(120));
+        public static final PosPose2d reefTroughGH = new PosPose2d(0, 0, new Rotation2d(180));
+        public static final PosPose2d reefTroughIJ = new PosPose2d(0, 0, new Rotation2d(240));
+        public static final PosPose2d reefTroughKL = new PosPose2d(0, 0, new Rotation2d(300));
     }
 
     public static final class TargetPosConstants {

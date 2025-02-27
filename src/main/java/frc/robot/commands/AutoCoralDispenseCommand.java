@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
 import frc.robot.subsystems.CoralDispenserSubsystem;

@@ -101,5 +101,4 @@ public class LimeLightSubsystem extends SubsystemBase {
     public double getTotalConfidence() {
         return this.totalConfidence;
     }
-
 }
