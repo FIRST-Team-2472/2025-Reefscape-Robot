@@ -429,7 +429,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Pose2d filteredBotPose = getFilteredPose();
         // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
         // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
-        
+        /*
         try {
             if (periods == 0) {
                 calibrateOdometry();
@@ -440,6 +440,7 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception NullPointerException) {
             // TODO: handle exception
         }
+        */
         
         
 
