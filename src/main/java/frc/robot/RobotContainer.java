@@ -106,7 +106,7 @@ public class RobotContainer {
     // m_chooser.addOption(CageFiveToFL1, CageFiveToFL1);
     // m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
     // m_chooser.addOption(CageSixToFL1, CageSixToFL1);
-    // m_chooser.addOption(CageSixToFL4, CageSixToFL4);
+    //m_chooser.addOption(CageSixToFL4, CageSixToFL4);
     //m_chooser.addOption(driveforward, driveforward);
     
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
@@ -262,9 +262,8 @@ public class RobotContainer {
           commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
         );
                     
-      /* default :
-          commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem)
-        );*/
+       default :
+          commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
     }
 
       /* if(m_autoSelected == MiddleToH)

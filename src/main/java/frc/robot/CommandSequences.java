@@ -235,10 +235,10 @@ public class CommandSequences {
 
     // TODO: Works on Blue but not Red
     public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
-        swerveSubsystem.calibrateOdometry(0.0f);
+        swerveSubsystem.setOdometry(swerveSubsystem.getPose());
+        //swerveSubsystem.calibrateOdometry(0.0f);
         Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
-        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 1, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }
   
     public PosPose2d reefNode(char NodeLetter){
