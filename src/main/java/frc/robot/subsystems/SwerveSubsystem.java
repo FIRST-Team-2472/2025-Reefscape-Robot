@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
@@ -112,8 +114,10 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
 
-        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
-        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);//use this constant not maxspeed
+        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
+                TargetPosConstants.kBackwardMaxAcceleration);
+        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
+                TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxspeed
 
         xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
         yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
@@ -206,17 +210,18 @@ public class SwerveSubsystem extends SubsystemBase {
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }
-    public boolean isStalling(){
+
+    public boolean isStalling() {
         int stallScount = 0;
-        if(frontLeft.isStalling())
+        if (frontLeft.isStalling())
             stallScount++;
-        if(frontRight.isStalling())
+        if (frontRight.isStalling())
             stallScount++;
-        if(backLeft.isStalling())
+        if (backLeft.isStalling())
             stallScount++;
-        if(backRight.isStalling())
+        if (backRight.isStalling())
             stallScount++;
-        return stallScount >=2;
+        return stallScount >= 2;
 
     }
 
@@ -299,17 +304,17 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed =  -xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        double ySpeed =  -yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        double xSpeed =  xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        double ySpeed =  yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
-        //angleDifference is the error value for the Motor Power Controller
+        // angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
+        double turningSpeed = turningPowerController.calculate(angleDifference.getRadians(), 0);
         //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
 
-        //xSpeed = xLimiter.calculate(xSpeed);
-        //ySpeed = yLimiter.calculate(ySpeed);
+        // xSpeed = xLimiter.calculate(xSpeed);
+        // ySpeed = yLimiter.calculate(ySpeed);
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
@@ -357,35 +362,44 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public boolean isAtPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
-        boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
+        boolean isAtPose = getPose().getTranslation()
+                .getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
 
         SmartDashboard.putBoolean("isAtPose", isAtPose);
-        return isAtPose;  
+        return isAtPose;
     }
+
     public boolean isNearPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
-        boolean isNearPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError*2.5; //
+        boolean isNearPose = getPose().getTranslation()
+                .getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError * 2.5; //
 
         SmartDashboard.putBoolean("isNearPose", isNearPose);
         return isNearPose;
     }
 
     public boolean isAtAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+        SmartDashboard.putNumber("angle error",
+                Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle = Math.abs(odometer.getPoseMeters().getRotation().minus(angle)
+                .getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isAtAngle", isAtAngle);
         return isAtAngle;
     }
+
     public boolean isNearAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+        SmartDashboard.putNumber("angle error",
+                Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isNearAngle = Math.abs(odometer.getPoseMeters().getRotation().minus(angle)
+                .getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isNearAngle", isNearAngle);
         return isNearAngle;
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
+        logSwerveDesiredStates(desiredStates);
         // if their speed is larger then the physical max speed, it reduces all speeds
         // until they are smaller than physical max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
@@ -429,20 +443,18 @@ public class SwerveSubsystem extends SubsystemBase {
         // Pose2d filteredBotPose = getFilteredPose();
         // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
         // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
-        /*
+        
         try {
-            if (periods == 0) {
-                calibrateOdometry();
-                periods = 10;
-            }
-            
-            periods--;
-        } catch (Exception NullPointerException) {
-            // TODO: handle exception
+         if (periods == 0) {
+         calibrateOdometry();
+         periods = 10;
         }
-        */
         
-        
+         periods--;
+        } catch (Exception NullPointerException) {
+         // TODO: handle exception
+        }
+         
 
         SmartDashboard.putNumber("frontLeft Encoder",
                 frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
@@ -468,5 +480,35 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
         SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
         SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
+
+        logSwerveStates();
+        logOdometry();
+        logPigeonState();
+    }
+
+    // Send the swerve modules' encoder positions to Advantage Kit
+    public void logSwerveStates() {
+
+        Logger.recordOutput("SwerveState", new SwerveModuleState[] {
+                frontLeft.getState(),
+                frontRight.getState(),
+                backLeft.getState(),
+                backRight.getState()
+        });
+    }
+
+    // Send Swerve Desired Rotation and speed to Advantage Kit
+    public void logSwerveDesiredStates(SwerveModuleState[] desiredStates) {
+        Logger.recordOutput("DesiredSwerveState", desiredStates);
+    }
+
+    // Send Pigeon Rotation to Advantage Kit (useful for seeing robot rotation)
+    public void logPigeonState() {
+        Logger.recordOutput("PigeonGyro", gyro.getRotation2d());
+    }
+
+    // Send Odometry Position on field to Advantage Kit
+    public void logOdometry() {
+        Logger.recordOutput("Odometry/Location", odometer.getPoseMeters());
     }
 }
