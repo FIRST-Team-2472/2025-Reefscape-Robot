@@ -3,6 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.PartialResultException;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
@@ -23,6 +26,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.AutoCoralDispenseCommand;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.CollectCoralCmd;
+import frc.robot.commands.HoldElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
 import frc.robot.commands.SwerveFollowTransitionCmd;
 import frc.robot.extras.PosPose2d;
@@ -192,28 +196,40 @@ public class CommandSequences {
     public Command PlaceOnL4(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+            new ParallelDeadlineGroup(
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
+            )
         );
     }
 
     public Command PlaceOnL3(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL3Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+            new ParallelDeadlineGroup(
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
+            )
         );
     }
 
     public Command PlaceOnL2(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL2Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+            new ParallelDeadlineGroup(
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
+            )
         );
     }
 
     public Command PlaceOnL1(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height),
-            new AutoCoralDispenseCommand(coralDispenserSubsystem)
+            new ParallelDeadlineGroup(
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
+            )
         );
     }
 
@@ -235,10 +251,10 @@ public class CommandSequences {
 
     // TODO: Works on Blue but not Red
     public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
-        swerveSubsystem.calibrateOdometry(0.0f);
+        swerveSubsystem.setOdometry(swerveSubsystem.getPose());
+        //swerveSubsystem.calibrateOdometry(0.0f);
         Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
-        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 1, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }
   
     public PosPose2d reefNode(char NodeLetter){
