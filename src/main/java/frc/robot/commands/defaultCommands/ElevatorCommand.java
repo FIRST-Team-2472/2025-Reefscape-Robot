@@ -30,7 +30,7 @@ public class ElevatorCommand extends Command{
 
   @Override
   public void initialize() {
-    elevatorSetHeight = SensorStatus.kElevatorHeight;
+        elevatorSetHeight = SensorStatus.kElevatorHeight;
   }
   
   // Called every time the scheduler runs while the command is scheduled.

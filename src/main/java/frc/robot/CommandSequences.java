@@ -26,6 +26,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.AutoCoralDispenseCommand;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.CollectCoralCmd;
+import frc.robot.commands.HoldElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveDriveToPointCmd;
 import frc.robot.commands.SwerveFollowTransitionCmd;
 import frc.robot.extras.PosPose2d;
@@ -196,7 +197,8 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem)
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
             )
         );
     }
@@ -205,7 +207,8 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL3Height),
             new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem)
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
             )
         );
     }
@@ -214,7 +217,8 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL2Height),
             new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem)
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
             )
         );
     }
@@ -223,7 +227,8 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height),
             new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem)
+                new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                new HoldElevatorCommand(elevatorSubsystem)
             )
         );
     }
