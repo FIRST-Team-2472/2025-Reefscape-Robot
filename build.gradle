@@ -1,21 +1,11 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.1.1"
-
-    // Adds spotless plugin for code formatting
-    id "com.diffplug.spotless" version "6.14.1"
+    id "edu.wpi.first.GradleRIO" version "2025.3.1"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
-}
-
-// run ./gradlew spotlessApply to apply formatting to code
-spotless {
-    java {
-        googleJavaFormat('1.25.0')
-    }
 }
 
 sourceSets {
@@ -72,32 +62,34 @@ wpi.java.debugJni = false
 // Set this to true to enable desktop support.
 def includeDesktopSupport = true
 
+task(replayWatch, type: JavaExec) {
+    mainClass = "org.littletonrobotics.junction.ReplayWatch"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {
     annotationProcessor wpi.java.deps.wpilibAnnotations()
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
-
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
     roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
-
     roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
     roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
-
     nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
     nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
     simulationDebug wpi.sim.enableDebug()
-
     nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
-
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testImplementation 'org.mockito:mockito-core:5.5.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
-
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
+    annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
 }
 
 test {
@@ -117,11 +109,6 @@ jar {
     from sourceSets.main.allSource
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-// Ensure spotlessApply runs before build
-tasks.named('build') {
-    dependsOn 'spotlessApply'
 }
 
 // Configure jar and deploy tasks
