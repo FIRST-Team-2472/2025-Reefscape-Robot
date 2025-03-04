@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoPrepForClimbCommand;
 import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
@@ -160,32 +161,32 @@ public class RobotContainer {
       case MiddleToHL1:
         return new SequentialCommandGroup(
           commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case MiddleToHL4:
         return new SequentialCommandGroup(
           commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageThreeToHL1:
         return new SequentialCommandGroup(
           commandSequences.CageThreeToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageThreeToHL4:
         return new SequentialCommandGroup(
           commandSequences.CageThreeToH(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageTwoToIL1:
         return new SequentialCommandGroup(
           commandSequences.CageTwoToI(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageTwoToIL4:
         return new SequentialCommandGroup(
           commandSequences.CageTwoToI(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case coralcollectionautotest:
         return new SequentialCommandGroup(
@@ -194,72 +195,72 @@ public class RobotContainer {
       case MiddleToGL1:
         return new SequentialCommandGroup(
           commandSequences.MiddleToG(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case MiddleToGL4:
         return new SequentialCommandGroup(
           commandSequences.MiddleToG(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageThreeToGL1:
         return new SequentialCommandGroup(
           commandSequences.CageThreeToG(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageThreeToGL4:
         return new SequentialCommandGroup(
           commandSequences.CageThreeToG(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageFourToGL1:
         return new SequentialCommandGroup(
           commandSequences.CageFourToG(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageFourToGL4:
         return new SequentialCommandGroup(
           commandSequences.CageFourToG(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageFourToHL1:
         return new SequentialCommandGroup(
           commandSequences.CageFourToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageFourToHL4:
         return new SequentialCommandGroup(
           commandSequences.CageFourToH(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageOneToIL1:
         return new SequentialCommandGroup(
           commandSequences.CageOneToI(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageOneToIL4:
         return new SequentialCommandGroup(
           commandSequences.CageOneToI(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageFiveToFL1:
         return new SequentialCommandGroup(
           commandSequences.CageFiveToF(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageFiveToFL4:
         return new SequentialCommandGroup(
           commandSequences.CageFiveToF(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
       case CageSixToFL1:
         return new SequentialCommandGroup(
           commandSequences.CageSixToF(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL1Height)
         );
       case CageSixToFL4:
         return new SequentialCommandGroup(
           commandSequences.CageSixToF(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem,coralDispenserSubsystem)
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
                     
        default :
