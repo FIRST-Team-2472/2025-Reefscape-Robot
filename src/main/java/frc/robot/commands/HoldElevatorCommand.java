@@ -21,7 +21,6 @@ public class HoldElevatorCommand extends Command {
 
         addRequirements(elevatorSubsystem);
     }
-
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
@@ -32,7 +31,7 @@ public class HoldElevatorCommand extends Command {
     @Override
     public void execute() {
         double power = motorPowerController.calculate(targetHeight, SensorStatus.kElevatorHeight);
-        elevatorSubsystem.runElevatorMotors(power);
+        elevatorSubsystem.runElevatorMotors(-power);
     }
 
     // Called once the command ends or is interrupted.

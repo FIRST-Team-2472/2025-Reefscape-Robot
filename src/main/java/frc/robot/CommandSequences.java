@@ -192,40 +192,9 @@ public class CommandSequences {
     }
 
     //Elevator Commands
-
-    public Command PlaceOnL4(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
+    public Command placeOnReef(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem, double elevatorHeight) {
         return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
-            new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem),
-                new HoldElevatorCommand(elevatorSubsystem)
-            )
-        );
-    }
-
-    public Command PlaceOnL3(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL3Height),
-            new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem),
-                new HoldElevatorCommand(elevatorSubsystem)
-            )
-        );
-    }
-
-    public Command PlaceOnL2(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL2Height),
-            new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem),
-                new HoldElevatorCommand(elevatorSubsystem)
-            )
-        );
-    }
-
-    public Command PlaceOnL1(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
-        return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height),
+            new AutoElevatorCommand(elevatorSubsystem, elevatorHeight),
             new ParallelDeadlineGroup(
                 new AutoCoralDispenseCommand(coralDispenserSubsystem),
                 new HoldElevatorCommand(elevatorSubsystem)
