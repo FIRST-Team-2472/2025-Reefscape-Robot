@@ -3,10 +3,9 @@ package frc.robot.commands.defaultCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.extras.DrivePose2d;
 import frc.robot.extras.PosPose2d;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveDriveToPointCmd extends Command {
   private SwerveSubsystem swerveSubsystem;
@@ -16,7 +15,7 @@ public class SwerveDriveToPointCmd extends Command {
   public SwerveDriveToPointCmd(SwerveSubsystem m_SwerveSubsystem, DrivePose2d targetPosition) {
     this.swerveSubsystem = m_SwerveSubsystem;
     this.targetPosition = targetPosition;
-    
+
     timer = new Timer();
 
     addRequirements(m_SwerveSubsystem);
@@ -25,7 +24,7 @@ public class SwerveDriveToPointCmd extends Command {
   public SwerveDriveToPointCmd(SwerveSubsystem m_SwerveSubsystem, PosPose2d targetPosition) {
     this.swerveSubsystem = m_SwerveSubsystem;
     this.targetPosition = targetPosition.toFieldPose2d();
-    
+
     timer = new Timer();
 
     addRequirements(m_SwerveSubsystem);
@@ -34,8 +33,9 @@ public class SwerveDriveToPointCmd extends Command {
   @Override
   public void initialize() {
     swerveSubsystem.initializeDriveToPointAndRotate(targetPosition);
-    //System.out.println("robot pose" + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
-    //System.out.println("target pose" + targetPosition.getX()+", "+ targetPosition.getY());
+    // System.out.println("robot pose" + swerveSubsystem.getPose().getX()+", "+
+    // swerveSubsystem.getPose().getY());
+    // System.out.println("target pose" + targetPosition.getX()+", "+ targetPosition.getY());
     timer.restart();
   }
 
@@ -53,15 +53,18 @@ public class SwerveDriveToPointCmd extends Command {
   public boolean isFinished() {
     // use this function if you overide the command to finish it
 
-    if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation()) && swerveSubsystem.isAtAngle(targetPosition.getRotation())) || (swerveSubsystem.isNearPoint(targetPosition.getTranslation()) && swerveSubsystem.isNearAngle(targetPosition.getRotation()) && swerveSubsystem.isStalling())){
+    if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation())
+            && swerveSubsystem.isAtAngle(targetPosition.getRotation()))
+        || (swerveSubsystem.isNearPoint(targetPosition.getTranslation())
+            && swerveSubsystem.isNearAngle(targetPosition.getRotation())
+            && swerveSubsystem.isStalling())) {
       System.out.println("Finished Driving");
     }
 
     /*if (timer.hasElapsed(1) && swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.00001 && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond < 0.00001)
-      return true; */
+    return true; */
 
-    if(timer.hasElapsed(2.5))
-      return true;
+    if (timer.hasElapsed(2.5)) return true;
 
     return false;
   }
