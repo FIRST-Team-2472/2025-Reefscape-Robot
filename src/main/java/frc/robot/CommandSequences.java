@@ -1,7 +1,9 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.PartialResultException;
 
@@ -43,18 +45,18 @@ public class CommandSequences {
         cageNodes[5] = simplePose(7.114, 0.794, 180); //Cage on far right from driver POV
 
 
-        reefNodes[0] = simplePose(3.168, 4.190, 0); //Reef Position A
-        reefNodes[1] = simplePose(3.168, 3.860, 0); //Reef Position B
-        reefNodes[2] = simplePose(3.682, 2.958, 60); //Reef Position C
-        reefNodes[3] = simplePose(3.97, 2.798, 60); //Reef Position D
-        reefNodes[4] = simplePose(5.003, 2.796, 120); //Reef Position E
-        reefNodes[5] = simplePose(5.294, 2.962, 120); //Reef Position F
-        reefNodes[6] = simplePose(5.81, 3.86, 180); //Reef Position G
-        reefNodes[7] = simplePose(5.79, 4.2, 180); //Reef Position H
-        reefNodes[8] = simplePose(5.288, 5.084, 240); //Reef Position I
-        reefNodes[9] = simplePose(5.006, 5.253, 240); //Reef Position J // was 5, 
-        reefNodes[10] = simplePose(3.972, 5.249, 300); //Reef Position K
-        reefNodes[11] = simplePose(3.686, 5.085, 300); //Reef Position L
+        reefNodesMap.put('A', simplePose(3.168, 4.190, 0));
+        reefNodesMap.put('B', simplePose(3.168, 3.860, 0));
+        reefNodesMap.put('C', simplePose(3.682, 2.958, 60));
+        reefNodesMap.put('D', simplePose(3.97, 2.798, 60));
+        reefNodesMap.put('E', simplePose(5.003, 2.796, 120));
+        reefNodesMap.put('F', simplePose(5.294, 2.962, 120));
+        reefNodesMap.put('G', simplePose(5.81, 3.86, 180));
+        reefNodesMap.put('H', simplePose(5.79, 4.2, 180));
+        reefNodesMap.put('I', simplePose(5.288, 5.084, 240));
+        reefNodesMap.put('J', simplePose(5.006, 5.253, 240));
+        reefNodesMap.put('K', simplePose(3.972, 5.249, 300));
+        reefNodesMap.put('L', simplePose(3.686, 5.085, 300));
 
 
         leftHumanPlayer = simplePose(1.127, 6.982, 306);
