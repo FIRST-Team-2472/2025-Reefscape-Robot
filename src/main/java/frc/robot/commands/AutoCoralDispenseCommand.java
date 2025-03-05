@@ -26,20 +26,25 @@ public class AutoCoralDispenseCommand extends Command{
     public void execute() {
         if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10) {
             coralDispenserSubsystem.runMotors(.9, -.3);
-            coralDispenserSubsystem.hascoral = false;
         } else {
             coralDispenserSubsystem.runMotors(1, -1);
-            coralDispenserSubsystem.hascoral = false;
         }
+
+        coralDispenserSubsystem.hascoral = false;
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("Dispense Coral Command ENDED!");
         coralDispenserSubsystem.runMotors(0, 0);
     }
 
     @Override
     public boolean isFinished() {
-        return timoutTimer.hasElapsed(1);
+        if (timoutTimer.hasElapsed(1)){
+            System.out.println("isFinished Dispensing Coral");
+            return true;
+        }
+        return false;
     }
 }
