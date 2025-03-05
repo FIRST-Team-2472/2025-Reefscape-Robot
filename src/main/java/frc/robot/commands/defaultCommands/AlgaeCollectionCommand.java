@@ -46,7 +46,7 @@ public class AlgaeCollectionCommand extends Command{
             }
             else{
                 AlgaeSubsystem.runSpinMotor(0);
-                currentSetAngle = 120;
+                currentSetAngle = 105;
             }
 
 

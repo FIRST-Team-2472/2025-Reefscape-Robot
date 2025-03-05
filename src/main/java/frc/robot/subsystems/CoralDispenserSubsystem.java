@@ -46,17 +46,20 @@ public class CoralDispenserSubsystem extends SubsystemBase{
 
     public void autoIntake() {
         if (fails < 7) {
-            if (seecoral && SensorStatus.kTimeOfFlightDistance > 80) {
+            if (seecoral && SensorStatus.kTimeOfFlightDistance > 85) {
                 hascoral = true;
                 seecoral = false;
             }
-            if (SensorStatus.kTimeOfFlightDistance < 80) {
+            if (SensorStatus.kTimeOfFlightDistance < 85) {
                 seecoral = true;
             }
         } else {
             hascoral = false;
             seecoral = false;
-            System.out.println("fail");
+            //System.out.println("fail");
+        }
+        if (hascoral && seecoral) {
+            hascoral = false;
         }
     }
 

@@ -28,7 +28,7 @@ public final class Constants {
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
-        public static final double kElevatorL4Height = 57;
+        public static final double kElevatorL4Height = 57.5;
         public static final double kElevatorL3Height = 32;
         public static final double kElevatorL2Height = 16;
         public static final double kElevatorL1Height = 9;
@@ -94,7 +94,7 @@ public final class Constants {
 
         // Positive should be counter clockwise
         public static final boolean kFrontLeftTurningEncoderReversed = false;
-        public static final boolean kBackLeftTurningEncoderReversed = false;
+        public static final boolean kBackLeftTurningEncoderReversed = false; 
         public static final boolean kFrontRightTurningEncoderReversed = false;
         public static final boolean kBackRightTurningEncoderReversed = false;
 
@@ -115,9 +115,9 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
         // To find set the motors forward record the value (don't inverse the value)
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 180;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 180; 
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 180;
         public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180;
 
         // Max physical speed of our motors. Required for motor speed caculations
