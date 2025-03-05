@@ -9,66 +9,61 @@ import frc.robot.subsystems.ClimbSubsystem;
 import java.util.function.Supplier;
 
 public class ClimbCommand extends Command {
-  ClimbSubsystem climberSusbsystem;
-  Supplier<Double> xboxControllerY;
-  Supplier<Boolean> xboxControllerLeftBumper, xboxControllerRightBumper;
-  boolean anglingOut = false;
-  boolean anglingIn = false;
-  MotorPowerController climberMotorPowerController =
-      new MotorPowerController(0.0001, 0.0001, 0.0001, 1, 0, SensorStatus.kClimberAngle, 0);
+	ClimbSubsystem climberSusbsystem;
+	Supplier<Double> xboxControllerY;
+	Supplier<Boolean> xboxControllerLeftBumper, xboxControllerRightBumper;
+	boolean anglingOut = false;
+	boolean anglingIn = false;
+	MotorPowerController climberMotorPowerController = new MotorPowerController(0.0001, 0.0001, 0.0001, 1, 0,
+			SensorStatus.kClimberAngle, 0);
 
-  public ClimbCommand(
-      ClimbSubsystem climberSusbsystem,
-      Supplier<Double> xboxControllerY,
-      Supplier<Boolean> xboxControllerLeftBumper,
-      Supplier<Boolean> xboxControllerRightBumper) {
-    this.climberSusbsystem = climberSusbsystem;
-    this.xboxControllerY = xboxControllerY;
-    this.xboxControllerLeftBumper = xboxControllerLeftBumper;
-    this.xboxControllerRightBumper = xboxControllerRightBumper;
-    addRequirements(climberSusbsystem);
-  }
+	public ClimbCommand(ClimbSubsystem climberSusbsystem, Supplier<Double> xboxControllerY,
+			Supplier<Boolean> xboxControllerLeftBumper, Supplier<Boolean> xboxControllerRightBumper) {
+		this.climberSusbsystem = climberSusbsystem;
+		this.xboxControllerY = xboxControllerY;
+		this.xboxControllerLeftBumper = xboxControllerLeftBumper;
+		this.xboxControllerRightBumper = xboxControllerRightBumper;
+		addRequirements(climberSusbsystem);
+	}
 
-  @Override
-  public void initialize() {}
+	@Override
+	public void initialize() {
+	}
 
-  @Override
-  public void execute() {
-    double y = xboxControllerY.get();
+	@Override
+	public void execute() {
+		double y = xboxControllerY.get();
 
-    if (xboxControllerLeftBumper.get()) {
-      anglingOut = true;
-    }
-    if (xboxControllerRightBumper.get()) {
-      anglingIn = true;
-    }
+		if (xboxControllerLeftBumper.get()) {
+			anglingOut = true;
+		}
+		if (xboxControllerRightBumper.get()) {
+			anglingIn = true;
+		}
 
-    if (Math.abs(y) <= OperatorConstants.kXboxControllerDeadband) {
-      y = 0;
-    } else {
-      anglingOut = false;
-      anglingIn = false;
-    }
-    if (anglingIn) {
-      y =
-          climberMotorPowerController.calculate(
-              ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
-    }
-    if (anglingOut) {
-      y =
-          climberMotorPowerController.calculate(
-              ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
-    }
+		if (Math.abs(y) <= OperatorConstants.kXboxControllerDeadband) {
+			y = 0;
+		} else {
+			anglingOut = false;
+			anglingIn = false;
+		}
+		if (anglingIn) {
+			y = climberMotorPowerController.calculate(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
+		}
+		if (anglingOut) {
+			y = climberMotorPowerController.calculate(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
+		}
 
-    climberSusbsystem.runClimberMotor(y);
-  }
+		climberSusbsystem.runClimberMotor(y);
+	}
 
-  @Override
-  public void end(boolean interrupted) {}
+	@Override
+	public void end(boolean interrupted) {
+	}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

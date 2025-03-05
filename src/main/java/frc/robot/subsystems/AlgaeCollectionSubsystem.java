@@ -15,61 +15,59 @@ import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
 
 public class AlgaeCollectionSubsystem extends SubsystemBase {
-  public SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
-  public SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
+	public SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
+	public SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
 
-  private MotorPowerController angleController =
-      new MotorPowerController(.003, .05, .1, .5, 2, 120, 5);
+	private MotorPowerController angleController = new MotorPowerController(.003, .05, .1, .5, 2, 120, 5);
 
-  private double pivotAngleSetPoint = 120;
+	private double pivotAngleSetPoint = 120;
 
-  private DutyCycleEncoder absoluteEncoder =
-      new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
+	private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
 
-  public AlgaeCollectionSubsystem() {
+	public AlgaeCollectionSubsystem() {
 
-    SparkMaxConfig config = new SparkMaxConfig();
-    SparkMaxConfig config2 = new SparkMaxConfig();
-    config.smartCurrentLimit(35);
-    config.idleMode(IdleMode.kBrake);
-    pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+		SparkMaxConfig config = new SparkMaxConfig();
+		SparkMaxConfig config2 = new SparkMaxConfig();
+		config.smartCurrentLimit(35);
+		config.idleMode(IdleMode.kBrake);
+		pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    config2.smartCurrentLimit(15); // it will burn at 10-13 so this is already semi pushing it
-    config2.idleMode(IdleMode.kCoast);
-    spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+		config2.smartCurrentLimit(15); // it will burn at 10-13 so this is already semi pushing it
+		config2.idleMode(IdleMode.kCoast);
+		spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    SensorStatus.kPivotAngle =
-        absoluteEncoder.get() * 360; // updating it before its read, converting it to degrees as
-    // well
-  }
+		SensorStatus.kPivotAngle = absoluteEncoder.get() * 360; // updating it before its read, converting it to degrees
+																// as
+		// well
+	}
 
-  public void runPivotMotor(double powerPercent) {
-    if (SensorStatus.kPivotAngle > 200)
-      Math.max(0, powerPercent); // clamps it so it cant drive down when beyond this angle
-    else if (SensorStatus.kPivotAngle < 105)
-      Math.min(0, powerPercent); // clamps it so it cant drive up when beyond this angle
-    pivotmotor.set(powerPercent);
-  }
+	public void runPivotMotor(double powerPercent) {
+		if (SensorStatus.kPivotAngle > 200)
+			Math.max(0, powerPercent); // clamps it so it cant drive down when beyond this angle
+		else if (SensorStatus.kPivotAngle < 105)
+			Math.min(0, powerPercent); // clamps it so it cant drive up when beyond this angle
+		pivotmotor.set(powerPercent);
+	}
 
-  public void runSpinMotor(double powerPercent) {
-    spinmotor.set(powerPercent);
-  }
+	public void runSpinMotor(double powerPercent) {
+		spinmotor.set(powerPercent);
+	}
 
-  public void setAngleSetpoint(double angle) {
-    angle = Math.min(200, Math.max(105, angle)); // clamp betweein vertical and on the ground
-    pivotAngleSetPoint = angle;
-  }
+	public void setAngleSetpoint(double angle) {
+		angle = Math.min(200, Math.max(105, angle)); // clamp betweein vertical and on the ground
+		pivotAngleSetPoint = angle;
+	}
 
-  @Override
-  public void periodic() {
-    // updating the sensors status to be read by other files
-    SensorStatus.kPivotAngle =
-        (absoluteEncoder.get() * 360 + 180) % 360; // converting it to degrees and offsetting it
-    // by 180
-    SmartDashboard.putNumber("Algea Collector angle", SensorStatus.kPivotAngle);
-    SmartDashboard.putNumber("Spin motor output", spinmotor.getOutputCurrent());
+	@Override
+	public void periodic() {
+		// updating the sensors status to be read by other files
+		SensorStatus.kPivotAngle = (absoluteEncoder.get() * 360 + 180) % 360; // converting it to degrees and offsetting
+																				// it
+		// by 180
+		SmartDashboard.putNumber("Algea Collector angle", SensorStatus.kPivotAngle);
+		SmartDashboard.putNumber("Spin motor output", spinmotor.getOutputCurrent());
 
-    // driving it to hold its angle
-    runPivotMotor(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
-  }
+		// driving it to hold its angle
+		runPivotMotor(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
+	}
 }

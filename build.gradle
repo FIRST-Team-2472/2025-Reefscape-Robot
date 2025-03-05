@@ -12,7 +12,8 @@ java {
 
 spotless {
     java {
-        googleJavaFormat('1.25.0')
+        eclipse()
+        removeUnusedImports()
     }
 }
 
