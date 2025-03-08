@@ -88,7 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewAccelerationLimiter xLimiter, yLimiter;
+    private NewAccelerationLimiter xLimiter, yLimiter, turningLimiter;
     public PIDController thetaController;
 
     public MotorPowerController xPowerController, yPowerController, turningPowerController;
@@ -116,12 +116,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
         xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
                 TargetPosConstants.kBackwardMaxAcceleration);
+
+        turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5,
+        TargetPosConstants.kBackwardMaxAcceleration*2.5);
+
         yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
                 TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxspeed
 
-        xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
+        xPowerController = new MotorPowerController(0.15, 0.00, .7, 1, .2, 0, 1);
+        yPowerController = new MotorPowerController(0.15, 0.00, .7, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -209,20 +213,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
-    }
-
-    public boolean isStalling() {
-        int stallScount = 0;
-        if (frontLeft.isStalling())
-            stallScount++;
-        if (frontRight.isStalling())
-            stallScount++;
-        if (backLeft.isStalling())
-            stallScount++;
-        if (backRight.isStalling())
-            stallScount++;
-        return stallScount >= 2;
-
     }
 
     // gets our current velocity relative to the x of the robot (front/back)
@@ -314,8 +304,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
         // turningSpeed);
 
-        // xSpeed = xLimiter.calculate(xSpeed);
-        // ySpeed = yLimiter.calculate(ySpeed);
+        //xSpeed = xLimiter.calculate(xSpeed);
+        //ySpeed = yLimiter.calculate(ySpeed);
+        //turningSpeed = turningLimiter.calculate(turningSpeed);
+
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 

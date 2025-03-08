@@ -91,7 +91,7 @@ public class RobotContainer {
     m_chooser.addOption(MiddleToHL1, MiddleToHL1);
     m_chooser.addOption(MiddleToHL4, MiddleToHL4);
     // m_chooser.addOption(CageThreeToHL1, CageThreeToHL1);
-    // m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
+    m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
     // m_chooser.addOption(MiddleToGL1, MiddleToGL1);
     // m_chooser.addOption(MiddleToGL4, MiddleToGL4);
     // m_chooser.addOption(CageThreeToHL4, CageThreeToHL4);
@@ -105,7 +105,7 @@ public class RobotContainer {
     // m_chooser.addOption(CageOneToIL4, CageOneToIL4);
     // m_chooser.addOption(CageTwoToIL1, CageTwoToIL1); 
     // m_chooser.addOption(CageFiveToFL1, CageFiveToFL1);
-    // m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
+    m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
     // m_chooser.addOption(CageSixToFL1, CageSixToFL1);
     //m_chooser.addOption(CageSixToFL4, CageSixToFL4);
     //m_chooser.addOption(driveforward, driveforward);

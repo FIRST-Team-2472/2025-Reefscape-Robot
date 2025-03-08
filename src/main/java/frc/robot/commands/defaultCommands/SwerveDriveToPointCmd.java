@@ -53,14 +53,14 @@ public class SwerveDriveToPointCmd extends Command {
   public boolean isFinished() {
     // use this function if you overide the command to finish it
 
-    if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation()) && swerveSubsystem.isAtAngle(targetPosition.getRotation())) || (swerveSubsystem.isNearPoint(targetPosition.getTranslation()) && swerveSubsystem.isNearAngle(targetPosition.getRotation()) && swerveSubsystem.isStalling())){
+    if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation()) && swerveSubsystem.isAtAngle(targetPosition.getRotation()))){
       System.out.println("Finished Driving");
     }
 
     /*if (timer.hasElapsed(1) && swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.00001 && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond < 0.00001)
       return true; */
 
-    if(timer.hasElapsed(2.5))
+    if(timer.hasElapsed(3.5))
       return true;
 
     return false;
