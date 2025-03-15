@@ -123,8 +123,8 @@ public class SwerveSubsystem extends SubsystemBase {
         yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
                 TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxspeed
 
-        xPowerController = new MotorPowerController(0.15, 0.00, .7, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.15, 0.00, .7, 1, .2, 0, 1);
+        xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
         turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()

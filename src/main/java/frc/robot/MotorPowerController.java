@@ -42,7 +42,9 @@ public class MotorPowerController {
             integral -= Math.min(timeIncrement, timeIncrement * 2 /(1/Math.abs(error) * integralProportionalThreshold));
             else if (integral< 1)
             integral += Math.min(timeIncrement, timeIncrement * 2 /(1/Math.abs(error) * integralProportionalThreshold));
-        }
+        } /*else{
+            Math.max(d, sensorRead)integral -= .1
+        }*/
         integral = Math.min(1, Math.max(-1, integral)); //limits integral to -1 to 1 
 
         predictionPoint = (sensorRead - lastSensorRead)*dTime + sensorRead; //predicts position dTime seconds in the future

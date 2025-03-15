@@ -45,7 +45,7 @@ public class CommandSequences {
     public CommandSequences() {
         // x is centered on starting line
         cageNodes[0] = simplePose(7.114, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.114, 6.145, 180); //Cage Position 2
+        cageNodes[1] = simplePose(7.114, 6.165, 180); //Cage Position 2
         cageNodes[2] = simplePose(7.114, 5.077, 180); //Cage Position 3
         cageNodes[3] = simplePose(7.114, 2.929, 180); //Cage Position 4
         cageNodes[4] = simplePose(7.114, 1.898, 180); //Cage Position 5
