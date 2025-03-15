@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.time.Year;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
@@ -91,13 +92,15 @@ public class SwerveSubsystem extends SubsystemBase {
     private NewAccelerationLimiter xLimiter, yLimiter, turningLimiter;
     public PIDController thetaController;
 
-    public MotorPowerController xPowerController, yPowerController, turningPowerController;
+    public MotorPowerController xPowerController, yPowerController, turningPowerController, speedPowerController;
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
     double lastXDrive = 0;
     double lastYDrive = 0;
+
+    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
@@ -114,17 +117,15 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
 
-        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
-                TargetPosConstants.kBackwardMaxAcceleration);
+        //xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
-        turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5,
-        TargetPosConstants.kBackwardMaxAcceleration*2.5);
+        //turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5, TargetPosConstants.kBackwardMaxAcceleration*2.5);
 
-        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
-                TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxspeed
+        //yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxSpeed
 
-        xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        speedPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
         turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
@@ -285,8 +286,12 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xError = getPose().getX() - targetPosition.getX();
+        yError = getPose().getY() - targetPosition.getY();
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        speedPowerController.calculate(distanceError, 0);
+        //xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //yPowerController.calculate(getPose().getY(), targetPosition.getY());
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
         turningPowerController.calculate(angleDifference.getRadians(), 0);
         xLimiter.setInitialSpeed(lastXDrive);
@@ -294,8 +299,16 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xError = getPose().getX() - targetPosition.getX();
+        yError = getPose().getY() - targetPosition.getY();
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        xError /= xError > yError ? xError : yError;
+        yError /= xError > yError ? xError : yError;
+        speed = speedPowerController.calculate(distanceError, 0);
+        xSpeed = xError * speed*.3;
+        ySpeed = yError * speed*.3;
+        //double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
         // angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
