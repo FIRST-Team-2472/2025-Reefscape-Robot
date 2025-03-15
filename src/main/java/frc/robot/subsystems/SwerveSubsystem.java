@@ -302,8 +302,8 @@ public class SwerveSubsystem extends SubsystemBase {
         xError = getPose().getX() - targetPosition.getX();
         yError = getPose().getY() - targetPosition.getY();
         distanceError = Math.sqrt(xError*xError + yError*yError);
-        xError /= xError > yError ? xError : yError;
-        yError /= xError > yError ? xError : yError;
+        xError /= Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError);
+        yError /= Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError);
         speed = speedPowerController.calculate(distanceError, 0);
         xSpeed = xError * speed*.3;
         ySpeed = yError * speed*.3;
