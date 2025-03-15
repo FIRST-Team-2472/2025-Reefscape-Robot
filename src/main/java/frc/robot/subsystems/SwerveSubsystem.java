@@ -294,8 +294,8 @@ public class SwerveSubsystem extends SubsystemBase {
         //yPowerController.calculate(getPose().getY(), targetPosition.getY());
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
         turningPowerController.calculate(angleDifference.getRadians(), 0);
-        xLimiter.setInitialSpeed(lastXDrive);
-        yLimiter.setInitialSpeed(lastYDrive);
+        //xLimiter.setInitialSpeed(lastXDrive);
+        //yLimiter.setInitialSpeed(lastYDrive);
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
