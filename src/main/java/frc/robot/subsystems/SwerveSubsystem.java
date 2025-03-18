@@ -438,7 +438,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonYaw = getHeading();
 
         // Send Gyro data to Limelight for higher accuracy
-        LimelightHelpers.SetRobotOrientation("limelight-obj", odometer.getPoseMeters().getRotation().getDegrees(),
+        LimelightHelpers.SetRobotOrientation(SensorConstants.PRIMARY_LIMELIGHT, odometer.getPoseMeters().getRotation().getDegrees(),
                 0.0, 0.0, 0.0, 0.0, 0.0);
 
         // Pose2d filteredBotPose = getFilteredPose();
