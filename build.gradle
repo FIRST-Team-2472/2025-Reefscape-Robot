@@ -12,7 +12,9 @@ java {
 
 spotless {
     java {
-        eclipse()
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        googleJavaFormat().aosp()
         removeUnusedImports()
     }
 }

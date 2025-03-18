@@ -8,35 +8,37 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class AutoPrepForClimbCommand extends Command {
-	CoralDispenserSubsystem coralDispenserSubsystem;
-	CoralCollectionSubsystem coralCollectionSubsystem;
-	ElevatorSubsystem elevatorSubsystem;
-	int angle;
+    CoralDispenserSubsystem coralDispenserSubsystem;
+    CoralCollectionSubsystem coralCollectionSubsystem;
+    ElevatorSubsystem elevatorSubsystem;
+    int angle;
 
-	public AutoPrepForClimbCommand(CoralDispenserSubsystem coralDispenserSubsystem, ElevatorSubsystem elevatorSubsystem,
-			CoralCollectionSubsystem coralCollectionSubsystem) {
-		this.coralCollectionSubsystem = coralCollectionSubsystem;
-		this.elevatorSubsystem = elevatorSubsystem;
-		this.coralDispenserSubsystem = coralDispenserSubsystem;
-		addRequirements(coralCollectionSubsystem, elevatorSubsystem, coralDispenserSubsystem);
-	}
+    public AutoPrepForClimbCommand(
+            CoralDispenserSubsystem coralDispenserSubsystem,
+            ElevatorSubsystem elevatorSubsystem,
+            CoralCollectionSubsystem coralCollectionSubsystem) {
+        this.coralCollectionSubsystem = coralCollectionSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.coralDispenserSubsystem = coralDispenserSubsystem;
+        addRequirements(coralCollectionSubsystem, elevatorSubsystem, coralDispenserSubsystem);
+    }
 
-	@Override
-	public void initialize() {
-		new ParallelCommandGroup(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(angle)),
-				new AutoElevatorCommand(elevatorSubsystem, 0)).schedule();
-	}
+    @Override
+    public void initialize() {
+        new ParallelCommandGroup(
+                        new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(angle)),
+                        new AutoElevatorCommand(elevatorSubsystem, 0))
+                .schedule();
+    }
 
-	@Override
-	public void execute() {
-	}
+    @Override
+    public void execute() {}
 
-	@Override
-	public void end(boolean interrupted) {
-	}
+    @Override
+    public void end(boolean interrupted) {}
 
-	@Override
-	public boolean isFinished() {
-		return true;
-	}
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

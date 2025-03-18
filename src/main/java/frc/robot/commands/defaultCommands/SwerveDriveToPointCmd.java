@@ -8,69 +8,69 @@ import frc.robot.extras.PosPose2d;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveDriveToPointCmd extends Command {
-	private SwerveSubsystem swerveSubsystem;
-	private Pose2d targetPosition;
-	private Timer timer;
+    private SwerveSubsystem swerveSubsystem;
+    private Pose2d targetPosition;
+    private Timer timer;
 
-	public SwerveDriveToPointCmd(SwerveSubsystem m_SwerveSubsystem, DrivePose2d targetPosition) {
-		this.swerveSubsystem = m_SwerveSubsystem;
-		this.targetPosition = targetPosition;
+    public SwerveDriveToPointCmd(SwerveSubsystem m_SwerveSubsystem, DrivePose2d targetPosition) {
+        this.swerveSubsystem = m_SwerveSubsystem;
+        this.targetPosition = targetPosition;
 
-		timer = new Timer();
+        timer = new Timer();
 
-		addRequirements(m_SwerveSubsystem);
-	}
+        addRequirements(m_SwerveSubsystem);
+    }
 
-	public SwerveDriveToPointCmd(SwerveSubsystem m_SwerveSubsystem, PosPose2d targetPosition) {
-		this.swerveSubsystem = m_SwerveSubsystem;
-		this.targetPosition = targetPosition.toFieldPose2d();
+    public SwerveDriveToPointCmd(SwerveSubsystem m_SwerveSubsystem, PosPose2d targetPosition) {
+        this.swerveSubsystem = m_SwerveSubsystem;
+        this.targetPosition = targetPosition.toFieldPose2d();
 
-		timer = new Timer();
+        timer = new Timer();
 
-		addRequirements(m_SwerveSubsystem);
-	}
+        addRequirements(m_SwerveSubsystem);
+    }
 
-	@Override
-	public void initialize() {
-		swerveSubsystem.initializeDriveToPointAndRotate(targetPosition);
-		// System.out.println("robot pose" + swerveSubsystem.getPose().getX()+", "+
-		// swerveSubsystem.getPose().getY());
-		// System.out.println("target pose" + targetPosition.getX()+", "+
-		// targetPosition.getY());
-		timer.restart();
-	}
+    @Override
+    public void initialize() {
+        swerveSubsystem.initializeDriveToPointAndRotate(targetPosition);
+        // System.out.println("robot pose" + swerveSubsystem.getPose().getX()+", "+
+        // swerveSubsystem.getPose().getY());
+        // System.out.println("target pose" + targetPosition.getX()+", "+
+        // targetPosition.getY());
+        timer.restart();
+    }
 
-	@Override
-	public void execute() {
-		swerveSubsystem.executeDriveToPointAndRotate(targetPosition);
-	}
+    @Override
+    public void execute() {
+        swerveSubsystem.executeDriveToPointAndRotate(targetPosition);
+    }
 
-	@Override
-	public void end(boolean interrupted) {
-		swerveSubsystem.stopModules();
-	}
+    @Override
+    public void end(boolean interrupted) {
+        swerveSubsystem.stopModules();
+    }
 
-	@Override
-	public boolean isFinished() {
-		// use this function if you overide the command to finish it
+    @Override
+    public boolean isFinished() {
+        // use this function if you overide the command to finish it
 
-		if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation())
-				&& swerveSubsystem.isAtAngle(targetPosition.getRotation()))
-				|| (swerveSubsystem.isNearPoint(targetPosition.getTranslation())
-						&& swerveSubsystem.isNearAngle(targetPosition.getRotation()) && swerveSubsystem.isStalling())) {
-			System.out.println("Finished Driving");
-		}
+        if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation())
+                        && swerveSubsystem.isAtAngle(targetPosition.getRotation()))
+                || (swerveSubsystem.isNearPoint(targetPosition.getTranslation())
+                        && swerveSubsystem.isNearAngle(targetPosition.getRotation())
+                        && swerveSubsystem.isStalling())) {
+            System.out.println("Finished Driving");
+        }
 
-		/*
-		 * if (timer.hasElapsed(1) &&
-		 * swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.00001
-		 * && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond <
-		 * 0.00001) return true;
-		 */
+        /*
+         * if (timer.hasElapsed(1) &&
+         * swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.00001
+         * && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond <
+         * 0.00001) return true;
+         */
 
-		if (timer.hasElapsed(2.5))
-			return true;
+        if (timer.hasElapsed(2.5)) return true;
 
-		return false;
-	}
+        return false;
+    }
 }
