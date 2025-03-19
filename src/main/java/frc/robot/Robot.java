@@ -40,6 +40,8 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
+    // Start the DataLogManager
+    DataLogManager.start();
     Logger.recordMetadata("ProjectName", "YourProjectName"); // Set a metadata value
 
     if (isReal()) {
