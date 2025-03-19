@@ -125,7 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
         //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
-        speedPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        speedPowerController = new MotorPowerController(0.15, 0.0, .005, 1, .2, 0, 1);
         turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
@@ -286,10 +286,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xError = getPose().getX() - targetPosition.getX();
-        yError = getPose().getY() - targetPosition.getY();
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
         distanceError = Math.sqrt(xError*xError + yError*yError);
-        speedPowerController.calculate(distanceError, 0);
+        speedPowerController.calculate(0, distanceError);
         //xPowerController.calculate(getPose().getX(), targetPosition.getX());
         //yPowerController.calculate(getPose().getY(), targetPosition.getY());
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
@@ -299,14 +299,23 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        xError = getPose().getX() - targetPosition.getX();
-        yError = getPose().getY() - targetPosition.getY();
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        SmartDashboard.putNumber("calculated x error", xError);
+        SmartDashboard.putNumber("calculated y error", yError);
         distanceError = Math.sqrt(xError*xError + yError*yError);
-        xError /= Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError);
-        yError /= Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError);
-        speed = speedPowerController.calculate(distanceError, 0);
-        xSpeed = xError * speed*.3;
-        ySpeed = yError * speed*.3;
+        xSpeed = xError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        ySpeed = yError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        speed = speedPowerController.calculate(0, distanceError);
+        SmartDashboard.putNumber("distance Error", distanceError);
+        SmartDashboard.putNumber("speed", speed);
+        SmartDashboard.putNumber("target X", targetPosition.getX());
+        SmartDashboard.putNumber("target Y", targetPosition.getY());
+        xSpeed *= speed;
+        ySpeed *= speed;
+        
+        SmartDashboard.putNumber("X speed", xSpeed);
+        SmartDashboard.putNumber("Y speed", ySpeed);
         //double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
         //double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
