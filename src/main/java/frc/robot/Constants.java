@@ -127,6 +127,7 @@ public final class Constants {
 
     }
 
+    //never used ANYWHERE
     public static final class TeleDriveConstants {
         // Motion constants for joystick drive mode -> dependant on max speed
         // Max x/y speed of robot in this drive mode
@@ -140,6 +141,7 @@ public final class Constants {
         public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI * 2;
     }
 
+    //never used ANYWHERE
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44; // was 9.44; (changed 2/20/25)//was 4 before 9.44 (changed somtime before 2/20/25)
