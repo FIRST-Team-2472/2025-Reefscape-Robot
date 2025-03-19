@@ -81,6 +81,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
+    private double frontLeftEncoderLast, frontRightEncoderLast, backLeftEncoderLast, backRightEncoderLast = 0;
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
@@ -89,7 +90,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewAccelerationLimiter xLimiter, yLimiter, turningLimiter;
+    private NewAccelerationLimiter xLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
     public PIDController thetaController;
 
     public MotorPowerController xPowerController, yPowerController, turningPowerController, speedPowerController;
@@ -100,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double lastXDrive = 0;
     double lastYDrive = 0;
 
-    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed;
+    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
@@ -116,7 +117,7 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
-
+        wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
         //xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
         //turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5, TargetPosConstants.kBackwardMaxAcceleration*2.5);
@@ -469,6 +470,22 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception NullPointerException) {
             // TODO: handle exception
         }
+        SmartDashboard.putNumber("Frontleft Encoder rate of change", frontLeft.getDrivePosition() - frontLeftEncoderLast);
+        SmartDashboard.putNumber("FrontRight Encoder rate of change", frontRight.getDrivePosition() - frontRightEncoderLast);
+        SmartDashboard.putNumber("BackLeft Encoder rate of change", backLeft.getDrivePosition() - backLeftEncoderLast);
+        SmartDashboard.putNumber("BackRight Encoder rate of change", backRight.getDrivePosition() - backRightEncoderLast);
+        
+        velocityX += gyro.getAccelerationX().getValueAsDouble();
+        velocityY += gyro.getAccelerationY().getValueAsDouble();
+        SmartDashboard.putNumber("gyro X velocity",velocityX);
+        SmartDashboard.putNumber("gyro Y velocity",velocityY);
+        double totalVelocity = Math.sqrt(velocityX*velocityX + velocityY*velocityY);
+        SmartDashboard.putNumber("gyro total velocity", totalVelocity);
+
+        SmartDashboard.putNumber("odometer X velocity", chassisSpeeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("odometer Y velocity", chassisSpeeds.vyMetersPerSecond);
+        double odometerTotalVelocity = Math.sqrt(chassisSpeeds.vxMetersPerSecond*chassisSpeeds.vxMetersPerSecond + chassisSpeeds.vyMetersPerSecond*chassisSpeeds.vyMetersPerSecond);
+        SmartDashboard.putNumber("odometer total velocity", odometerTotalVelocity);
 
         SmartDashboard.putNumber("frontLeft Encoder",
                 frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
@@ -494,6 +511,11 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
         SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
         SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
+
+        frontLeftEncoderLast = frontLeft.getDrivePosition();
+        frontRightEncoderLast = frontRight.getDrivePosition();
+        backLeftEncoderLast = backLeft.getDrivePosition();
+        backRightEncoderLast = backRight.getDrivePosition();
 
         logSwerveStates();
         logOdometry();

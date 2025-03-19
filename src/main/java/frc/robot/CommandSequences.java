@@ -225,6 +225,10 @@ public class CommandSequences {
         Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 1, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }
+    public Command driveForwardTest(SwerveSubsystem swerveSubsystem) {
+        swerveSubsystem.setOdometry(simplePose(1, 0, 0).toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(3, 0, 0));
+    }
   
     public PosPose2d reefNode(char NodeLetter){
         switch (NodeLetter) {
