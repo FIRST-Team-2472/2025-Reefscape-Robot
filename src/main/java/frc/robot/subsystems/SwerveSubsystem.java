@@ -40,6 +40,7 @@ import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.extras.NewNewAccelLimiter;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -90,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewAccelerationLimiter xLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
+    private NewNewAccelLimiter speedLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
     public PIDController thetaController;
 
     public MotorPowerController xPowerController, yPowerController, turningPowerController, speedPowerController;
@@ -117,8 +118,8 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
-        wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
-        //xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
+        //wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
+        speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
         //turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5, TargetPosConstants.kBackwardMaxAcceleration*2.5);
 
@@ -290,12 +291,12 @@ public class SwerveSubsystem extends SubsystemBase {
         xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
         yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
         distanceError = Math.sqrt(xError*xError + yError*yError);
-        speedPowerController.calculate(0, distanceError);
+        double lastSpeed = speedPowerController.calculate(0, distanceError);
         //xPowerController.calculate(getPose().getX(), targetPosition.getX());
         //yPowerController.calculate(getPose().getY(), targetPosition.getY());
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
         turningPowerController.calculate(angleDifference.getRadians(), 0);
-        //xLimiter.setInitialSpeed(lastXDrive);
+        speedLimiter.zeroSpeed();
         //yLimiter.setInitialSpeed(lastYDrive);
     }
 
@@ -309,9 +310,10 @@ public class SwerveSubsystem extends SubsystemBase {
         ySpeed = yError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
         speed = speedPowerController.calculate(0, distanceError);
         SmartDashboard.putNumber("distance Error", distanceError);
-        SmartDashboard.putNumber("speed", speed);
         SmartDashboard.putNumber("target X", targetPosition.getX());
         SmartDashboard.putNumber("target Y", targetPosition.getY());
+        speed = speedLimiter.calculate(speed);
+        SmartDashboard.putNumber("speed", speed);
         xSpeed *= speed;
         ySpeed *= speed;
         
@@ -327,7 +329,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
         // turningSpeed);
 
-        //xSpeed = xLimiter.calculate(xSpeed);
+        
         //ySpeed = yLimiter.calculate(ySpeed);
         //turningSpeed = turningLimiter.calculate(turningSpeed);
 
@@ -470,10 +472,10 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception NullPointerException) {
             // TODO: handle exception
         }
-        SmartDashboard.putNumber("Frontleft Encoder rate of change", frontLeft.getDrivePosition() - frontLeftEncoderLast);
-        SmartDashboard.putNumber("FrontRight Encoder rate of change", frontRight.getDrivePosition() - frontRightEncoderLast);
-        SmartDashboard.putNumber("BackLeft Encoder rate of change", backLeft.getDrivePosition() - backLeftEncoderLast);
-        SmartDashboard.putNumber("BackRight Encoder rate of change", backRight.getDrivePosition() - backRightEncoderLast);
+        SmartDashboard.putNumber("Frontleft Encoder rate of change", frontLeft.getDrivePositionTwo() - frontLeftEncoderLast);
+        SmartDashboard.putNumber("FrontRight Encoder rate of change", frontRight.getDrivePositionTwo() - frontRightEncoderLast);
+        SmartDashboard.putNumber("BackLeft Encoder rate of change", backLeft.getDrivePositionTwo() - backLeftEncoderLast);
+        SmartDashboard.putNumber("BackRight Encoder rate of change", backRight.getDrivePositionTwo() - backRightEncoderLast);
         
         velocityX += gyro.getAccelerationX().getValueAsDouble();
         velocityY += gyro.getAccelerationY().getValueAsDouble();
@@ -512,10 +514,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
         SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
 
-        frontLeftEncoderLast = frontLeft.getDrivePosition();
-        frontRightEncoderLast = frontRight.getDrivePosition();
-        backLeftEncoderLast = backLeft.getDrivePosition();
-        backRightEncoderLast = backRight.getDrivePosition();
+        frontLeftEncoderLast = frontLeft.getDrivePositionTwo();
+        frontRightEncoderLast = frontRight.getDrivePositionTwo();
+        backLeftEncoderLast = backLeft.getDrivePositionTwo();
+        backRightEncoderLast = backRight.getDrivePositionTwo();
 
         logSwerveStates();
         logOdometry();

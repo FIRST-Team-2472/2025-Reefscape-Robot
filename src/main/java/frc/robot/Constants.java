@@ -189,8 +189,8 @@ public final class Constants {
         public static final double kMaxAngularSpeed = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 16;
 
-        public static final double kForwardMaxAcceleration = .2;
-        public static final double kBackwardMaxAcceleration = -.2;
+        public static final double kForwardMaxAcceleration = .04;
+        public static final double kBackwardMaxAcceleration = .1;
         public static final double kMaxAngularAcceleration = Math.PI / 3;
         public static final double kBackwardAngularAcceleration = -Math.PI * 9;
 

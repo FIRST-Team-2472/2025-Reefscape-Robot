@@ -4,7 +4,7 @@ public class NewNewAccelLimiter {
     double maxIncrease; 
     double maxDecrease;
     double previousOutput = 0;
-    NewNewAccelLimiter(double maxIncrease, double maxDecrease){
+    public NewNewAccelLimiter(double maxIncrease, double maxDecrease){
         this.maxIncrease = maxIncrease;
         this.maxDecrease = maxDecrease;
     }
@@ -18,9 +18,9 @@ public class NewNewAccelLimiter {
             }
         }else{
             if(wantedDrive > 0){
-                output += Math.min(wantedDrive - previousOutput, maxDecrease);
-            }else{
                 output += Math.max(wantedDrive - previousOutput, -maxDecrease);
+            }else{
+                output += Math.min(wantedDrive - previousOutput, maxDecrease);
             }
         }
         previousOutput = output;
