@@ -41,6 +41,7 @@ import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.extras.NewNewAccelLimiter;
+import frc.robot.extras.RobotLogManager;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -333,6 +334,9 @@ public class SwerveSubsystem extends SubsystemBase {
         //ySpeed = yLimiter.calculate(ySpeed);
         //turningSpeed = turningLimiter.calculate(turningSpeed);
 
+        // xSpeed = xLimiter.calculate(xSpeed);
+        // ySpeed = yLimiter.calculate(ySpeed);
+        
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
@@ -376,6 +380,14 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
+    }
+
+    public boolean isExactlyInPosition(Pose2d targetPosition) {
+        return isAtPoint(targetPosition.getTranslation()) && isAtAngle(targetPosition.getRotation());
+    }
+
+    public boolean isNearlyInPosition(Pose2d targetPosition) {
+        return isNearPoint(targetPosition.getTranslation()) && isNearAngle(targetPosition.getRotation());
     }
 
     public boolean isAtPoint(Translation2d targetDrivePos) {
@@ -455,7 +467,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonYaw = getHeading();
 
         // Send Gyro data to Limelight for higher accuracy
-        LimelightHelpers.SetRobotOrientation("limelight-obj", odometer.getPoseMeters().getRotation().getDegrees(),
+        LimelightHelpers.SetRobotOrientation(SensorConstants.PRIMARY_LIMELIGHT, odometer.getPoseMeters().getRotation().getDegrees(),
                 0.0, 0.0, 0.0, 0.0, 0.0);
 
         // Pose2d filteredBotPose = getFilteredPose();
