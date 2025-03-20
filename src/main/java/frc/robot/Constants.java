@@ -53,7 +53,7 @@ public final class Constants {
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = .0989191;
+        public static final double kWheelDiameterMeters = .0952492;
         // gear ratio is inversed (1/gear ratio) so we can multiply instead of dividing
         // the Rot to meter funtion
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -127,6 +127,7 @@ public final class Constants {
 
     }
 
+    //never used ANYWHERE
     public static final class TeleDriveConstants {
         // Motion constants for joystick drive mode -> dependant on max speed
         // Max x/y speed of robot in this drive mode
@@ -140,6 +141,7 @@ public final class Constants {
         public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI * 2;
     }
 
+    //never used ANYWHERE
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44; // was 9.44; (changed 2/20/25)//was 4 before 9.44 (changed somtime before 2/20/25)
@@ -187,8 +189,8 @@ public final class Constants {
         public static final double kMaxAngularSpeed = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 16;
 
-        public static final double kForwardMaxAcceleration = .4;
-        public static final double kBackwardMaxAcceleration = -.4;
+        public static final double kForwardMaxAcceleration = .04;
+        public static final double kBackwardMaxAcceleration = .1;
         public static final double kMaxAngularAcceleration = Math.PI / 3;
         public static final double kBackwardAngularAcceleration = -Math.PI * 9;
 
@@ -197,7 +199,7 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.06;// subject to change was 0.04
+        public static final double kAcceptableDistanceError = 0.03;// subject to change was 0.04
         public static final double kAcceptableAngleError = 3;
     }
 
@@ -221,8 +223,8 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMetersX = 17.55;
-        public static final double sizeOfFieldMetersY = 8;
+        public static final double sizeOfFieldMetersX = 17.548225;
+        public static final double sizeOfFieldMetersY = 8.0518;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later

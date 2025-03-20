@@ -6,6 +6,8 @@
 package frc.robot;
 
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -49,7 +51,8 @@ public class RobotContainer {
   CageOneToIL1 = "Drive from Cage 1 and Place on I L1", CageOneToIL4 = "Drive from Cage 1 and Place on I L4",
   CageTwoToIL1 = "Drive from Cage 2 and Place on I L1",
   CageFiveToFL1 = "Drive from Cage 5 and Place on F L1", CageFiveToFL4 = "Drive from Cage 5 and Place on F L4",
-  CageSixToFL1 = "Drive from Cage 6 and Place on F L1", CageSixToFL4 = "Drive from Cage 6 and Place on F L4" ;
+  CageSixToFL1 = "Drive from Cage 6 and Place on F L1", CageSixToFL4 = "Drive from Cage 6 and Place on F L4",
+  DriveForwardTest = "Drive Forward Test";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -91,7 +94,7 @@ public class RobotContainer {
     m_chooser.addOption(MiddleToHL1, MiddleToHL1);
     m_chooser.addOption(MiddleToHL4, MiddleToHL4);
     // m_chooser.addOption(CageThreeToHL1, CageThreeToHL1);
-    // m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
+    m_chooser.addOption(CageTwoToIL4, CageTwoToIL4);
     // m_chooser.addOption(MiddleToGL1, MiddleToGL1);
     // m_chooser.addOption(MiddleToGL4, MiddleToGL4);
     // m_chooser.addOption(CageThreeToHL4, CageThreeToHL4);
@@ -105,10 +108,11 @@ public class RobotContainer {
     // m_chooser.addOption(CageOneToIL4, CageOneToIL4);
     // m_chooser.addOption(CageTwoToIL1, CageTwoToIL1); 
     // m_chooser.addOption(CageFiveToFL1, CageFiveToFL1);
-    // m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
+    m_chooser.addOption(CageFiveToFL4, CageFiveToFL4); 
     // m_chooser.addOption(CageSixToFL1, CageSixToFL1);
     //m_chooser.addOption(CageSixToFL4, CageSixToFL4);
     //m_chooser.addOption(driveforward, driveforward);
+    m_chooser.addOption(DriveForwardTest, DriveForwardTest);
     
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -262,49 +266,14 @@ public class RobotContainer {
           commandSequences.CageSixToF(swerveSubsystem),
           commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
         );
+      case DriveForwardTest:
+        return new SequentialCommandGroup(
+          commandSequences.driveForwardTest(swerveSubsystem)
+        );
                     
        default :
           commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem);
     }
-
-      /* if(m_autoSelected == MiddleToH)
-      return new SequentialCommandGroup(
-        commandSequences.MiddleToH(swerveSubsystem)
-      );
-
-      if(m_autoSelected == driveforward)
-      return new SequentialCommandGroup(
-        commandSequences.driveForward(swerveSubsystem, positionFilteringSubsystem)
-      );
-
-      if(m_autoSelected == MiddleToHL1)
-        return new SequentialCommandGroup(
-          commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
-        );
-
-      if(m_autoSelected == MiddleToHL4)
-        return new SequentialCommandGroup(
-          commandSequences.MiddleToH(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
-        );
-
-      if(m_autoSelected == CageThreeToHL1)
-        return new SequentialCommandGroup(
-          commandSequences.CageThreeToH(swerveSubsystem),
-          commandSequences.PlaceOnL1(elevatorSubsystem, coralDispenserSubsystem)
-        );
-
-      if(m_autoSelected == CageTwoToIL4)
-        return new SequentialCommandGroup(
-          commandSequences.CageTwoToI(swerveSubsystem),
-          commandSequences.PlaceOnL4(elevatorSubsystem, coralDispenserSubsystem)
-        );
-
-      if(m_autoSelected == coralcollectionautotest)
-        return new SequentialCommandGroup(
-          commandSequences.coralcollectionautotest(coralDispenserSubsystem)
-        ); */
 
     return null;
   }

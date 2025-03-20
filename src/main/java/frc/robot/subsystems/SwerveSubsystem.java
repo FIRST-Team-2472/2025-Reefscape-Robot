@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.time.Year;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
@@ -39,6 +40,7 @@ import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.extras.NewNewAccelLimiter;
 import frc.robot.extras.RobotLogManager;
 import frc.robot.extras.SwerveModule;
 
@@ -81,6 +83,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
+    private double frontLeftEncoderLast, frontRightEncoderLast, backLeftEncoderLast, backRightEncoderLast = 0;
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
@@ -89,16 +92,18 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewAccelerationLimiter xLimiter, yLimiter;
+    private NewNewAccelLimiter speedLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
     public PIDController thetaController;
 
-    public MotorPowerController xPowerController, yPowerController, turningPowerController;
+    public MotorPowerController xPowerController, yPowerController, turningPowerController, speedPowerController;
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
     double lastXDrive = 0;
     double lastYDrive = 0;
+
+    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
@@ -114,15 +119,17 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
+        //wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
+        speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
-        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
-                TargetPosConstants.kBackwardMaxAcceleration);
-        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration,
-                TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxspeed
+        //turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5, TargetPosConstants.kBackwardMaxAcceleration*2.5);
 
-        xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
+        //yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxSpeed
+
+        //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        speedPowerController = new MotorPowerController(0.15, 0.0, .005, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -212,20 +219,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }
 
-    public boolean isStalling() {
-        int stallScount = 0;
-        if (frontLeft.isStalling())
-            stallScount++;
-        if (frontRight.isStalling())
-            stallScount++;
-        if (backLeft.isStalling())
-            stallScount++;
-        if (backRight.isStalling())
-            stallScount++;
-        return stallScount >= 2;
-
-    }
-
     // gets our current velocity relative to the x of the robot (front/back)
     public double getXSpeedRobotRel() {
         ChassisSpeeds temp = DriveConstants.kDriveKinematics.toChassisSpeeds(frontLeft.getState(),
@@ -296,17 +289,39 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        double lastSpeed = speedPowerController.calculate(0, distanceError);
+        //xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //yPowerController.calculate(getPose().getY(), targetPosition.getY());
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
         turningPowerController.calculate(angleDifference.getRadians(), 0);
-        xLimiter.setInitialSpeed(lastXDrive);
-        yLimiter.setInitialSpeed(lastYDrive);
+        speedLimiter.zeroSpeed();
+        //yLimiter.setInitialSpeed(lastYDrive);
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        SmartDashboard.putNumber("calculated x error", xError);
+        SmartDashboard.putNumber("calculated y error", yError);
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        xSpeed = xError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        ySpeed = yError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        speed = speedPowerController.calculate(0, distanceError);
+        SmartDashboard.putNumber("distance Error", distanceError);
+        SmartDashboard.putNumber("target X", targetPosition.getX());
+        SmartDashboard.putNumber("target Y", targetPosition.getY());
+        speed = speedLimiter.calculate(speed);
+        SmartDashboard.putNumber("speed", speed);
+        xSpeed *= speed;
+        ySpeed *= speed;
+        
+        SmartDashboard.putNumber("X speed", xSpeed);
+        SmartDashboard.putNumber("Y speed", ySpeed);
+        //double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
         // angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
@@ -314,6 +329,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
         // turningSpeed);
+
+        
+        //ySpeed = yLimiter.calculate(ySpeed);
+        //turningSpeed = turningLimiter.calculate(turningSpeed);
 
         // xSpeed = xLimiter.calculate(xSpeed);
         // ySpeed = yLimiter.calculate(ySpeed);
@@ -465,6 +484,22 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception NullPointerException) {
             // TODO: handle exception
         }
+        SmartDashboard.putNumber("Frontleft Encoder rate of change", frontLeft.getDrivePositionTwo() - frontLeftEncoderLast);
+        SmartDashboard.putNumber("FrontRight Encoder rate of change", frontRight.getDrivePositionTwo() - frontRightEncoderLast);
+        SmartDashboard.putNumber("BackLeft Encoder rate of change", backLeft.getDrivePositionTwo() - backLeftEncoderLast);
+        SmartDashboard.putNumber("BackRight Encoder rate of change", backRight.getDrivePositionTwo() - backRightEncoderLast);
+        
+        velocityX += gyro.getAccelerationX().getValueAsDouble();
+        velocityY += gyro.getAccelerationY().getValueAsDouble();
+        SmartDashboard.putNumber("gyro X velocity",velocityX);
+        SmartDashboard.putNumber("gyro Y velocity",velocityY);
+        double totalVelocity = Math.sqrt(velocityX*velocityX + velocityY*velocityY);
+        SmartDashboard.putNumber("gyro total velocity", totalVelocity);
+
+        SmartDashboard.putNumber("odometer X velocity", chassisSpeeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("odometer Y velocity", chassisSpeeds.vyMetersPerSecond);
+        double odometerTotalVelocity = Math.sqrt(chassisSpeeds.vxMetersPerSecond*chassisSpeeds.vxMetersPerSecond + chassisSpeeds.vyMetersPerSecond*chassisSpeeds.vyMetersPerSecond);
+        SmartDashboard.putNumber("odometer total velocity", odometerTotalVelocity);
 
         SmartDashboard.putNumber("frontLeft Encoder",
                 frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
@@ -490,6 +525,11 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
         SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
         SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
+
+        frontLeftEncoderLast = frontLeft.getDrivePositionTwo();
+        frontRightEncoderLast = frontRight.getDrivePositionTwo();
+        backLeftEncoderLast = backLeft.getDrivePositionTwo();
+        backRightEncoderLast = backRight.getDrivePositionTwo();
 
         logSwerveStates();
         logOdometry();

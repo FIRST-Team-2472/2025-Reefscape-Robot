@@ -75,7 +75,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             }
         }else{
             fails++;
-            System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
+            //System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
         autoIntake();
         SmartDashboard.putBoolean("seeCoral", seecoral);

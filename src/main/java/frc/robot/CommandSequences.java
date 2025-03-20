@@ -38,7 +38,7 @@ public class CommandSequences {
     public CommandSequences() {
         // x is centered on starting line
         cageNodes[0] = simplePose(7.114, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.114, 6.145, 180); //Cage Position 2
+        cageNodes[1] = simplePose(7.114, 6.165, 180); //Cage Position 2
         cageNodes[2] = simplePose(7.114, 5.077, 180); //Cage Position 3
         cageNodes[3] = simplePose(7.114, 2.929, 180); //Cage Position 4
         cageNodes[4] = simplePose(7.114, 1.898, 180); //Cage Position 5
@@ -217,6 +217,10 @@ public class CommandSequences {
         //swerveSubsystem.calibrateOdometry(0.0f);
         Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 1, currentPos.getY(), currentPos.getRotation().getDegrees()));
+    }
+    public Command driveForwardTest(SwerveSubsystem swerveSubsystem) {
+        swerveSubsystem.setOdometry(simplePose(1, 0, 0).toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(3, 0, 0));
     }
 
     public PosPose2d simplePose(double x, double y, double angleDegrees) {
