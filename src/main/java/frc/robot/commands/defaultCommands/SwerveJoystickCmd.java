@@ -3,6 +3,7 @@ package frc.robot.commands.defaultCommands;
 import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.extras.AccelLimiter;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCmd extends Command {
@@ -10,6 +11,8 @@ public class SwerveJoystickCmd extends Command {
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
+    private final AccelLimiter xLimiter = new AccelLimiter(0.001, 0.001);
+    private final AccelLimiter yLimiter = new AccelLimiter(0.001, 0.001);
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
@@ -31,7 +34,7 @@ public class SwerveJoystickCmd extends Command {
     @Override
     public void execute() {
 
-        if(resetHeadingButton.get())
+        if (resetHeadingButton.get())
             swerveSubsystem.zeroOdometerHeading();
 
         // 1. Get real-time joystick inputs flipping the x and y of controller to the fields x and y
@@ -42,27 +45,34 @@ public class SwerveJoystickCmd extends Command {
         // System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
         // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
+        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ? xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ? ySpeed : 0.0;
+        turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ? turningSpeed : 0.0;
 
         // 3. Apply polynomial function or slowmode to joystick values
         if (!slowButton.get()) {
             xSpeed = input_2_speed(xSpeed);
             ySpeed = input_2_speed(ySpeed);
 
-        } else if(slowButton.get()){
+        } else if (slowButton.get()) {
             xSpeed *= .3;
             ySpeed *= .3;
             turningSpeed *= .3;
         }
 
         // 4. invert direction if on red alliance
-        if(!SwerveSubsystem.isOnRed()){
+        if (!SwerveSubsystem.isOnRed()) {
             xSpeed *= -1;
             ySpeed *= -1;
         }
-        
+
+
+        boolean individual = true;
+        if (individual) {
+            xSpeed = xLimiter.calculate(xSpeed);
+            ySpeed = yLimiter.calculate(ySpeed);
+        }
+
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
@@ -75,6 +85,7 @@ public class SwerveJoystickCmd extends Command {
     public boolean isFinished() {
         return false;
     }
+
     // alters the joystick input according to a polynomial function for more precise control
     public static double input_2_speed(double x) {
         return 19.4175 * Math.pow(x, 13) - 103.7677 * Math.pow(x, 11) + 195.0857 * Math.pow(x, 9)
