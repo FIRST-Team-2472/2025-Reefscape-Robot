@@ -1,9 +1,9 @@
 package frc.robot.commands.defaultCommands;
 
+import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import java.util.function.Supplier;
 
 public class SwerveJoystickCmd extends Command {
 
@@ -11,13 +11,8 @@ public class SwerveJoystickCmd extends Command {
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
 
-    public SwerveJoystickCmd(
-            SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction,
-            Supplier<Double> ySpdFunction,
-            Supplier<Double> turningSpdFunction,
-            Supplier<Boolean> slowButton,
-            Supplier<Boolean> resetHeadingButton) {
+    public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
@@ -36,10 +31,10 @@ public class SwerveJoystickCmd extends Command {
     @Override
     public void execute() {
 
-        if (resetHeadingButton.get()) swerveSubsystem.zeroOdometerHeading();
+        if(resetHeadingButton.get())
+            swerveSubsystem.zeroOdometerHeading();
 
-        // 1. Get real-time joystick inputs flipping the x and y of controller to the
-        // fields x and y
+        // 1. Get real-time joystick inputs flipping the x and y of controller to the fields x and y
         double xSpeed = ySpdFunction.get();
         double ySpeed = xSpdFunction.get();
         double turningSpeed = turningSpdFunction.get();
@@ -47,50 +42,42 @@ public class SwerveJoystickCmd extends Command {
         // System.out.print("Joystick Input: (" + xSpeed + ", " + ySpeed + ")");
 
         // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ? ySpeed : 0.0;
-        turningSpeed =
-                Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband
-                        ? turningSpeed
-                        : 0.0;
+        xSpeed = Math.abs(xSpeed) > OperatorConstants.kFlightControllerDeadband ?  xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
+        turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
 
         // 3. Apply polynomial function or slowmode to joystick values
         if (!slowButton.get()) {
             xSpeed = input_2_speed(xSpeed);
             ySpeed = input_2_speed(ySpeed);
 
-        } else if (slowButton.get()) {
+        } else if(slowButton.get()){
             xSpeed *= .3;
             ySpeed *= .3;
             turningSpeed *= .3;
         }
 
         // 4. invert direction if on red alliance
-        if (SwerveSubsystem.isOnRed()) {
+        if(!SwerveSubsystem.isOnRed()){
             xSpeed *= -1;
             ySpeed *= -1;
         }
-
+        
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+
+    }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-
-    // alters the joystick input according to a polynomial function for more precise
-    // control
+    // alters the joystick input according to a polynomial function for more precise control
     public static double input_2_speed(double x) {
-        return 19.4175 * Math.pow(x, 13)
-                - 103.7677 * Math.pow(x, 11)
-                + 195.0857 * Math.pow(x, 9)
-                - 165.5452 * Math.pow(x, 7)
-                + 61.8185 * Math.pow(x, 5)
-                - 6.5099 * Math.pow(x, 3)
-                + 0.5009 * x;
+        return 19.4175 * Math.pow(x, 13) - 103.7677 * Math.pow(x, 11) + 195.0857 * Math.pow(x, 9)
+                - 165.5452 * Math.pow(x, 7) + 61.8185 * Math.pow(x, 5) - 6.5099 * Math.pow(x, 3) + 0.5009 * x;
     }
 }

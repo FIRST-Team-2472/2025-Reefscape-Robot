@@ -3,19 +3,24 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.SensorStatus;
+
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class LimeLightSubsystem extends SubsystemBase {
 
-    private String[] LimeLights = {"limelight-obj"};
-    private double[] LimeLightConfidence = {0};
-    private double[] LimeLightArea = {0};
-    private double[] LimeLightDist = {0};
-    private Pose2d[] LimeLightPose2d = {new Pose2d()};
+    private String[] LimeLights = { Constants.SensorConstants.PRIMARY_LIMELIGHT };
+    private double[] LimeLightConfidence = { 0 };
+    private double[] LimeLightArea = { 0 };
+    private double[] LimeLightDist = { 0 };
+    private Pose2d[] LimeLightPose2d = { new Pose2d() };
     private double totalConfidence;
 
-    public LimeLightSubsystem() {}
+    public LimeLightSubsystem() {
+
+    }
 
     public void addLimeLight(String name) {
         LimeLights[LimeLights.length] = name;
@@ -26,8 +31,7 @@ public class LimeLightSubsystem extends SubsystemBase {
         for (int i = 0; i < LimeLights.length; i++) {
 
             // Get the pose estimates
-            PoseEstimate estimate =
-                    LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
+            PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimeLights[i]);
 
             // System.out.println(estimate);
 
@@ -44,14 +48,7 @@ public class LimeLightSubsystem extends SubsystemBase {
             double targetDistance = estimate.avgTagDist;
 
             // Confidence calculation
-            double confidence =
-                    Math.min(
-                            ((32.0f / (targetDistance + 4.0f))
-                                                    - (0.25f * targetDistance)
-                                                    + (7.0f * targetArea))
-                                            * 0.1f
-                                    + 0.02f,
-                            1.0f);
+            double confidence = Math.min(((32.0f / (targetDistance + 4.0f)) - (0.25f * targetDistance) + (7.0f * targetArea)) * 0.1f + 0.02f, 1.0f);
 
             // Save the confidence
             LimeLightConfidence[i] = confidence;
@@ -70,16 +67,7 @@ public class LimeLightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("AprilTagConf", confidence);
 
             // Print the pose, confidence, and name
-            System.out.println(
-                    "LimeLightSubsystem: Name: "
-                            + LimeLights[i]
-                            + ", Confidence: "
-                            + confidence
-                            + ", Pose: ("
-                            + estimate.pose.getX()
-                            + ", "
-                            + estimate.pose.getY()
-                            + ")");
+            System.out.println("LimeLightSubsystem: Name: " + LimeLights[i] + ", Confidence: " + confidence + ", Pose: (" + estimate.pose.getX() + ", " + estimate.pose.getY() + ")");
         }
     }
 
@@ -114,4 +102,5 @@ public class LimeLightSubsystem extends SubsystemBase {
     public double getTotalConfidence() {
         return this.totalConfidence;
     }
+
 }
