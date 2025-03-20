@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
-import java.time.Year;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,30 +16,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
-import frc.robot.NewAccelerationLimiter;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SensorConstants;
-import frc.robot.Constants.TargetPosConstants;
-import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
-import frc.robot.extras.NewNewAccelLimiter;
-import frc.robot.extras.RobotLogManager;
+import frc.robot.extras.AccelLimiter;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -92,7 +80,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewNewAccelLimiter speedLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
+    private AccelLimiter speedLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
     public PIDController thetaController;
 
     public MotorPowerController xPowerController, yPowerController, turningPowerController, speedPowerController;
@@ -120,7 +108,7 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
         //wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
-        speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
+        speedLimiter = new AccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
         //turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5, TargetPosConstants.kBackwardMaxAcceleration*2.5);
 
