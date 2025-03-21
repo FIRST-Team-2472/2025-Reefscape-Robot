@@ -11,8 +11,8 @@ public class SwerveJoystickCmd extends Command {
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
-    private final AccelLimiter xLimiter = new AccelLimiter(0.001, 0.001);
-    private final AccelLimiter yLimiter = new AccelLimiter(0.001, 0.001);
+    private final AccelLimiter xLimiter = new AccelLimiter(0.04, 0.1);
+    private final AccelLimiter yLimiter = new AccelLimiter(0.04, 0.1);
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
