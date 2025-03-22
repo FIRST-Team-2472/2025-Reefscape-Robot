@@ -35,14 +35,14 @@ public class AutoCoralDispenseCommand extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Dispense Coral Command ENDED!");
+        //System.out.println("Dispense Coral Command ENDED!");
         coralDispenserSubsystem.runMotors(0, 0);
     }
 
     @Override
     public boolean isFinished() {
         if (timoutTimer.hasElapsed(1)){
-            System.out.println("isFinished Dispensing Coral");
+            //System.out.println("isFinished Dispensing Coral");
             return true;
         }
         return false;

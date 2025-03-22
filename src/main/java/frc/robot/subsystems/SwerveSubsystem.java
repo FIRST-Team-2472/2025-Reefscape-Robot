@@ -119,7 +119,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
         //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
-        speedPowerController = new MotorPowerController(0.15, 0.0, .005, 1, .2, 0, 1);
+        speedPowerController = new MotorPowerController(0.15, 0.05, .005, 1, .2, 0, 1);
         turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
@@ -259,6 +259,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setOdometry(Pose2d odometryPose) {
+        odometryOffset = new Pose2d();
         odometer.resetPosition(getRotation2d(), getModulePositions(), odometryPose);
     }
 
@@ -268,7 +269,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d calculateFilteredPose(double odometryConfidence) {
-        return this.positionFilteringSubsystem.getFilteredBotPose(getPose(), odometryConfidence);
+        return this.positionFilteringSubsystem.getFilteredBotPose(getOdometryPose(), odometryConfidence);
     }
 
     public Pose2d getPose() {
@@ -279,9 +280,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public void calibrateOdometry(double odometryConfidence) {
         Pose2d filteredPose = this.calculateFilteredPose(odometryConfidence);
         Pose2d odometryPose = this.getOdometryPose();
-        System.out.println(filteredPose);
-        System.out.println(this.getOdometryPose());
-        System.out.println(filteredPose.minus(this.getOdometryPose()));
+        //System.out.println(filteredPose);
+        //System.out.println(this.getOdometryPose());
+        //System.out.println(filteredPose.minus(this.getOdometryPose()));
 
         // Calculate difference between odometry pose and filtered pose
         // and set the odometry offset to that difference
@@ -472,7 +473,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonYaw = getHeading();
 
         // Send Gyro data to Limelight for higher accuracy
-        System.out.println(odometer.getPoseMeters().getRotation().getDegrees());
+        //System.out.println(odometer.getPoseMeters().getRotation().getDegrees());
         LimelightHelpers.SetRobotOrientation(SensorConstants.PRIMARY_LIMELIGHT, odometer.getPoseMeters().getRotation().getDegrees(),
                 0.0, 0.0, 0.0, 0.0, 0.0);
 
@@ -494,6 +495,9 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("FrontRight Encoder rate of change", frontRight.getDrivePositionTwo() - frontRightEncoderLast);
         SmartDashboard.putNumber("BackLeft Encoder rate of change", backLeft.getDrivePositionTwo() - backLeftEncoderLast);
         SmartDashboard.putNumber("BackRight Encoder rate of change", backRight.getDrivePositionTwo() - backRightEncoderLast);
+
+        SmartDashboard.putNumber("filtered X", getPose().getX());
+        SmartDashboard.putNumber("filtered Y", getPose().getY());
         
         velocityX += gyro.getAccelerationX().getValueAsDouble();
         velocityY += gyro.getAccelerationY().getValueAsDouble();

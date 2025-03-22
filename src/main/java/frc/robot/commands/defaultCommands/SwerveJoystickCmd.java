@@ -25,7 +25,7 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void initialize() {
-        System.out.println("Swerve Joystick contoslled!");
+        //System.out.println("Swerve Joystick contoslled!");
     }
 
     @Override

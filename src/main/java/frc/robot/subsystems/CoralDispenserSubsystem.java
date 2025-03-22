@@ -36,7 +36,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
             laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
         }catch (ConfigurationFailedException e) {
-            System.out.println("Configuration failed" + e);
+            //System.out.println("Configuration failed" + e);
         }
     }
     public void runMotors(double leftPower, double rightPower){
