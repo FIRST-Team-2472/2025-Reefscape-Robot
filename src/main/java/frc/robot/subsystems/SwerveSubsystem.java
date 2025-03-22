@@ -1,13 +1,12 @@
 package frc.robot.subsystems;
 
-import java.time.Year;
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Transform2d;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,30 +17,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
-import frc.robot.NewAccelerationLimiter;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SensorConstants;
-import frc.robot.Constants.TargetPosConstants;
-import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.extras.NewNewAccelLimiter;
-import frc.robot.extras.RobotLogManager;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -106,6 +95,8 @@ public class SwerveSubsystem extends SubsystemBase {
     double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+
+    private Transform2d odometryOffset = new Transform2d();
 
     public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
         this.positionFilteringSubsystem = positionFilteringSubsystem;
@@ -272,20 +263,29 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     // Gets our drive position aka where the odometer thinks we are
-    public Pose2d getPose() {
+    public Pose2d getOdometryPose() {
         return odometer.getPoseMeters();
     }
 
-    public Pose2d getFilteredPose(double odometryConfidence) {
+    public Pose2d calculateFilteredPose(double odometryConfidence) {
         return this.positionFilteringSubsystem.getFilteredBotPose(odometer, odometryConfidence);
     }
 
+    public Pose2d getPose() {
+        return this.getOdometryPose().transformBy(this.odometryOffset);
+    }
+
     public void calibrateOdometry(double odometryConfidence) {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(odometryConfidence));
+        Pose2d filteredPose = calculateFilteredPose(odometryConfidence);
+
+        // Calculate difference between odometry pose and filtered pose
+        // and set the odometry offset to that difference
+
+        this.odometryOffset = filteredPose.minus(this.getOdometryPose());
     }
 
     public void calibrateOdometry() {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(1.0));
+        this.calibrateOdometry(1.0);
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
