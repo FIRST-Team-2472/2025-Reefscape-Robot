@@ -12,21 +12,13 @@ public class PositionFilteringSubsystem extends SubsystemBase {
 
     private int numLimeLights = 1;
 
-    private Pose2d filteredBotPose = new Pose2d();
-    private Pose2d odometryBotPose = new Pose2d();
-    private Pose2d[] limeLightBotPoses = new Pose2d[numLimeLights];
-
-    private double odometryConfidence = 1.0d;
-    private double[] limeLightConfidences = new double[numLimeLights];
-
-    private LimeLightSubsystem limeLightSubsystem;
+    private final LimeLightSubsystem limeLightSubsystem;
 
     public PositionFilteringSubsystem(LimeLightSubsystem limeLightSubsystem) {
         this.limeLightSubsystem = limeLightSubsystem;
     }
 
-    public Pose2d getFilteredBotPose(SwerveDriveOdometry odometer, double odometryConfidence) {
-        this.odometryConfidence = odometryConfidence;
+    public Pose2d getFilteredBotPose(Pose2d lastPosition, double odometryConfidence) {
         limeLightSubsystem.fetchLimeLightData();
 
         numLimeLights = limeLightSubsystem.getNumLimeLights();
@@ -35,15 +27,15 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         double weightedY = 0;
         double weightedAngle = 0;
 
-        odometryBotPose = odometer.getPoseMeters();
-        limeLightBotPoses = limeLightSubsystem.getBotPoses();
-        limeLightConfidences = limeLightSubsystem.getConfidences();
+        Pose2d odometryBotPose = lastPosition;
+        Pose2d[] limeLightBotPoses = limeLightSubsystem.getBotPoses();
+        double[] limeLightConfidences = limeLightSubsystem.getConfidences();
         // System.out.println(limeLightBotPoses.length);
 
-        for (int i = 0; i < numLimeLights; i++) {
-            /* System.out.println("PositionFilteringSubsystem: Confidence: " + limeLightConfidences[i] + ", Pose: ("
-                    + limeLightBotPoses[i].getX() + ", " + limeLightBotPoses[i].getY() + ")"); */
-        }
+//        for (int i = 0; i < numLimeLights; i++) {
+//            /* System.out.println("PositionFilteringSubsystem: Confidence: " + limeLightConfidences[i] + ", Pose: ("
+//                    + limeLightBotPoses[i].getX() + ", " + limeLightBotPoses[i].getY() + ")"); */
+//        }
 
         // if (numLimeLights == 0) {
         // Constants.SensorStatus.filteredBotPose = odometryBotPose;
@@ -103,7 +95,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         //System.out.println("PositionFilteringSubsystem: Weighted X: " + weightedX);
         //System.out.println("PositionFilteringSubsystem: Weighted Y: " + weightedY);
 
-        filteredBotPose = new Pose2d(weightedX, weightedY, odometer.getPoseMeters().getRotation());
+        Pose2d filteredBotPose = new Pose2d(weightedX, weightedY, odometryBotPose.getRotation());
 
         SmartDashboard.putNumber("Total Confidence", totalConfidence);
         SmartDashboard.putNumber("numLimeLights", numLimeLights);

@@ -828,7 +828,7 @@ public class LimelightHelpers {
      */
     public static void printPoseEstimate(PoseEstimate pose) {
         if (pose == null) {
-            System.out.println("No PoseEstimate available.");
+            //System.out.println("No PoseEstimate available.");
             return;
         }
     
@@ -840,14 +840,14 @@ public class LimelightHelpers {
         System.out.printf("Average Tag Distance: %.2f meters%n", pose.avgTagDist);
         System.out.printf("Average Tag Area: %.2f%% of image%n", pose.avgTagArea);
         System.out.printf("Is MegaTag2: %b%n", pose.isMegaTag2);
-        System.out.println();
+        //System.out.println();
     
         if (pose.rawFiducials == null || pose.rawFiducials.length == 0) {
-            System.out.println("No RawFiducials data available.");
+            //System.out.println("No RawFiducials data available.");
             return;
         }
     
-        System.out.println("Raw Fiducials Details:");
+        //System.out.println("Raw Fiducials Details:");
         for (int i = 0; i < pose.rawFiducials.length; i++) {
             RawFiducial fiducial = pose.rawFiducials[i];
             System.out.printf(" Fiducial #%d:%n", i + 1);

@@ -52,7 +52,7 @@ public class RobotContainer {
   CageTwoToIL1 = "Drive from Cage 2 and Place on I L1",
   CageFiveToFL1 = "Drive from Cage 5 and Place on F L1", CageFiveToFL4 = "Drive from Cage 5 and Place on F L4",
   CageSixToFL1 = "Drive from Cage 6 and Place on F L1", CageSixToFL4 = "Drive from Cage 6 and Place on F L4",
-  DriveForwardTest = "Drive Forward Test";
+  DriveForwardTest = "Drive Forward Test", setOdodmetryToTest = "set Odometry to test", CageFiveToFL4ToCL4 = "Drive from Cage 5 to FL4 CL4";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -113,7 +113,8 @@ public class RobotContainer {
     //m_chooser.addOption(CageSixToFL4, CageSixToFL4);
     //m_chooser.addOption(driveforward, driveforward);
     m_chooser.addOption(DriveForwardTest, DriveForwardTest);
-    
+    m_chooser.addOption(setOdodmetryToTest, setOdodmetryToTest);
+    m_chooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
@@ -269,6 +270,15 @@ public class RobotContainer {
       case DriveForwardTest:
         return new SequentialCommandGroup(
           commandSequences.driveForwardTest(swerveSubsystem)
+        );
+      case setOdodmetryToTest:
+        commandSequences.setOdodmeteryToTest(swerveSubsystem);
+      case CageFiveToFL4ToCL4:
+        return new SequentialCommandGroup(
+          commandSequences.CageFiveToF(swerveSubsystem),
+          commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height),
+          commandSequences.FToRightPlayer(swerveSubsystem),
+          commandSequences.collectCoral(coralDispenserSubsystem)
         );
                     
        default :

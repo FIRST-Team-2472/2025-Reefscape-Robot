@@ -2,7 +2,6 @@ package frc.robot.commands.defaultCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.extras.DrivePose2d;
@@ -55,12 +54,12 @@ public class SwerveDriveToPointCmd extends Command {
     // use this function if you overide the command to finish it
 
     if ((swerveSubsystem.isExactlyInPosition(targetPosition) || swerveSubsystem.isNearlyInPosition(targetPosition) && swerveSubsystem.isAtAngle(targetPosition.getRotation())) || timer.hasElapsed(5)){
-      System.out.println("Finished Driving");
+      //System.out.println("Finished Driving");
       return true;
     }
 
 
-    if(timer.hasElapsed(2.5)){
+    if(timer.hasElapsed(6)){
       return true;
     }
 

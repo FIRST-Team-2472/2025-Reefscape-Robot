@@ -1,21 +1,14 @@
 package frc.robot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.naming.PartialResultException;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.AutoCoralDispenseCommand;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.CollectCoralCmd;
@@ -53,7 +46,7 @@ public class CommandSequences {
         reefNodesMap.put('F', simplePose(5.294, 2.962, 120));
         reefNodesMap.put('G', simplePose(5.81, 3.86, 180));
         reefNodesMap.put('H', simplePose(5.79, 4.2, 180));
-        reefNodesMap.put('I', simplePose(5.288, 5.084, 240));
+        reefNodesMap.put('I', simplePose(5.16, 4.98, 240));  //5.293, 5.089,
         reefNodesMap.put('J', simplePose(5.006, 5.253, 240));
         reefNodesMap.put('K', simplePose(3.972, 5.249, 300));
         reefNodesMap.put('L', simplePose(3.686, 5.085, 300));
@@ -84,6 +77,11 @@ public class CommandSequences {
     public Command CageOneToH(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
+    }
+
+    public Command setOdodmeteryToTest(SwerveSubsystem swerveSubsystem){
+        swerveSubsystem.setOdometry(simplePose(2.18, 4, 0));
+        return null;
     }
 
     public Command CageOneToI(SwerveSubsystem swerveSubsystem){

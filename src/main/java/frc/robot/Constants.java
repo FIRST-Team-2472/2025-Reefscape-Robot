@@ -199,7 +199,7 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.03;// subject to change was 0.04
+        public static final double kAcceptableDistanceError = 0.015;// subject to change was 0.04
         public static final double kAcceptableAngleError = 3;
     }
 
