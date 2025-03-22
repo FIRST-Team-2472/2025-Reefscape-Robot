@@ -96,7 +96,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
-    private Transform2d odometryOffset = new Transform2d();
+    private Pose2d odometryOffset = new Pose2d();
 
     public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
         this.positionFilteringSubsystem = positionFilteringSubsystem;
@@ -272,11 +272,13 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return this.getOdometryPose().transformBy(this.odometryOffset);
+        Pose2d odometryPose = this.getOdometryPose();
+        return new Pose2d(odometryPose.getX() + this.odometryOffset.getX(), odometryPose.getY() + this.odometryOffset.getY(), odometryPose.getRotation());
     }
 
     public void calibrateOdometry(double odometryConfidence) {
-        Pose2d filteredPose = calculateFilteredPose(odometryConfidence);
+        Pose2d filteredPose = this.calculateFilteredPose(odometryConfidence);
+        Pose2d odometryPose = this.getOdometryPose();
         System.out.println(filteredPose);
         System.out.println(this.getOdometryPose());
         System.out.println(filteredPose.minus(this.getOdometryPose()));
@@ -284,7 +286,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Calculate difference between odometry pose and filtered pose
         // and set the odometry offset to that difference
 
-        this.odometryOffset = filteredPose.minus(this.getOdometryPose());
+        this.odometryOffset = new Pose2d(filteredPose.getX() - odometryPose.getX(), filteredPose.getY() - odometryPose.getY(), new Rotation2d());
     }
 
     public void calibrateOdometry() {
