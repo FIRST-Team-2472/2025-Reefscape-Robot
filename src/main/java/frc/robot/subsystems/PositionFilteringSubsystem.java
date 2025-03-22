@@ -18,7 +18,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         this.limeLightSubsystem = limeLightSubsystem;
     }
 
-    public Pose2d getFilteredBotPose(SwerveDriveOdometry odometer, double odometryConfidence) {
+    public Pose2d getFilteredBotPose(Pose2d lastPosition, double odometryConfidence) {
         limeLightSubsystem.fetchLimeLightData();
 
         numLimeLights = limeLightSubsystem.getNumLimeLights();
@@ -27,7 +27,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         double weightedY = 0;
         double weightedAngle = 0;
 
-        Pose2d odometryBotPose = odometer.getPoseMeters();
+        Pose2d odometryBotPose = lastPosition;
         Pose2d[] limeLightBotPoses = limeLightSubsystem.getBotPoses();
         double[] limeLightConfidences = limeLightSubsystem.getConfidences();
         // System.out.println(limeLightBotPoses.length);
@@ -95,7 +95,7 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         //System.out.println("PositionFilteringSubsystem: Weighted X: " + weightedX);
         //System.out.println("PositionFilteringSubsystem: Weighted Y: " + weightedY);
 
-        Pose2d filteredBotPose = new Pose2d(weightedX, weightedY, odometer.getPoseMeters().getRotation());
+        Pose2d filteredBotPose = new Pose2d(weightedX, weightedY, odometryBotPose.getRotation());
 
         SmartDashboard.putNumber("Total Confidence", totalConfidence);
         SmartDashboard.putNumber("numLimeLights", numLimeLights);

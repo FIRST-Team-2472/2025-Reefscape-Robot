@@ -268,7 +268,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d calculateFilteredPose(double odometryConfidence) {
-        return this.positionFilteringSubsystem.getFilteredBotPose(odometer, odometryConfidence);
+        return this.positionFilteringSubsystem.getFilteredBotPose(getPose(), odometryConfidence);
     }
 
     public Pose2d getPose() {
@@ -277,6 +277,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void calibrateOdometry(double odometryConfidence) {
         Pose2d filteredPose = calculateFilteredPose(odometryConfidence);
+        System.out.println(filteredPose);
+        System.out.println(this.getOdometryPose());
+        System.out.println(filteredPose.minus(this.getOdometryPose()));
 
         // Calculate difference between odometry pose and filtered pose
         // and set the odometry offset to that difference
@@ -467,6 +470,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonYaw = getHeading();
 
         // Send Gyro data to Limelight for higher accuracy
+        System.out.println(odometer.getPoseMeters().getRotation().getDegrees());
         LimelightHelpers.SetRobotOrientation(SensorConstants.PRIMARY_LIMELIGHT, odometer.getPoseMeters().getRotation().getDegrees(),
                 0.0, 0.0, 0.0, 0.0, 0.0);
 
@@ -515,8 +519,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
-        SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
-                odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().getRadians() });
+        SmartDashboard.putNumberArray("odometer", new double[] { getPose().getX(),
+            getPose().getY(), getPose().getRotation().getRadians() });
         SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
@@ -559,6 +563,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Send Odometry Position on field to Advantage Kit
     public void logOdometry() {
-        Logger.recordOutput("Odometry/Location", odometer.getPoseMeters());
+        Logger.recordOutput("Odometry/Location", getPose()
+        );
     }
 }
