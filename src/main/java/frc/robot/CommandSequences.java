@@ -180,22 +180,18 @@ public class CommandSequences {
     //Source to Reef
 
     public Command RightPlayerToD(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(leftHumanPlayer.toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, reefNodesMap.get('D'), 1);
     }
 
     public Command LeftPlayerToK(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(rightHumanPlayer.toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, reefNodesMap.get('K'), 1);
     }
 
     public Command RightPlayerToC(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(leftHumanPlayer.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('C'));
     }
 
     public Command LeftPlayerTo(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(leftHumanPlayer.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('L'));
     }
 
