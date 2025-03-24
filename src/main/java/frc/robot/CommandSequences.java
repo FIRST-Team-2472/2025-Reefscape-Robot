@@ -34,8 +34,10 @@ public class CommandSequences {
 
     PosPose2d leftHumanPlayer, rightHumanPlayer, middle, rightReefPassage, leftReefPassage;
     PosPose2d processor;
+    MPCConfig mpcConfig;
 
-    public CommandSequences() {
+    public CommandSequences(MPCConfig mpcConfig) {
+        this.mpcConfig = mpcConfig;
         // x is centered on starting line
         cageNodes[0] = simplePose(7.114, 7.279, 180); //Cage on far left from driver POV
         cageNodes[1] = simplePose(7.114, 6.165, 180); //Cage Position 2
@@ -187,10 +189,10 @@ public class CommandSequences {
     //Elevator Commands
     public Command placeOnReef(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem, double elevatorHeight) {
         return new SequentialCommandGroup(
-            new AutoElevatorCommand(elevatorSubsystem, elevatorHeight),
+            new AutoElevatorCommand(elevatorSubsystem, elevatorHeight, mpcConfig),
             new ParallelDeadlineGroup(
                 new AutoCoralDispenseCommand(coralDispenserSubsystem),
-                new HoldElevatorCommand(elevatorSubsystem)
+                new HoldElevatorCommand(elevatorSubsystem, mpcConfig)
             )
         );
     }

@@ -7,7 +7,7 @@ public class SensorStatus {
     public static boolean kMiddleLimitSwitchValue = false;
     public static boolean kRightLimitSwitchValue = false;
 
-    public static double kElevatorHeight = 0;
+    public static double kElevatorHeight = 0.0;
 
     public static double pigeonYaw = 0;
     public static double pigeonPitch = 0;

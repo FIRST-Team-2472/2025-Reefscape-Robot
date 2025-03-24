@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.MPCConfig;
 import frc.robot.MotorPowerController;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.SensorConstants;
@@ -19,13 +20,12 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   public SparkMax pivotmotor = new SparkMax(AlgaeConstants.kPivotMotorID, MotorType.kBrushless);
   public SparkMax spinmotor = new SparkMax(AlgaeConstants.kSpinMotorID, MotorType.kBrushless);
 
-  private MotorPowerController angleController = new MotorPowerController(.003, .05, .1, .5, 2, 120, 5);
-
+  private MotorPowerController angleController;
   private double pivotAngleSetPoint = 120;
 
   private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(SensorConstants.kAlgeaABSEncoderDIOPort);
 
-  public AlgaeCollectionSubsystem() {
+  public AlgaeCollectionSubsystem(MPCConfig mpcConfig) {
 
     SparkMaxConfig config = new SparkMaxConfig();
     SparkMaxConfig config2 = new SparkMaxConfig();
@@ -36,7 +36,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     config2.smartCurrentLimit(15);// it will burn at 10-13 so this is already semi pushing it
     config2.idleMode(IdleMode.kCoast);
     spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    angleController = new MotorPowerController(mpcConfig.getMPCValues("AlgaeMPCValues"));
     SensorStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read, converting it to degrees as
                                                            // well
   }

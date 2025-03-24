@@ -40,6 +40,7 @@ import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.MPCConfig;
 import frc.robot.extras.NewNewAccelLimiter;
 import frc.robot.extras.RobotLogManager;
 import frc.robot.extras.SwerveModule;
@@ -107,9 +108,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
-    public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
+    public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem, MPCConfig mpcConfig) {
         this.positionFilteringSubsystem = positionFilteringSubsystem;
-
         // Gets tabs from Shuffleboard
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
 
@@ -128,8 +128,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
         //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
-        speedPowerController = new MotorPowerController(0.15, 0.0, .005, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
+        speedPowerController = new MotorPowerController(mpcConfig.getMPCValues("SwerveSpeedMPCValues"));
+        turningPowerController = new MotorPowerController(mpcConfig.getMPCValues("SwerveTurningMPCValues"));
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {

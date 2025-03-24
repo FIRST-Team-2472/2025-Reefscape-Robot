@@ -15,7 +15,7 @@ public class ClimbCommand extends Command{
     Supplier<Boolean> xboxControllerLeftBumper, xboxControllerRightBumper;
     boolean anglingOut = false;
     boolean anglingIn = false;
-    MotorPowerController climberMotorPowerController = new MotorPowerController(0.0001, 0.0001, 0.0001, 1, 0, SensorStatus.kClimberAngle, 0);
+    //MotorPowerController climberMotorPowerController = new MotorPowerController(0.0001, 0.0001, 0.0001, 1, 0, SensorStatus.kClimberAngle, 0);
     public ClimbCommand(ClimbSubsystem climberSusbsystem, Supplier<Double> xboxControllerY, Supplier<Boolean> xboxControllerLeftBumper, Supplier<Boolean> xboxControllerRightBumper){
         this.climberSusbsystem = climberSusbsystem;
         this.xboxControllerY = xboxControllerY;
@@ -44,10 +44,10 @@ public class ClimbCommand extends Command{
             anglingIn = false;
         }
         if(anglingIn){
-            y = climberMotorPowerController.calculate(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
+           // y = climberMotorPowerController.calculate(ClimberConstants.kClimberInAngle, SensorStatus.kClimberAngle);
         }
         if(anglingOut){
-            y = climberMotorPowerController.calculate(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
+           // y = climberMotorPowerController.calculate(ClimberConstants.kClimberOutAngle, SensorStatus.kClimberAngle);
         }
 
         climberSusbsystem.runClimberMotor(y);

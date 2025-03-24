@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.MPCConfig;
 import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -12,10 +13,10 @@ public class AutoElevatorCommand extends Command{
     double elevatorSetHeight;
     MotorPowerController motorPowerController;
     
-    public AutoElevatorCommand(ElevatorSubsystem elevatorSubsystem, double elevatorSetHeight) {
+    public AutoElevatorCommand(ElevatorSubsystem elevatorSubsystem, double elevatorSetHeight, MPCConfig mpcConfig) {
         this.elevatorSetHeight = elevatorSetHeight;
         this.elevatorSubsystem = elevatorSubsystem;
-        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
+        motorPowerController = new MotorPowerController(mpcConfig.getMPCValues("ElevatorMPCValues"));
         addRequirements(elevatorSubsystem);
         // these are guessed numbers, they need to be tuned
     }

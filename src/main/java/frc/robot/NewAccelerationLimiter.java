@@ -1,7 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix6.signals.MagnetHealthValue;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.WPIUtilJNI;
 

@@ -1,9 +1,8 @@
 package frc.robot;
 
-
+import frc.robot.MPCConfig.MPCConfigValues;
 
 public class MotorPowerController {
-    
     private double Kp, Ki, integral, dTime, error, timeIncrement, lastSensorRead, changeSpeed,   predictionPoint, speedNeeded, allowedError, integralProportionalThreshold;
     /**
      * Sets up the MotorPowerController
@@ -16,16 +15,16 @@ public class MotorPowerController {
      * @param lastSensorRead The last sensor read
      * @param integralProportionalThreshold The error threshold in which the integral starts changing by smaller increments
      */
-    public MotorPowerController(double Kp, double Ki, double dTime, double time, double allowedError, double lastSensorRead, double integralProportionalThreshold){
-    this.dTime = dTime*50; //50 = code refresh rate (per second)
-    this.integralProportionalThreshold = integralProportionalThreshold *2; //multiplies by 2 for math to work i forgot why
-    this.allowedError = allowedError;
-    this.Ki = Ki;
-    this.Kp = Kp;
-    this.lastSensorRead = lastSensorRead;
+    public MotorPowerController(MPCConfigValues values){//double Kp, double Ki, double dTime, double time, double allowedError, double lastSensorRead, double integralProportionalThreshold){
+    dTime = values.dTime*50; //50 = code refresh rate (per second)
+    integralProportionalThreshold = values.integralProportionalThreshold *2; //multiplies by 2 for math to work i forgot why
+    allowedError = values.allowedError;
+    Ki = values.Ki;
+    Kp = values.Kp;
+    lastSensorRead = values.lastSensorRead;
     integral = 0; //starts at 0
     error = 0; //starts at 0
-    timeIncrement = 1/time/50; // 50 = code refresh rate (per second) this is the maximum amount the integral can change per code frame
+    timeIncrement = 1/values.time/50; // 50 = code refresh rate (per second) this is the maximum amount the integral can change per code frame
     }
     /**
      * Calculates the motor speed needed to reach the setpoint
