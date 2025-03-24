@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.AutoCoralDispenseCommand;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.CollectCoralCmd;
@@ -171,9 +172,27 @@ public class CommandSequences {
         return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
     }
 
-    public Command IToRightPlayrt(SwerveSubsystem swerveSubsystem){
+    public Command IToRightPlayer(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setOdometry(reefNodesMap.get('I').toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+    }
+
+    //Source to Reef
+
+    public Command RightPlayerToD(SwerveSubsystem swerveSubsystem){
+        return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, reefNodesMap.get('D'), 1);
+    }
+
+    public Command LeftPlayerToK(SwerveSubsystem swerveSubsystem){
+        return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, reefNodesMap.get('K'), 1);
+    }
+
+    public Command RightPlayerToC(SwerveSubsystem swerveSubsystem){
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('C'));
+    }
+
+    public Command LeftPlayerTo(SwerveSubsystem swerveSubsystem){
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('L'));
     }
 
     //Intake Coral
@@ -191,6 +210,26 @@ public class CommandSequences {
                 new HoldElevatorCommand(elevatorSubsystem)
             )
         );
+    }
+
+    public Command setElevatorL0(ElevatorSubsystem elevatorSubsystem){
+        return new AutoElevatorCommand(elevatorSubsystem, 0);
+    }
+
+    public Command setElevatorL1(ElevatorSubsystem elevatorSubsystem){
+        return new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL1Height);
+    }
+
+    public Command setElevatorL2(ElevatorSubsystem elevatorSubsystem){
+        return new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL2Height);
+    }
+
+    public Command setElevatorL3(ElevatorSubsystem elevatorSubsystem){
+        return new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL3Height);
+    }
+
+    public Command setElevatorL4(ElevatorSubsystem elevatorSubsystem){
+        return new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height);
     }
 
     //Coral Dispenser Command
