@@ -191,7 +191,7 @@ public class CommandSequences {
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('C'));
     }
 
-    public Command LeftPlayerTo(SwerveSubsystem swerveSubsystem){
+    public Command LeftPlayerToL(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('L'));
     }
 
