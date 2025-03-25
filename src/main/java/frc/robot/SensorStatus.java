@@ -23,4 +23,7 @@ public class SensorStatus {
     public static double kTimeOfFlightDistance = -1;
     public static double kClimberAngle = 0;
     public static double kPivotAngle = 0;
+
+    public static boolean hasCoral = false;
+    public static boolean seeCoral = false;
 }

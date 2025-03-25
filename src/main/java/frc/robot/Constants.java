@@ -229,8 +229,8 @@ public final class Constants {
     }
 
     public static class LEDConstants {
-        public static int kChannel1 = 0;
-        public static int kChannel2 = 1;
-        public static int kChannel3 = 2;
+        public static int kChannel1 = 2;
+        public static int kChannel2 = 3;
+        public static int kChannel3 = 4;
       }
 }

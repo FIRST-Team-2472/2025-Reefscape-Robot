@@ -1,15 +1,20 @@
 package frc.robot.commands.defaultCommands;
 
 import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
+    private LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
+    private Timer gameTimer = new Timer();
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
@@ -26,11 +31,12 @@ public class SwerveJoystickCmd extends Command {
     @Override
     public void initialize() {
         System.out.println("Swerve Joystick contoslled!");
+        gameTimer.start();
     }
 
     @Override
     public void execute() {
-
+        ledSubsystem.Timer(gameTimer);
         if(resetHeadingButton.get())
             swerveSubsystem.zeroOdometerHeading();
 
