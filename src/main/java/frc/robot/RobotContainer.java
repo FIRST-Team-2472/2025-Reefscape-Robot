@@ -318,18 +318,21 @@ public class RobotContainer {
 
         case CageFiveToFL4ToCL4:
           return new SequentialCommandGroup(
-              new SequentialCommandGroup(
+            new SequentialCommandGroup(
                   commandSequences.CageFiveToF(swerveSubsystem),
-                  commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                      ElevatorConstants.kElevatorL4Height)),
-              new ParallelCommandGroup(
-                  commandSequences.FToRightPlayer(swerveSubsystem),
-                  commandSequences.setElevatorL0(elevatorSubsystem)),
-              new SequentialCommandGroup(
-                  commandSequences.collectCoral(coralDispenserSubsystem),
-                  commandSequences.RightPlayerToD(swerveSubsystem),
-                  commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                      ElevatorConstants.kElevatorL4Height)));
+                  commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+            ),
+            new ParallelCommandGroup(
+                  commandSequences.setElevatorL0(elevatorSubsystem),
+                  commandSequences.FToRightPlayer(swerveSubsystem)
+            ),
+                
+              commandSequences.collectCoral(coralDispenserSubsystem),
+
+              commandSequences.RightPlayerToD(swerveSubsystem),
+              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
+                  ElevatorConstants.kElevatorL4Height)
+          );
       }
     }
 

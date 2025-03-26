@@ -33,6 +33,7 @@ public class AutoElevatorCommand extends Command{
     }
 
     public void end(boolean interrupted) {
+        elevatorSubsystem.runElevatorMotors(0);
     }
 
     @Override

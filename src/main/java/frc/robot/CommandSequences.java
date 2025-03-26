@@ -168,8 +168,8 @@ public class CommandSequences {
     }
 
     public Command FToRightPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(reefNodesMap.get('F').toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+        //swerveSubsystem.setOdometry(reefNodesMap.get('F').toFieldPose2d());
+        return new SwerveDriveToPointCmd(swerveSubsystem, rightHumanPlayer);
     }
 
     public Command IToRightPlayer(SwerveSubsystem swerveSubsystem){
@@ -180,7 +180,7 @@ public class CommandSequences {
     //Source to Reef
 
     public Command RightPlayerToD(SwerveSubsystem swerveSubsystem){
-        return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, reefNodesMap.get('D'), 1);
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('D'));
     }
 
     public Command LeftPlayerToK(SwerveSubsystem swerveSubsystem){
@@ -202,6 +202,7 @@ public class CommandSequences {
     }
 
     //Elevator Commands
+
     public Command placeOnReef(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem, double elevatorHeight) {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, elevatorHeight),
