@@ -116,8 +116,8 @@ public class RobotContainer {
     //m_chooser.addOption(CageSixToFL4, CageSixToFL4);
     //m_chooser.addOption(driveforward, driveforward);
     m_chooser.addOption(DriveForwardTest, DriveForwardTest);
-    m_chooser.addOption(setOdodmetryToTest, setOdodmetryToTest);
-    m_chooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
+    //m_chooser.addOption(setOdodmetryToTest, setOdodmetryToTest);
+    //m_chooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
