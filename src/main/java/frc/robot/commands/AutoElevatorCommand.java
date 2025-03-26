@@ -23,11 +23,12 @@ public class AutoElevatorCommand extends Command{
     @Override
     public void initialize() {
         
-        timer.reset();// this is broken
+        timer.restart();// this is broken
     }
 
     @Override
-    public void execute() {// nothing to do since the subsystem handles the driving of it
+    public void execute() {
+        // nothing to do since the subsystem handles the driving of it
         elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight), 1), -1)); //negative because up is reverse
     }
 
@@ -36,6 +37,6 @@ public class AutoElevatorCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        return Math.abs(elevatorSetHeight - SensorStatus.kElevatorHeight) < .5 || timer.hasElapsed(2);
+        return Math.abs(elevatorSetHeight - SensorStatus.kElevatorHeight) < .1 || timer.hasElapsed(2);
     }
 }

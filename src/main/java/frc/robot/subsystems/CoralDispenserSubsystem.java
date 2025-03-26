@@ -36,7 +36,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
             laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
         }catch (ConfigurationFailedException e) {
-            System.out.println("Configuration failed" + e);
+            //System.out.println("Configuration failed" + e);
         }
     }
     public void runMotors(double leftPower, double rightPower){
@@ -46,17 +46,20 @@ public class CoralDispenserSubsystem extends SubsystemBase{
 
     public void autoIntake() {
         if (fails < 7) {
-            if (seecoral && SensorStatus.kTimeOfFlightDistance > 80) {
+            if (seecoral && SensorStatus.kTimeOfFlightDistance > 85) {
                 hascoral = true;
                 seecoral = false;
             }
-            if (SensorStatus.kTimeOfFlightDistance < 80) {
+            if (SensorStatus.kTimeOfFlightDistance < 85) {
                 seecoral = true;
             }
         } else {
             hascoral = false;
             seecoral = false;
-            System.out.println("fail");
+            //System.out.println("fail");
+        }
+        if (hascoral && seecoral) {
+            hascoral = false;
         }
         if (hascoral && seecoral) {
             hascoral = false;
@@ -75,7 +78,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             }
         }else{
             fails++;
-            System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
+            //System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
         autoIntake();
         SmartDashboard.putBoolean("seeCoral", seecoral);

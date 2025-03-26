@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Transform2d;
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,28 +17,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
-import frc.robot.NewAccelerationLimiter;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SensorConstants;
-import frc.robot.Constants.TargetPosConstants;
-import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.extras.NewNewAccelLimiter;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -78,6 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
+    private double frontLeftEncoderLast, frontRightEncoderLast, backLeftEncoderLast, backRightEncoderLast = 0;
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
@@ -86,10 +81,10 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewAccelerationLimiter xLimiter, yLimiter;
+    private NewNewAccelLimiter speedLimiter, yLimiter, turningLimiter, wheelAccelerationFinder;
     public PIDController thetaController;
 
-    public MotorPowerController xPowerController, yPowerController, turningPowerController;
+    public MotorPowerController xPowerController, yPowerController, turningPowerController, speedPowerController;
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
@@ -97,7 +92,11 @@ public class SwerveSubsystem extends SubsystemBase {
     double lastXDrive = 0;
     double lastYDrive = 0;
 
+    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
+
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+
+    private Pose2d odometryOffset = new Pose2d();
 
     public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
         this.positionFilteringSubsystem = positionFilteringSubsystem;
@@ -111,13 +110,17 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
+        //wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
+        speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
-        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
-        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);//use this constant not maxspeed
+        //turningLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration*2.5, TargetPosConstants.kBackwardMaxAcceleration*2.5);
 
-        xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
+        //yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);// use this constant not maxSpeed
+
+        //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
+        speedPowerController = new MotorPowerController(0.15, 0.05, .005, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -206,19 +209,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }
-    public boolean isStalling(){
-        int stallScount = 0;
-        if(frontLeft.isStalling())
-            stallScount++;
-        if(frontRight.isStalling())
-            stallScount++;
-        if(backLeft.isStalling())
-            stallScount++;
-        if(backRight.isStalling())
-            stallScount++;
-        return stallScount >=2;
-
-    }
 
     // gets our current velocity relative to the x of the robot (front/back)
     public double getXSpeedRobotRel() {
@@ -269,45 +259,90 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setOdometry(Pose2d odometryPose) {
+        odometryOffset = new Pose2d();
         odometer.resetPosition(getRotation2d(), getModulePositions(), odometryPose);
     }
 
     // Gets our drive position aka where the odometer thinks we are
-    public Pose2d getPose() {
+    public Pose2d getOdometryPose() {
         return odometer.getPoseMeters();
     }
 
-    public Pose2d getFilteredPose(double odometryConfidence) {
-        return this.positionFilteringSubsystem.getFilteredBotPose(odometer, odometryConfidence);
+    public Pose2d calculateFilteredPose(double odometryConfidence) {
+        return this.positionFilteringSubsystem.getFilteredBotPose(getOdometryPose(), odometryConfidence);
+    }
+
+    public Pose2d getPose() {
+        Pose2d odometryPose = this.getOdometryPose();
+        return new Pose2d(odometryPose.getX() + this.odometryOffset.getX(), odometryPose.getY() + this.odometryOffset.getY(), odometryPose.getRotation());
     }
 
     public void calibrateOdometry(double odometryConfidence) {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(odometryConfidence));
+        Pose2d filteredPose = this.calculateFilteredPose(odometryConfidence);
+        Pose2d odometryPose = this.getOdometryPose();
+        //System.out.println(filteredPose);
+        //System.out.println(this.getOdometryPose());
+        //System.out.println(filteredPose.minus(this.getOdometryPose()));
+
+        // Calculate difference between odometry pose and filtered pose
+        // and set the odometry offset to that difference
+
+        this.odometryOffset = new Pose2d(filteredPose.getX() - odometryPose.getX(), filteredPose.getY() - odometryPose.getY(), new Rotation2d());
     }
 
     public void calibrateOdometry() {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(1.0));
+        this.calibrateOdometry(1.0);
     }
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        yPowerController.calculate(getPose().getY(), targetPosition.getY());
-        xLimiter.setInitialSpeed(lastXDrive);
-        yLimiter.setInitialSpeed(lastYDrive);
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        double lastSpeed = speedPowerController.calculate(0, distanceError);
+        //xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        turningPowerController.calculate(angleDifference.getRadians(), 0);
+        speedLimiter.zeroSpeed();
+        //yLimiter.setInitialSpeed(lastYDrive);
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed =  -xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        double ySpeed =  -yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        SmartDashboard.putNumber("calculated x error", xError);
+        SmartDashboard.putNumber("calculated y error", yError);
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        xSpeed = xError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        ySpeed = yError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        speed = speedPowerController.calculate(0, distanceError);
+        SmartDashboard.putNumber("distance Error", distanceError);
+        SmartDashboard.putNumber("target X", targetPosition.getX());
+        SmartDashboard.putNumber("target Y", targetPosition.getY());
+        speed = speedLimiter.calculate(speed);
+        SmartDashboard.putNumber("speed", speed);
+        xSpeed *= speed;
+        ySpeed *= speed;
+        
+        SmartDashboard.putNumber("X speed", xSpeed);
+        SmartDashboard.putNumber("Y speed", ySpeed);
+        //double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
-        //angleDifference is the error value for the Motor Power Controller
+        // angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
-        //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
-        //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
+        double turningSpeed = turningPowerController.calculate(angleDifference.getRadians(), 0);
+        // turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
+        // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
+        // turningSpeed);
 
-        //xSpeed = xLimiter.calculate(xSpeed);
+        
         //ySpeed = yLimiter.calculate(ySpeed);
+        //turningSpeed = turningLimiter.calculate(turningSpeed);
+
+        // xSpeed = xLimiter.calculate(xSpeed);
+        // ySpeed = yLimiter.calculate(ySpeed);
+        
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
@@ -353,37 +388,54 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
+    public boolean isExactlyInPosition(Pose2d targetPosition) {
+        return isAtPoint(targetPosition.getTranslation()) && isAtAngle(targetPosition.getRotation());
+    }
+
+    public boolean isNearlyInPosition(Pose2d targetPosition) {
+        return isNearPoint(targetPosition.getTranslation()) && isNearAngle(targetPosition.getRotation());
+    }
+
     public boolean isAtPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
-        boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
+        boolean isAtPose = getPose().getTranslation()
+                .getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
 
         SmartDashboard.putBoolean("isAtPose", isAtPose);
-        return isAtPose;  
+        return isAtPose;
     }
+
     public boolean isNearPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
-        boolean isNearPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError*2.5; //
+        boolean isNearPose = getPose().getTranslation()
+                .getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError * 2.5; //
 
         SmartDashboard.putBoolean("isNearPose", isNearPose);
         return isNearPose;
     }
 
     public boolean isAtAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+        SmartDashboard.putNumber("angle error",
+                Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle = Math.abs(odometer.getPoseMeters().getRotation().minus(angle)
+                .getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isAtAngle", isAtAngle);
         return isAtAngle;
     }
+
     public boolean isNearAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
+        SmartDashboard.putNumber("angle error",
+                Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
+        boolean isNearAngle = Math.abs(odometer.getPoseMeters().getRotation().minus(angle)
+                .getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isNearAngle", isNearAngle);
         return isNearAngle;
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
+        logSwerveDesiredStates(desiredStates);
         // if their speed is larger then the physical max speed, it reduces all speeds
         // until they are smaller than physical max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
@@ -421,25 +473,43 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonYaw = getHeading();
 
         // Send Gyro data to Limelight for higher accuracy
-        LimelightHelpers.SetRobotOrientation("limelight-front", odometer.getPoseMeters().getRotation().getDegrees(),
+        //System.out.println(odometer.getPoseMeters().getRotation().getDegrees());
+        LimelightHelpers.SetRobotOrientation(SensorConstants.PRIMARY_LIMELIGHT, odometer.getPoseMeters().getRotation().getDegrees(),
                 0.0, 0.0, 0.0, 0.0, 0.0);
 
         // Pose2d filteredBotPose = getFilteredPose();
         // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
         // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
+
         try {
             if (periods == 0) {
                 calibrateOdometry();
                 periods = 10;
             }
-            
+
             periods--;
         } catch (Exception NullPointerException) {
             // TODO: handle exception
         }
+        SmartDashboard.putNumber("Frontleft Encoder rate of change", frontLeft.getDrivePositionTwo() - frontLeftEncoderLast);
+        SmartDashboard.putNumber("FrontRight Encoder rate of change", frontRight.getDrivePositionTwo() - frontRightEncoderLast);
+        SmartDashboard.putNumber("BackLeft Encoder rate of change", backLeft.getDrivePositionTwo() - backLeftEncoderLast);
+        SmartDashboard.putNumber("BackRight Encoder rate of change", backRight.getDrivePositionTwo() - backRightEncoderLast);
 
+        SmartDashboard.putNumber("filtered X", getPose().getX());
+        SmartDashboard.putNumber("filtered Y", getPose().getY());
         
-        
+        velocityX += gyro.getAccelerationX().getValueAsDouble();
+        velocityY += gyro.getAccelerationY().getValueAsDouble();
+        SmartDashboard.putNumber("gyro X velocity",velocityX);
+        SmartDashboard.putNumber("gyro Y velocity",velocityY);
+        double totalVelocity = Math.sqrt(velocityX*velocityX + velocityY*velocityY);
+        SmartDashboard.putNumber("gyro total velocity", totalVelocity);
+
+        SmartDashboard.putNumber("odometer X velocity", chassisSpeeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("odometer Y velocity", chassisSpeeds.vyMetersPerSecond);
+        double odometerTotalVelocity = Math.sqrt(chassisSpeeds.vxMetersPerSecond*chassisSpeeds.vxMetersPerSecond + chassisSpeeds.vyMetersPerSecond*chassisSpeeds.vyMetersPerSecond);
+        SmartDashboard.putNumber("odometer total velocity", odometerTotalVelocity);
 
         SmartDashboard.putNumber("frontLeft Encoder",
                 frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
@@ -455,8 +525,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
         SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
-        SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
-                odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().getRadians() });
+        SmartDashboard.putNumberArray("odometer", new double[] { getPose().getX(),
+            getPose().getY(), getPose().getRotation().getRadians() });
         SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
@@ -465,5 +535,41 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
         SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
         SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
+
+        frontLeftEncoderLast = frontLeft.getDrivePositionTwo();
+        frontRightEncoderLast = frontRight.getDrivePositionTwo();
+        backLeftEncoderLast = backLeft.getDrivePositionTwo();
+        backRightEncoderLast = backRight.getDrivePositionTwo();
+
+        logSwerveStates();
+        logOdometry();
+        logPigeonState();
+    }
+
+    // Send the swerve modules' encoder positions to Advantage Kit
+    public void logSwerveStates() {
+
+        Logger.recordOutput("SwerveState", new SwerveModuleState[] {
+                frontLeft.getState(),
+                frontRight.getState(),
+                backLeft.getState(),
+                backRight.getState()
+        });
+    }
+
+    // Send Swerve Desired Rotation and speed to Advantage Kit
+    public void logSwerveDesiredStates(SwerveModuleState[] desiredStates) {
+        Logger.recordOutput("DesiredSwerveState", desiredStates);
+    }
+
+    // Send Pigeon Rotation to Advantage Kit (useful for seeing robot rotation)
+    public void logPigeonState() {
+        Logger.recordOutput("PigeonGyro", gyro.getRotation2d());
+    }
+
+    // Send Odometry Position on field to Advantage Kit
+    public void logOdometry() {
+        Logger.recordOutput("Odometry/Location", getPose()
+        );
     }
 }

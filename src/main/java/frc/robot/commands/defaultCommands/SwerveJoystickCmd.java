@@ -30,8 +30,10 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void initialize() {
+      
         System.out.println("Swerve Joystick contoslled!");
         gameTimer.start();
+
     }
 
     @Override
@@ -64,7 +66,7 @@ public class SwerveJoystickCmd extends Command {
         }
 
         // 4. invert direction if on red alliance
-        if(SwerveSubsystem.isOnRed()){
+        if(!SwerveSubsystem.isOnRed()){
             xSpeed *= -1;
             ySpeed *= -1;
         }

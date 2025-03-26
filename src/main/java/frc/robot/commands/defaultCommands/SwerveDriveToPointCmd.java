@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.extras.DrivePose2d;
 import frc.robot.extras.PosPose2d;
+import frc.robot.extras.RobotLogManager;
 
 public class SwerveDriveToPointCmd extends Command {
   private SwerveSubsystem swerveSubsystem;
@@ -33,8 +34,8 @@ public class SwerveDriveToPointCmd extends Command {
   @Override
   public void initialize() {
     swerveSubsystem.initializeDriveToPointAndRotate(targetPosition);
-    //System.out.println("robot pose" + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
-    //System.out.println("target pose" + targetPosition.getX()+", "+ targetPosition.getY());
+    RobotLogManager.debug("robot pose: " + swerveSubsystem.getPose().getX()+", "+ swerveSubsystem.getPose().getY());
+    RobotLogManager.debug("target pose: " + targetPosition.getX()+", "+ targetPosition.getY());
     timer.restart();
   }
 
@@ -50,13 +51,17 @@ public class SwerveDriveToPointCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    // use this function if you overide the command to finsih it
-    if ((swerveSubsystem.isAtPoint(targetPosition.getTranslation()) && swerveSubsystem.isAtAngle(targetPosition.getRotation())) || (swerveSubsystem.isNearPoint(targetPosition.getTranslation()) && swerveSubsystem.isNearAngle(targetPosition.getRotation()) && swerveSubsystem.isStalling())){
-      System.out.println("Finished Driving");
+    // use this function if you overide the command to finish it
+
+    if ((swerveSubsystem.isExactlyInPosition(targetPosition) || swerveSubsystem.isNearlyInPosition(targetPosition) && swerveSubsystem.isAtAngle(targetPosition.getRotation())) || timer.hasElapsed(5)){
+      //System.out.println("Finished Driving");
       return true;
     }
-    if(timer.hasElapsed(3))
+
+
+    if(timer.hasElapsed(6)){
       return true;
+    }
 
     return false;
   }
