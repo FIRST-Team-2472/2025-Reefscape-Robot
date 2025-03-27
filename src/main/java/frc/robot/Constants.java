@@ -49,7 +49,7 @@ public final class Constants {
     public static final class AlgaeConstants {
         public static final int kPivotMotorID = 18;
         public static final double kPivotGearRatio = 1/2;
-        public static final int kSpinMotorID = 10;
+        public static final int kSpinMotorID = 20;
     }
 
     public static final class ModuleConstants {
