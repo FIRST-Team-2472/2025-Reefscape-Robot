@@ -1,10 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.SensorStatus;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class CollectCoralCmd extends Command{
     CoralDispenserSubsystem coralDispenserSubsystem;
+    int framesCoralSeen = 0;
     public CollectCoralCmd(CoralDispenserSubsystem coralDispenserSubsystem){
         addRequirements(coralDispenserSubsystem);
         this.coralDispenserSubsystem = coralDispenserSubsystem;
@@ -12,9 +14,12 @@ public class CollectCoralCmd extends Command{
     }
     @Override
     public void initialize() {
+        framesCoralSeen = 0;
     }
     @Override
     public void execute() {
+        if(SensorStatus.seeCoral)
+            framesCoralSeen ++;
         coralDispenserSubsystem.runMotors(.5, -.5);
     }
     @Override
@@ -23,6 +28,6 @@ public class CollectCoralCmd extends Command{
     }
     @Override
     public boolean isFinished() {
-        return coralDispenserSubsystem.hascoral;
+        return coralDispenserSubsystem.hascoral && framesCoralSeen > 5;
     }
 }
