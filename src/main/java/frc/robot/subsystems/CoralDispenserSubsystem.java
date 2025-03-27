@@ -61,6 +61,9 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         if (hascoral && seecoral) {
             hascoral = false;
         }
+        if (hascoral && seecoral) {
+            hascoral = false;
+        }
     }
 
     @Override
@@ -80,6 +83,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         autoIntake();
         SmartDashboard.putBoolean("seeCoral", seecoral);
         SmartDashboard.putBoolean("hasCoral", hascoral);
+        SensorStatus.hasCoral = hascoral;
+        SensorStatus.seeCoral = seecoral;
     }
 
 }

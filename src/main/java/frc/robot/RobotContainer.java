@@ -23,6 +23,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoPrepForClimbCommand;
+import frc.robot.commands.CollectCoralCmd;
 import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
 import frc.robot.commands.defaultCommands.ClimbCommand;
 import frc.robot.commands.defaultCommands.CoralDispenserCommand;
@@ -31,6 +32,7 @@ import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -69,6 +71,7 @@ public class RobotContainer {
   private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem(
       limeLightSubsystem);
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
+  private final LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   CoralCollectionSubsystem coralCollectionSubsystem = new CoralCollectionSubsystem();
@@ -153,9 +156,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    xboxController.povUp().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(0)));
-    xboxController.povDown().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(180)));
-    // Controllers need to be added
+    xboxController.povUp().onTrue(new CollectCoralCmd(coralDispenserSubsystem));
+    //Controllers need to be added
     /*
      * xboxController.a().onTrue(new
      * AutoPrepForClimbCommand(coralCollectionSubsystem, 30));
