@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
+import frc.robot.subsystems.CoralCollectionSubsystem;
+import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class AutoElevatorCommand extends Command{
@@ -11,6 +13,7 @@ public class AutoElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     double elevatorSetHeight;
     MotorPowerController motorPowerController;
+    CoralDispenserSubsystem coralDispenserSubsystem;
     
     public AutoElevatorCommand(ElevatorSubsystem elevatorSubsystem, double elevatorSetHeight) {
         this.elevatorSetHeight = elevatorSetHeight;
@@ -29,10 +32,15 @@ public class AutoElevatorCommand extends Command{
     @Override
     public void execute() {
         // nothing to do since the subsystem handles the driving of it
-        elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight), 1), -1)); //negative because up is reverse
+        if(coralDispenserSubsystem.seecoral == true){
+            elevatorSubsystem.runElevatorMotors(0);
+        } else if(coralDispenserSubsystem.hascoral == true){
+            elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight), 1), -1)); //negative because up is reverse
+        }
     }
 
     public void end(boolean interrupted) {
+        elevatorSubsystem.runElevatorMotors(0);
     }
 
     @Override
