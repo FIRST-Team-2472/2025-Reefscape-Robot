@@ -172,9 +172,10 @@ public class CommandSequences {
         return new SwerveDriveToPointCmd(swerveSubsystem, rightHumanPlayer);
     }
 
-    public Command IToRightPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(reefNodesMap.get('I').toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+    public Command IToLeftPlayer(SwerveSubsystem swerveSubsystem){
+        //swerveSubsystem.setOdometry(reefNodesMap.get('I').toFieldPose2d());
+        return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
+        //return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
     }
 
     //Source to Reef

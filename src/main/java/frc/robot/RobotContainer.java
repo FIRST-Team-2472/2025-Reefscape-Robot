@@ -56,7 +56,7 @@ public class RobotContainer {
       CageFiveToFL1 = "Drive from Cage 5 and Place on F L1", CageFiveToFL4 = "Drive from Cage 5 and Place on F L4",
       CageSixToFL1 = "Drive from Cage 6 and Place on F L1", CageSixToFL4 = "Drive from Cage 6 and Place on F L4",
       DriveForwardTest = "Drive Forward Test", setOdodmetryToTest = "set Odometry to test",
-      CageFiveToFL4ToCL4 = "Drive from Cage 5 to FL4 CL4";
+      CageFiveToFL4ToCL4 = "Drive from Cage 5 to FL4 CL4", CageTwoToIL4ToLL4 = "Drive from Cage 2 to IL4 LL4";
 
   private String m_autoSelected;
   private String m_testSelected;
@@ -120,6 +120,7 @@ public class RobotContainer {
     autoChooser.addOption(DriveForwardTest, DriveForwardTest);
     testChooser.addOption(setOdodmetryToTest, setOdodmetryToTest);
     testChooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
+    autoChooser.addOption(CageTwoToIL4ToLL4, CageTwoToIL4ToLL4);
 
     if(DriverStation.isFMSAttached() == true) {
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
@@ -335,6 +336,20 @@ public class RobotContainer {
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL4Height)
           );
+          case CageTwoToIL4ToLL4:
+            return new SequentialCommandGroup(
+              commandSequences.CageTwoToI(swerveSubsystem),
+              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height),
+              new ParallelCommandGroup(
+                commandSequences.setElevatorL0(elevatorSubsystem),
+                commandSequences.IToLeftPlayer(swerveSubsystem)
+              ),
+          
+              commandSequences.collectCoral(coralDispenserSubsystem),
+
+              commandSequences.LeftPlayerToL(swerveSubsystem),
+              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+            );
       }
     }
 

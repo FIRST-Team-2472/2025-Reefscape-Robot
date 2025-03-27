@@ -64,12 +64,10 @@ public class SwerveFollowTransitionCmd extends Command {
     @Override
     public boolean isFinished() {
         // use this function if you overide the command to finsih it
-        if (swerveSubsystem.getChassisSpeedsRobotRelative().vxMetersPerSecond < 0.05 && swerveSubsystem.getChassisSpeedsRobotRelative().vyMetersPerSecond < 0.05)
+        if ((swerveSubsystem.isExactlyInPosition(endPose) || swerveSubsystem.isNearlyInPosition(endPose) && swerveSubsystem.isAtAngle(endPose.getRotation())) || timer.hasElapsed(5)){
+        //System.out.println("Finished Driving");
         return true;
-  
-        if(timer.hasElapsed(3))
-        return true;
-  
+        }
         return false;    
     }
 }
