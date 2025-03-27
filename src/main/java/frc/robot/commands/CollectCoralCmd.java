@@ -20,7 +20,7 @@ public class CollectCoralCmd extends Command{
     public void execute() {
         if(SensorStatus.seeCoral)
             framesCoralSeen ++;
-        coralDispenserSubsystem.runMotors(.5, -.5);
+        coralDispenserSubsystem.runMotors(.3, -.3);
     }
     @Override
     public void end(boolean interrupted) {
@@ -28,6 +28,6 @@ public class CollectCoralCmd extends Command{
     }
     @Override
     public boolean isFinished() {
-        return coralDispenserSubsystem.hascoral && framesCoralSeen > 5;
+        return coralDispenserSubsystem.hascoral && framesCoralSeen > 10;
     }
 }
