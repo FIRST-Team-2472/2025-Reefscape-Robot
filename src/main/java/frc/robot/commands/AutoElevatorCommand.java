@@ -13,7 +13,6 @@ public class AutoElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     double elevatorSetHeight;
     MotorPowerController motorPowerController;
-    CoralDispenserSubsystem coralDispenserSubsystem;
     
     public AutoElevatorCommand(ElevatorSubsystem elevatorSubsystem, double elevatorSetHeight) {
         this.elevatorSetHeight = elevatorSetHeight;
@@ -31,12 +30,7 @@ public class AutoElevatorCommand extends Command{
 
     @Override
     public void execute() {
-        // nothing to do since the subsystem handles the driving of it
-        if(coralDispenserSubsystem.seecoral == true){
-            elevatorSubsystem.runElevatorMotors(0);
-        } else if(coralDispenserSubsystem.hascoral == true){
             elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight), 1), -1)); //negative because up is reverse
-        }
     }
 
     public void end(boolean interrupted) {

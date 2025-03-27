@@ -70,7 +70,7 @@ public class RobotContainer {
   private final LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
   private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem(
       limeLightSubsystem);
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
   private final LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
@@ -211,6 +211,23 @@ public class RobotContainer {
           return new SequentialCommandGroup(
               commandSequences.driveForwardTest(swerveSubsystem));
 
+        case CageTwoToIL4ToLL4:
+              return new SequentialCommandGroup(
+                new SequentialCommandGroup(
+                commandSequences.CageTwoToI(swerveSubsystem),
+                commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+                ),
+                new ParallelCommandGroup(
+                  commandSequences.setElevatorL0(elevatorSubsystem),
+                  commandSequences.IToLeftPlayer(swerveSubsystem)
+                ),
+            
+                commandSequences.collectCoral(coralDispenserSubsystem),
+    
+                commandSequences.LeftPlayerToL(swerveSubsystem),
+                commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+              );
+
         default:
           return null;
       }
@@ -336,20 +353,6 @@ public class RobotContainer {
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL4Height)
           );
-          case CageTwoToIL4ToLL4:
-            return new SequentialCommandGroup(
-              commandSequences.CageTwoToI(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height),
-              new ParallelCommandGroup(
-                commandSequences.setElevatorL0(elevatorSubsystem),
-                commandSequences.IToLeftPlayer(swerveSubsystem)
-              ),
-          
-              commandSequences.collectCoral(coralDispenserSubsystem),
-
-              commandSequences.LeftPlayerToL(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
-            );
       }
     }
 
