@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class CoralCollectionSubsystem extends SubsystemBase{
     Servo intakeServo = new Servo(9);
     public CoralCollectionSubsystem() {
-        intakeServo.setAngle(15);
+        intakeServo.setAngle(30);
 
     }
     public void setServoAngle(double angle){

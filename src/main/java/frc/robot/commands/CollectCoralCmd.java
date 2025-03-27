@@ -34,6 +34,6 @@ public class CollectCoralCmd extends Command{
     }
     @Override
     public boolean isFinished() {
-        return coralDispenserSubsystem.hascoral && framesCoralSeen > 10;
+        return coralDispenserSubsystem.hascoral && framesCoralSeen > 20;
     }
 }

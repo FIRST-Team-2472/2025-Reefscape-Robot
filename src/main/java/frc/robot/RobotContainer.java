@@ -119,7 +119,7 @@ public class RobotContainer {
     testChooser.addOption(CageSixToFL4, CageSixToFL4);
     autoChooser.addOption(DriveForwardTest, DriveForwardTest);
     testChooser.addOption(setOdodmetryToTest, setOdodmetryToTest);
-    testChooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
+    autoChooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
     autoChooser.addOption(CageTwoToIL4ToLL4, CageTwoToIL4ToLL4);
 
     if(DriverStation.isFMSAttached() == true) {
@@ -226,6 +226,23 @@ public class RobotContainer {
     
                 commandSequences.LeftPlayerToL(swerveSubsystem),
                 commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+              );
+        case CageFiveToFL4ToCL4:
+              return new SequentialCommandGroup(
+                new SequentialCommandGroup(
+                      commandSequences.CageFiveToF(swerveSubsystem),
+                      commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+                ),
+                new ParallelCommandGroup(
+                      commandSequences.setElevatorL0(elevatorSubsystem),
+                      commandSequences.FToRightPlayer(swerveSubsystem)
+                ),
+                    
+                  commandSequences.collectCoral(coralDispenserSubsystem),
+    
+                  commandSequences.RightPlayerToD(swerveSubsystem),
+                  commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
+                      ElevatorConstants.kElevatorL4Height)
               );
 
         default:

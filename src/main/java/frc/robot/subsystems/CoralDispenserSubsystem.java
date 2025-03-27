@@ -61,9 +61,6 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         if (hascoral && seecoral) {
             hascoral = false;
         }
-        if (hascoral && seecoral) {
-            hascoral = false;
-        }
     }
 
     @Override
@@ -76,6 +73,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             if (fails > 0) {
                 fails--;
             }
+        }else if(measurement != null){
+            //do nothing
         }else{
             fails++;
             //System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
@@ -83,6 +82,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         autoIntake();
         SmartDashboard.putBoolean("seeCoral", seecoral);
         SmartDashboard.putBoolean("hasCoral", hascoral);
+        SmartDashboard.putNumber("fails", fails);
         SensorStatus.hasCoral = hascoral;
         SensorStatus.seeCoral = seecoral;
     }
