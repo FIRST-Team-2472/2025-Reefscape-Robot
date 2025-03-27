@@ -61,9 +61,6 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         if (hascoral && seecoral) {
             hascoral = false;
         }
-        if (hascoral && seecoral) {
-            hascoral = false;
-        }
     }
 
     @Override
