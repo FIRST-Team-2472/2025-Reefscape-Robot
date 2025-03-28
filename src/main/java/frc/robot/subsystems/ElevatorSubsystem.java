@@ -30,7 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     limitSwitchConfig.forwardLimitSwitchEnabled(true);
     limitSwitchConfig.reverseLimitSwitchEnabled(true);
     limitSwitchConfig.forwardLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
-    limitSwitchConfig.reverseLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
+    limitSwitchConfig.reverseLimitSwitchType(LimitSwitchConfig.Type.kNormallyOpen);
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.smartCurrentLimit(35);

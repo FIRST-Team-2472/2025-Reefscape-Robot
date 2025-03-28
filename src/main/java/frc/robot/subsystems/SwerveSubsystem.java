@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -97,6 +98,8 @@ public class SwerveSubsystem extends SubsystemBase {
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
     private Pose2d odometryOffset = new Pose2d();
+
+    public Timer gameTimer = new Timer();
 
     public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
         this.positionFilteringSubsystem = positionFilteringSubsystem;

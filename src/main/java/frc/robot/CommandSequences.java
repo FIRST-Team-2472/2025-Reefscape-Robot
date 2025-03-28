@@ -168,19 +168,20 @@ public class CommandSequences {
     }
 
     public Command FToRightPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(reefNodesMap.get('F').toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+        //swerveSubsystem.setOdometry(reefNodesMap.get('F').toFieldPose2d());
+        return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
     }
 
-    public Command IToRightPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(reefNodesMap.get('I').toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
+    public Command IToLeftPlayer(SwerveSubsystem swerveSubsystem){
+        //swerveSubsystem.setOdometry(reefNodesMap.get('I').toFieldPose2d());
+        return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
+        //return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
     }
 
     //Source to Reef
 
     public Command RightPlayerToD(SwerveSubsystem swerveSubsystem){
-        return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, reefNodesMap.get('D'), 1);
+        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('D'));
     }
 
     public Command LeftPlayerToK(SwerveSubsystem swerveSubsystem){
@@ -191,7 +192,7 @@ public class CommandSequences {
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('C'));
     }
 
-    public Command LeftPlayerTo(SwerveSubsystem swerveSubsystem){
+    public Command LeftPlayerToL(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('L'));
     }
 
@@ -202,6 +203,7 @@ public class CommandSequences {
     }
 
     //Elevator Commands
+
     public Command placeOnReef(ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem, double elevatorHeight) {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, elevatorHeight),

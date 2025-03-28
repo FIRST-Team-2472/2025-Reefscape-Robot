@@ -14,7 +14,6 @@ public class SwerveJoystickCmd extends Command {
     private LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
-    private Timer gameTimer = new Timer();
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
@@ -32,13 +31,11 @@ public class SwerveJoystickCmd extends Command {
     public void initialize() {
       
         System.out.println("Swerve Joystick contoslled!");
-        gameTimer.start();
-
     }
 
     @Override
     public void execute() {
-        ledSubsystem.Timer(gameTimer);
+        ledSubsystem.Timer(swerveSubsystem.gameTimer);
         if(resetHeadingButton.get())
             swerveSubsystem.zeroOdometerHeading();
 
