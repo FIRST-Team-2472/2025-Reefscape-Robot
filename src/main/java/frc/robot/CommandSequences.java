@@ -169,7 +169,7 @@ public class CommandSequences {
 
     public Command FToRightPlayer(SwerveSubsystem swerveSubsystem){
         //swerveSubsystem.setOdometry(reefNodesMap.get('F').toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, rightHumanPlayer);
+        return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
     }
 
     public Command IToLeftPlayer(SwerveSubsystem swerveSubsystem){
