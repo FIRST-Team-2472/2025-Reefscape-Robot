@@ -5,9 +5,15 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class RunSwerve extends Command{
     SwerveSubsystem swerveSubsystem;
+
+    double xPower, yPower;
     
     public RunSwerve(SwerveSubsystem swerveSubsystem, double xPower, double yPower) {
         this.swerveSubsystem = swerveSubsystem;
+
+        this.xPower = xPower;
+        this.yPower = yPower;
+
         addRequirements(swerveSubsystem);
         // these are guessed numbers, they need to be tuned
     }
@@ -18,7 +24,10 @@ public class RunSwerve extends Command{
     @Override
     public void execute() {
         if (SwerveSubsystem.isOnRed())
-            swerveSubsystem.runModulesFieldRelative(0.1, 0, 0);
+            swerveSubsystem.runModulesFieldRelative(-xPower, -yPower, 0);
+
+        else
+            swerveSubsystem.runModulesFieldRelative(xPower, yPower, 0);
     }
 
     public void end(boolean interrupted) {
