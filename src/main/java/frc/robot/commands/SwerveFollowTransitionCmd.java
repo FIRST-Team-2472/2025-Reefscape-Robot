@@ -9,7 +9,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveFollowTransitionCmd extends Command {
     SwerveSubsystem swerveSubsystem;
-    FieldPose2d startPose, endPose, targetPose;
+    PosPose2d startPose, endPose, targetPose;
+    FieldPose2d drivePose;
     double xTransitionPerFrame, yTransitionPerFrame, angleTransitionPerFrame;
 
     Timer timer = new Timer();
@@ -24,15 +25,13 @@ public class SwerveFollowTransitionCmd extends Command {
         addRequirements(swerveSubsystem);
 
         this.swerveSubsystem = swerveSubsystem;
-        this.startPose = startPose.toFieldPose2d();
-        this.endPose = endPose.toFieldPose2d();
+        this.startPose = startPose;
+        this.endPose = endPose;
         targetPose = this.startPose;
 
         xTransitionPerFrame = (endPose.getX()-startPose.getX())/50/transitionTime;// 50 is code refreshes per second
         yTransitionPerFrame = (endPose.getY()-startPose.getY())/50/transitionTime;
         angleTransitionPerFrame = endPose.getRotation().minus(startPose.getRotation()).getDegrees()/50/transitionTime;
-
-        timer = new Timer();
     }
 
     @Override
@@ -44,16 +43,20 @@ public class SwerveFollowTransitionCmd extends Command {
     @Override
     public void execute() {
         calculateCurrentPose();
-        swerveSubsystem.executeDriveToPointAndRotate(targetPose);
+        swerveSubsystem.executeDriveToPointAndRotate(drivePose);
     }
 
     public void calculateCurrentPose(){
         //if we are at the end pose we will just return
         //the < .01 is because doubles rarely exactly equal eachother
-        if(Math.abs(targetPose.getX() - endPose.getX()) < .01 && Math.abs(targetPose.getY() - endPose.getY()) < .01  && Math.abs(targetPose.getRotation().minus(endPose.getRotation()).getDegrees())  < .01)
+        if(Math.abs(targetPose.getX() - endPose.getX()) < .01 && Math.abs(targetPose.getY() - endPose.getY()) < .01  && Math.abs(targetPose.getRotation().minus(endPose.getRotation()).getDegrees())  < .01){
+            targetPose = endPose;
             return;
+        }
+            
         //creating a new pose by adding the transition per frame to the old one
-        targetPose = new FieldPose2d(targetPose.getX() + xTransitionPerFrame, targetPose.getY() + yTransitionPerFrame, Rotation2d.fromDegrees(targetPose.getRotation().getDegrees() + angleTransitionPerFrame));
+        targetPose = new PosPose2d(targetPose.getX() + xTransitionPerFrame, targetPose.getY() + yTransitionPerFrame, Rotation2d.fromDegrees(targetPose.getRotation().getDegrees() + angleTransitionPerFrame));
+        drivePose = targetPose.toFieldPose2d();
     }
 
     @Override
@@ -64,7 +67,7 @@ public class SwerveFollowTransitionCmd extends Command {
     @Override
     public boolean isFinished() {
         // use this function if you overide the command to finsih it
-        if ((swerveSubsystem.isExactlyInPosition(endPose) || swerveSubsystem.isNearlyInPosition(endPose) && swerveSubsystem.isAtAngle(endPose.getRotation())) || timer.hasElapsed(6)){
+        if ((swerveSubsystem.isExactlyInPosition(endPose) || (swerveSubsystem.isNearlyInPosition(endPose) && swerveSubsystem.isAtAngle(endPose.getRotation()))) || timer.hasElapsed(6)){
         return true;
         }
         return false;    
