@@ -223,8 +223,8 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMetersX = 17.548225;
-        public static final double sizeOfFieldMetersY = 8.0518;
+        public static final double sizeOfFieldMetersX = 17.421;//17.548225;
+        public static final double sizeOfFieldMetersY = 8;//8.0518;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
