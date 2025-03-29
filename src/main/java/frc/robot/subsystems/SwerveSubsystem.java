@@ -272,7 +272,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d calculateFilteredPose(double odometryConfidence) {
-        return this.positionFilteringSubsystem.getFilteredBotPose(getOdometryPose(), odometryConfidence);
+        return this.positionFilteringSubsystem.getFilteredBotPose(getPose(), odometryConfidence); // This is RIGHT, it needs the filtered position back in
     }
 
     public Pose2d getPose() {
