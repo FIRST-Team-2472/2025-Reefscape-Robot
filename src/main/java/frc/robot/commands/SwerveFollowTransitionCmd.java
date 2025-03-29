@@ -67,7 +67,7 @@ public class SwerveFollowTransitionCmd extends Command {
     @Override
     public boolean isFinished() {
         // use this function if you overide the command to finsih it
-        if ((swerveSubsystem.isExactlyInPosition(endPose) || (swerveSubsystem.isNearlyInPosition(endPose) && swerveSubsystem.isAtAngle(endPose.getRotation()))) || timer.hasElapsed(3)){
+        if ((swerveSubsystem.isExactlyInPosition(endPose) || (swerveSubsystem.isNearlyInPosition(endPose) && swerveSubsystem.isAtAngle(endPose.getRotation()))) || timer.hasElapsed(3.5)){
         return true;
         }
         return false;    
