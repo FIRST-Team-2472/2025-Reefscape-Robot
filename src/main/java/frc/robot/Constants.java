@@ -224,7 +224,7 @@ public final class Constants {
         public static final int kPigeonID = 0;
 
         public static final double sizeOfFieldMetersX = 17.5;//17.548225;
-        public static final double sizeOfFieldMetersY = 8;//8.0518;
+        public static final double sizeOfFieldMetersY = 8.0518;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later

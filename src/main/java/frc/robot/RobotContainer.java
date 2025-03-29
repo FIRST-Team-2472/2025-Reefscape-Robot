@@ -23,8 +23,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoCoralDispenseCommand;
+import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.AutoPrepForClimbCommand;
 import frc.robot.commands.CollectCoralCmd;
+import frc.robot.commands.HoldElevatorCommand;
 import frc.robot.commands.defaultCommands.AlgaeCollectionCommand;
 import frc.robot.commands.defaultCommands.ClimbCommand;
 import frc.robot.commands.defaultCommands.CoralDispenserCommand;
@@ -215,9 +218,16 @@ public class RobotContainer {
 
         case CageTwoToIL4ToLL4:
               return new SequentialCommandGroup(
-                new SequentialCommandGroup(
-                commandSequences.CageTwoToI(swerveSubsystem),
-                commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+                new ParallelDeadlineGroup(
+                  commandSequences.CageTwoToI(swerveSubsystem),
+                  new SequentialCommandGroup(
+                      new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .5),
+                      new HoldElevatorCommand(elevatorSubsystem)
+                  ) 
+                ),
+                new ParallelDeadlineGroup(
+                  new AutoCoralDispenseCommand(coralDispenserSubsystem), 
+                  new HoldElevatorCommand(elevatorSubsystem)
                 ),
                 new ParallelCommandGroup(
                   commandSequences.setElevatorL0(elevatorSubsystem),
@@ -233,9 +243,16 @@ public class RobotContainer {
               );
         case CageFiveToFL4ToCL4:
               return new SequentialCommandGroup(
-                new SequentialCommandGroup(
-                      commandSequences.CageFiveToF(swerveSubsystem),
-                      commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
+                new ParallelDeadlineGroup(
+                  commandSequences.CageFiveToF(swerveSubsystem),
+                  new SequentialCommandGroup(
+                    new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .5),
+                    new HoldElevatorCommand(elevatorSubsystem)
+                  ) 
+                ),
+                new ParallelDeadlineGroup(
+                  new AutoCoralDispenseCommand(coralDispenserSubsystem), 
+                  new HoldElevatorCommand(elevatorSubsystem)
                 ),
                 new ParallelCommandGroup(
                       commandSequences.setElevatorL0(elevatorSubsystem),

@@ -41,7 +41,7 @@ public class AutoCoralDispenseCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        if (timoutTimer.hasElapsed(1)){
+        if (timoutTimer.hasElapsed(.6)){
             //System.out.println("isFinished Dispensing Coral");
             return true;
         }
