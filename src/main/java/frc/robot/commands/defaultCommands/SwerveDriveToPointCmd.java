@@ -50,7 +50,7 @@ public class SwerveDriveToPointCmd extends Command {
     }
 
 
-    if(timer.hasElapsed(6)){
+    if(timer.hasElapsed(3)){
       return true;
     }
 
