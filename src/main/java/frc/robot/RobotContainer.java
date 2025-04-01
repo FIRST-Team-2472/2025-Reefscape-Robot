@@ -257,8 +257,7 @@ public class RobotContainer {
                 new ParallelCommandGroup(
                       commandSequences.setElevatorL0(elevatorSubsystem),
                       commandSequences.FToRightPlayer(swerveSubsystem)
-                ),
-                  
+                ),                  
                 new ParallelDeadlineGroup(
                   commandSequences.collectCoral(coralDispenserSubsystem),
                   new RunSwerve(swerveSubsystem, 0.1, 0.1)
