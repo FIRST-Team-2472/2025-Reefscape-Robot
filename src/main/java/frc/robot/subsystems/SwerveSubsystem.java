@@ -122,7 +122,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //xPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
         //yPowerController = new MotorPowerController(0.15, 0.0, .7, 1, .2, 0, 1);
-        speedPowerController = new MotorPowerController(0.15, 0.05, .005, 1, .2, 0, 1);
+        speedPowerController = new MotorPowerController(0.1, 0.04, .005, 1, .2, 0, 1);
         turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
@@ -272,7 +272,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d calculateFilteredPose(double odometryConfidence) {
-        return this.positionFilteringSubsystem.getFilteredBotPose(getOdometryPose(), odometryConfidence);
+        return this.positionFilteringSubsystem.getFilteredBotPose(getPose(), odometryConfidence); // This is RIGHT, it needs the filtered position back in
     }
 
     public Pose2d getPose() {

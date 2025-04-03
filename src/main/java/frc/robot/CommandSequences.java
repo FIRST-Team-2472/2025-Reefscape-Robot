@@ -47,7 +47,7 @@ public class CommandSequences {
         reefNodesMap.put('F', simplePose(5.294, 2.962, 120));
         reefNodesMap.put('G', simplePose(5.81, 3.86, 180));
         reefNodesMap.put('H', simplePose(5.79, 4.2, 180));
-        reefNodesMap.put('I', simplePose(5.16, 4.98, 240));  //5.293, 5.089,
+        reefNodesMap.put('I', simplePose(5.292, 5.094, 240)); 
         reefNodesMap.put('J', simplePose(5.006, 5.253, 240));
         reefNodesMap.put('K', simplePose(3.972, 5.249, 300));
         reefNodesMap.put('L', simplePose(3.686, 5.085, 300));
