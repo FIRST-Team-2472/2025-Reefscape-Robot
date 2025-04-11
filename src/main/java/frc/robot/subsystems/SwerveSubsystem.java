@@ -4,8 +4,10 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -80,8 +82,10 @@ public class SwerveSubsystem extends SubsystemBase {
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
-            new Rotation2d(0), getModulePositions());
+    //private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
+            //new Rotation2d(0), getModulePositions());
+    private final SwerveDrivePoseEstimator robotPoseEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, 
+        getRotation2d(), getModulePositions(), new Pose2d());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
@@ -146,8 +150,12 @@ public class SwerveSubsystem extends SubsystemBase {
         this.periods = periods;
     }
 
-    public SwerveDriveOdometry getOdometer() {
+    /*public SwerveDriveOdometry getOdometer() {
         return odometer;
+    }*/
+
+    public SwerveDrivePoseEstimator getPoseEstimator() {
+        return robotPoseEstimator;
     }
 
     // Just a quick method that zeros the IMU.
@@ -155,10 +163,15 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    public void zeroOdometerHeading() {
+    /*public void zeroOdometerHeading() {
         odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(),
                 new Pose2d(odometer.getPoseMeters().getX(), odometer.getPoseMeters().getY(), new Rotation2d()));
+    }*/
+
+    public void zeroRobotHeading() {
+        robotPoseEstimator.resetPosition(getRotation2d(), getModulePositions(), new Pose2d(robotPoseEstimator.getEstimatedPosition().getX(), robotPoseEstimator.getEstimatedPosition().getY(), new Rotation2d()));
     }
+
 
     // Gets the yaw/heading of the robot. getting this right is very important for
     // swerve
@@ -264,17 +277,29 @@ public class SwerveSubsystem extends SubsystemBase {
         return gyro.getRotation2d();
     }
 
-    public void zeroOdometry() {
+    /*public void zeroOdometry() {
         odometer.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d());
+    }*/
+
+    public void zeroPoseEstimator() {
+        robotPoseEstimator.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d());
     }
 
-    public void setOdometry(Pose2d odometryPose) {
+    /*public void setOdometry(Pose2d odometryPose) {
         odometer.resetPosition(getRotation2d(), getModulePositions(), odometryPose);
+    }*/
+
+    public void setPoseEstimator(Pose2d Pose) {
+        robotPoseEstimator.resetPosition(getRotation2d(), getModulePositions(), Pose);
     }
 
     // Gets our drive position aka where the odometer thinks we are
-    public Pose2d getPose() {
+    /*public Pose2d getPose() {
         return odometer.getPoseMeters();
+    }*/
+
+    public Pose2d getPose() {
+        return robotPoseEstimator.getEstimatedPosition();
     }
 
     public Pose2d getFilteredPose(double odometryConfidence) {
@@ -301,7 +326,8 @@ public class SwerveSubsystem extends SubsystemBase {
         double ySpeed =  -yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
         //angleDifference is the error value for the Motor Power Controller
-        Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        //Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        Rotation2d angleDifference = robotPoseEstimator.getEstimatedPosition().getRotation().minus(targetPosition.getRotation());
         double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
         //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
@@ -318,12 +344,26 @@ public class SwerveSubsystem extends SubsystemBase {
         return temp;
     }
 
-    public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
+    /*public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
         lastXDrive = xSpeed;
         lastYDrive = ySpeed;
         // Converts robot speeds to speeds relative to field
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, odometer.getPoseMeters().getRotation());
+
+        // Convert chassis speeds to individual module states
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+        // Output each module states to wheels
+        setModuleStates(moduleStates);
+    }*/
+
+    public void runModulesFieldRelative(double xSpeed, double ySpeed, double turningSpeed) {
+        lastXDrive = xSpeed;
+        lastYDrive = ySpeed;
+        // Converts robot speeds to speeds relative to field
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed, ySpeed, turningSpeed, robotPoseEstimator.getEstimatedPosition().getRotation());
 
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -368,16 +408,33 @@ public class SwerveSubsystem extends SubsystemBase {
         return isNearPose;
     }
 
-    public boolean isAtAngle(Rotation2d angle) {
+    /*public boolean isAtAngle(Rotation2d angle) {
         SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
         boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isAtAngle", isAtAngle);
         return isAtAngle;
+    }*/
+
+    public boolean isAtAngle(Rotation2d angle) {
+        SmartDashboard.putNumber("angle error", Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle =  Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+
+        SmartDashboard.putBoolean("isAtAngle", isAtAngle);
+        return isAtAngle;
     }
-    public boolean isNearAngle(Rotation2d angle) {
+
+    /*public boolean isNearAngle(Rotation2d angle) {
         SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
         boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
+
+        SmartDashboard.putBoolean("isNearAngle", isNearAngle);
+        return isNearAngle;
+    }*/
+
+    public boolean isNearAngle(Rotation2d angle) {
+        SmartDashboard.putNumber("angle error", Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()));
+        boolean isNearAngle =  Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
 
         SmartDashboard.putBoolean("isNearAngle", isNearAngle);
         return isNearAngle;
@@ -409,7 +466,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // changes heading and module states into an x,y coordinate.
         // Updates everything based on the new information it gathers.
-        odometer.update(getRotation2d(), getModulePositions());
+        robotPoseEstimator.updateWithTime(MathSharedStore.getTimestamp(), getRotation2d(), getModulePositions());
 
         headingShuffleBoard.setDouble(getHeading());
         odometerShuffleBoard.setString(getPose().getTranslation().toString());
@@ -453,11 +510,16 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());
         SmartDashboard.putNumber("read BackLeft Encoder", backLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read BackRight Encoder", backRight.getAbsolutePosition());
-        SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
-        SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
-        SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
-                odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().getRadians() });
-        SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
+        //SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
+        SmartDashboard.putNumber("EstimatedX", robotPoseEstimator.getEstimatedPosition().getX());
+        //SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
+        SmartDashboard.putNumber("EatimatedY", robotPoseEstimator.getEstimatedPosition().getY());
+        //SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
+                //odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().getRadians() });
+        SmartDashboard.putNumberArray("EstimatedPosition", new double[] { robotPoseEstimator.getEstimatedPosition().getX(),
+                robotPoseEstimator.getEstimatedPosition().getY(), robotPoseEstimator.getEstimatedPosition().getRotation().getRadians() });
+        //SmartDashboard.putNumber("odometerAngle", odometer.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("EstimatedAngle", robotPoseEstimator.getEstimatedPosition().getRotation().getDegrees());
         SmartDashboard.putNumber("gyro Yaw", gyro.getYaw().getValueAsDouble());
         SmartDashboard.putBoolean("isRed", isOnRed());
 

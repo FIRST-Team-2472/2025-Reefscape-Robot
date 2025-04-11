@@ -69,12 +69,12 @@ public class CommandSequences {
         processor = simplePose(2, 7,90);
     }
     public Command driveAndSitFromMiddle(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(middle.toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G'));
     }
     
     public Command driveAndPlaceOneFromMiddle(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(middle.toFieldPose2d());
         return new SequentialCommandGroup(
             new SwerveDriveToPointCmd(swerveSubsystem, reefNode('G')),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
@@ -82,7 +82,7 @@ public class CommandSequences {
         );
     }
     public Command driveAndPlaceOneFromLeft(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(cageNodes[0].toFieldPose2d());
         return new SequentialCommandGroup(
             new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
@@ -91,7 +91,7 @@ public class CommandSequences {
         );
     }
     public Command driveAndPlaceOneFromRight(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[5].toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(cageNodes[5].toFieldPose2d());
         return new SequentialCommandGroup(
             new SwerveDriveToPointCmd(swerveSubsystem, reefNode('E')),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
@@ -100,7 +100,7 @@ public class CommandSequences {
         );
     }
     public Command driveAndPlaceTwoFromLeft(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(cageNodes[0].toFieldPose2d());
         return new SequentialCommandGroup(
             new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
@@ -115,7 +115,7 @@ public class CommandSequences {
         );
     }
     public Command driveAndPlaceTwoFromRight(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(cageNodes[0].toFieldPose2d());
         return new SequentialCommandGroup(
             new SwerveDriveToPointCmd(swerveSubsystem, reefNode('E')),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
@@ -133,7 +133,7 @@ public class CommandSequences {
     public Command twoCoralCfourRoneHoneRfive(SwerveSubsystem swerveSubsystem, 
     ElevatorSubsystem elevatorSubsystem, CoralDispenserSubsystem coralDispenserSubsystem) {
 
-        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(cageNodes[2].toFieldPose2d());
 
         return new SequentialCommandGroup(
 
@@ -155,7 +155,7 @@ public class CommandSequences {
         );
     }
     public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(simplePose(2, 2, 0).toFieldPose2d());
 
         return new SequentialCommandGroup(
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
@@ -164,9 +164,9 @@ public class CommandSequences {
 
     // TODO: Works on Blue but not Red
     public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(middle.toFieldPose2d());
         swerveSubsystem.calibrateOdometry(0.0f);
-        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
+        Pose2d currentPos = swerveSubsystem.getPoseEstimator().getEstimatedPosition();
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }
   
