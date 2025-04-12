@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.MathSharedStore;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,13 +33,13 @@ import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.SensorStatus;
 import frc.robot.MotorPowerController;
-import frc.robot.NewAccelerationLimiter;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.extras.NewNewAccelLimiter;
 import frc.robot.extras.SwerveModule;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -90,16 +91,19 @@ public class SwerveSubsystem extends SubsystemBase {
     private PositionFilteringSubsystem positionFilteringSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
-    private NewAccelerationLimiter xLimiter, yLimiter;
+    private NewNewAccelLimiter speedLimiter;
     public PIDController thetaController;
 
-    public MotorPowerController xPowerController, yPowerController, turningPowerController;
+    public MotorPowerController speedPowerController, turningPowerController;
 
     private static final SendableChooser<String> colorChooser = new SendableChooser<>();
     private final String red = "Red", blue = "Blue";
 
     double lastXDrive = 0;
     double lastYDrive = 0;
+    double distanceError = 0;
+    double xError = 0;
+    double yError = 0;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
@@ -116,12 +120,10 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
 
-        xLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
-        yLimiter = new NewAccelerationLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);//use this constant not maxspeed
+        speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
-        xPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        yPowerController = new MotorPowerController(0.15, 0.05, .7, 1, .2, 0, 1);
-        turningPowerController = new MotorPowerController(0.15, 0.1, .3, 1, .1, 0, 1);
+        speedPowerController = new MotorPowerController(0.1, 0.04, .005, 1, .2, 0, 1);
+        turningPowerController = new MotorPowerController(0.15, 0.02, .7, 1, .1, 0, 1);
 
         // zeros heading after pigeon boots up)()
         new Thread(() -> {
@@ -315,25 +317,54 @@ public class SwerveSubsystem extends SubsystemBase {
     }*/
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
-        xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        yPowerController.calculate(getPose().getY(), targetPosition.getY());
-        xLimiter.setInitialSpeed(lastXDrive);
-        yLimiter.setInitialSpeed(lastYDrive);
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        double lastSpeed = speedPowerController.calculate(0, distanceError);
+        //xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        Rotation2d angleDifference = robotPoseEstimator.getEstimatedPosition().getRotation().minus(targetPosition.getRotation());
+        turningPowerController.calculate(angleDifference.getRadians(), 0);
+        speedLimiter.zeroSpeed();
+        //yLimiter.setInitialSpeed(lastYDrive);
     }
 
     public void executeDriveToPointAndRotate(Pose2d targetPosition) {
-        double xSpeed =  -xPowerController.calculate(getPose().getX(), targetPosition.getX());
-        double ySpeed =  -yPowerController.calculate(getPose().getY(), targetPosition.getY());
+        xError = targetPosition.getX() - getPose().getX();//getPose().getX() - targetPosition.getX();
+        yError = targetPosition.getY() - getPose().getY();//getPose().getY() - targetPosition.getY();
+        SmartDashboard.putNumber("calculated x error", xError);
+        SmartDashboard.putNumber("calculated y error", yError);
+        distanceError = Math.sqrt(xError*xError + yError*yError);
+        double xSpeed = xError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        double ySpeed = yError / (Math.abs(xError) > Math.abs(yError) ? Math.abs(xError) : Math.abs(yError));
+        double speed = speedPowerController.calculate(0, distanceError);
+        SmartDashboard.putNumber("distance Error", distanceError);
+        SmartDashboard.putNumber("target X", targetPosition.getX());
+        SmartDashboard.putNumber("target Y", targetPosition.getY());
+        speed = speedLimiter.calculate(speed);
+        SmartDashboard.putNumber("speed", speed);
+        xSpeed *= speed;
+        ySpeed *= speed;
+        
+        SmartDashboard.putNumber("X speed", xSpeed);
+        SmartDashboard.putNumber("Y speed", ySpeed);
+        //double xSpeed = xPowerController.calculate(getPose().getX(), targetPosition.getX());
+        //double ySpeed = yPowerController.calculate(getPose().getY(), targetPosition.getY());
 
-        //angleDifference is the error value for the Motor Power Controller
-        //Rotation2d angleDifference = odometer.getPoseMeters().getRotation().minus(targetPosition.getRotation());
+        // angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = robotPoseEstimator.getEstimatedPosition().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
-        //turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
-        //turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians, turningSpeed);
+        double turningSpeed = turningPowerController.calculate(angleDifference.getRadians(), 0);
+        // turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
+        // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
+        // turningSpeed);
 
-        //xSpeed = xLimiter.calculate(xSpeed);
+        
         //ySpeed = yLimiter.calculate(ySpeed);
+        //turningSpeed = turningLimiter.calculate(turningSpeed);
+
+        // xSpeed = xLimiter.calculate(xSpeed);
+        // ySpeed = yLimiter.calculate(ySpeed);
+        
         runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
@@ -393,48 +424,47 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
+    public boolean isExactlyInPosition(Pose2d targetPosition) {
+        return isAtPoint(targetPosition.getTranslation()) && isAtAngle(targetPosition.getRotation());
+    }
+
+    public boolean isNearlyInPosition(Pose2d targetPosition) {
+        return isNearPoint(targetPosition.getTranslation()) && isNearAngle(targetPosition.getRotation());
+    }
+
     public boolean isAtPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
-        boolean isAtPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
+        boolean isAtPose = getPose().getTranslation()
+                .getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError; //
 
         SmartDashboard.putBoolean("isAtPose", isAtPose);
-        return isAtPose;  
+        return isAtPose;
     }
+
     public boolean isNearPoint(Translation2d targetDrivePos) {
         SmartDashboard.putNumber("translation Error", getPose().getTranslation().getDistance(targetDrivePos));
-        boolean isNearPose =  getPose().getTranslation().getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError*2.5; //
+        boolean isNearPose = getPose().getTranslation()
+                .getDistance(targetDrivePos) <= TargetPosConstants.kAcceptableDistanceError * 2.5; //
 
         SmartDashboard.putBoolean("isNearPose", isNearPose);
         return isNearPose;
     }
 
-    /*public boolean isAtAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isAtAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
-
-        SmartDashboard.putBoolean("isAtAngle", isAtAngle);
-        return isAtAngle;
-    }*/
-
     public boolean isAtAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()));
-        boolean isAtAngle =  Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
+        SmartDashboard.putNumber("angle error",
+                Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()));
+        boolean isAtAngle = Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle)
+                .getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isAtAngle", isAtAngle);
         return isAtAngle;
     }
 
-    /*public boolean isNearAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()));
-        boolean isNearAngle =  Math.abs(odometer.getPoseMeters().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
-
-        SmartDashboard.putBoolean("isNearAngle", isNearAngle);
-        return isNearAngle;
-    }*/
-
     public boolean isNearAngle(Rotation2d angle) {
-        SmartDashboard.putNumber("angle error", Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()));
-        boolean isNearAngle =  Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()) <= TargetPosConstants.kAcceptableAngleError*2;
+        SmartDashboard.putNumber("angle error",
+                Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle).getDegrees()));
+        boolean isNearAngle = Math.abs(robotPoseEstimator.getEstimatedPosition().getRotation().minus(angle)
+                .getDegrees()) <= TargetPosConstants.kAcceptableAngleError;
 
         SmartDashboard.putBoolean("isNearAngle", isNearAngle);
         return isNearAngle;

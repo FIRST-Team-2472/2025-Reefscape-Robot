@@ -21,7 +21,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     private SparkMax rightMotor = new SparkMax(CoralDispenserConstants.kRightMotorID, MotorType.kBrushless);
     private LaserCan laserCan = new LaserCan(0);
     int fails = 0;
-    public boolean seecoral, hascoral = false;
+    public boolean seeCoral, hasCoral = false;
     
     public CoralDispenserSubsystem(){
 
@@ -46,21 +46,21 @@ public class CoralDispenserSubsystem extends SubsystemBase{
 
     public void autoIntake() {
         if (fails < 7) {
-            if (seecoral && SensorStatus.kTimeOfFlightDistance > 80) {
-                hascoral = true;
-                seecoral = false;
+            if (seeCoral && SensorStatus.kTimeOfFlightDistance > 80) {
+                hasCoral = true;
+                seeCoral = false;
             }
             if (SensorStatus.kTimeOfFlightDistance < 80) {
-                seecoral = true;
+                seeCoral = true;
             }
         } else {
-            hascoral = false;
-            seecoral = false;
+            hasCoral = false;
+            seeCoral = false;
             System.out.println("fail");
         }
 
-        if (hascoral && seecoral) {
-            hascoral = false;
+        if (hasCoral && seeCoral) {
+            hasCoral = false;
         }
     }
 
@@ -79,8 +79,10 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
         autoIntake();
-        SmartDashboard.putBoolean("seeCoral", seecoral);
-        SmartDashboard.putBoolean("hasCoral", hascoral);
+        SmartDashboard.putBoolean("seeCoral", seeCoral);
+        SmartDashboard.putBoolean("hasCoral", hasCoral);
+        SensorStatus.seeCoral = seeCoral;
+        SensorStatus.hasCoral = hasCoral;
     }
 
 }

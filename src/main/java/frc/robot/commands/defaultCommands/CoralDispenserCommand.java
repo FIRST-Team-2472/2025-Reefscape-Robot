@@ -25,10 +25,10 @@ public class CoralDispenserCommand extends Command{
         if(xboxControllerRightTrigger.get() > 0.3)
             if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10) {
                 coralDispenserSubsytem.runMotors(.9, -.3);
-                coralDispenserSubsytem.hascoral = false;
+                SensorStatus.hasCoral = false;
             }
             else if (SensorStatus.kElevatorHeight < 3) {
-                if (!coralDispenserSubsytem.hascoral) {
+                if (!SensorStatus.hasCoral) {
                     coralDispenserSubsytem.runMotors(.2, -.2);
                 } else {
                     coralDispenserSubsytem.runMotors(0, 0);
@@ -36,11 +36,11 @@ public class CoralDispenserCommand extends Command{
             }
             else {
                 coralDispenserSubsytem.runMotors(.8, -.8);//subject to change
-                coralDispenserSubsytem.hascoral = false;
+                SensorStatus.hasCoral = false;
             }
         else if(xboxControllerLeftTrigger.get() > 0.5) {
             coralDispenserSubsytem.runMotors(-.3, .3);
-            coralDispenserSubsytem.hascoral = false;
+            SensorStatus.hasCoral = false;
         }
         else
             coralDispenserSubsytem.runMotors(0, 0);
