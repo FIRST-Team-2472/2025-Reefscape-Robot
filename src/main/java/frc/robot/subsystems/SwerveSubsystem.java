@@ -341,7 +341,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("distance Error", distanceError);
         SmartDashboard.putNumber("target X", targetPosition.getX());
         SmartDashboard.putNumber("target Y", targetPosition.getY());
-        speed = speedLimiter.calculate(speed);
+        speed = - speedLimiter.calculate(speed);
         SmartDashboard.putNumber("speed", speed);
         xSpeed *= speed;
         ySpeed *= speed;
@@ -353,7 +353,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // angleDifference is the error value for the Motor Power Controller
         Rotation2d angleDifference = robotPoseEstimator.getEstimatedPosition().getRotation().minus(targetPosition.getRotation());
-        double turningSpeed = turningPowerController.calculate(angleDifference.getRadians(), 0);
+        double turningSpeed = -turningPowerController.calculate(angleDifference.getRadians(), 0);
         // turningSpeed *= TargetPosConstants.kMaxAngularSpeed;
         // turningSpeed += Math.copySign(TargetPosConstants.kMinAngluarSpeedRadians,
         // turningSpeed);
