@@ -12,17 +12,18 @@ public class CollectCoralCmd extends Command{
     }
     @Override
     public void initialize() {
-        //coralSubsystem.collectCoral();
+
     }
     @Override
     public void execute() {
+        coralSubsystem.runMotors(.2, -.2);
     }
     @Override
     public void end(boolean interrupted) {
-        //coralSubsystem.stopCollectingCoral();
+        coralSubsystem.runMotors(0, 0);
     }
     @Override
     public boolean isFinished() {
-        return false;
+        return coralSubsystem.hascoral;
     }
 }

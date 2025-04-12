@@ -49,7 +49,7 @@ public final class Constants {
     public static final class AlgaeConstants {
         public static final int kPivotMotorID = 18;
         public static final double kPivotGearRatio = 1/2;
-        public static final int kSpinMotorID = 10;
+        public static final int kSpinMotorID = 20;
     }
 
     public static final class ModuleConstants {
@@ -115,10 +115,10 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
         // To find set the motors forward record the value (don't inverse the value)
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
         public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 0;
 
         // Max physical speed of our motors. Required for motor speed caculations
         // To find set the modules to 100% and see what speed cap out at

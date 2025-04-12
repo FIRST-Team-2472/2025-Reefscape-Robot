@@ -105,6 +105,7 @@ public class CommandSequences {
             new SwerveDriveToPointCmd(swerveSubsystem, reefNode('J')),
             new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height),
             new AutoCoralDispenseCommand(coralDispenserSubsystem),
+            
             new AutoElevatorCommand(elevatorSubsystem, 0),
             new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1),
             new CollectCoralCmd(coralDispenserSubsystem),// this command is missing stuff

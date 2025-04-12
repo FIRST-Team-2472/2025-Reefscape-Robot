@@ -118,8 +118,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    xboxController.povUp().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(0)));
-    xboxController.povDown().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(180)));
+    //xboxController.povUp().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(0)));
+    //xboxController.povDown().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(180)));
     //Controllers need to be added
     /*
     xboxController.a().onTrue(new AutoPrepForClimbCommand(coralCollectionSubsystem, 30));

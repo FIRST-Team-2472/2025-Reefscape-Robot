@@ -58,6 +58,10 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             seecoral = false;
             System.out.println("fail");
         }
+
+        if (hascoral && seecoral) {
+            hascoral = false;
+        }
     }
 
     @Override

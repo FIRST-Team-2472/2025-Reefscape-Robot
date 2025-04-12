@@ -24,10 +24,10 @@ public class SwerveFollowTransitionCmd extends Command {
         this.startPose = startPose.toFieldPose2d();
         this.endPose = endPose.toFieldPose2d();
         targetPose = this.startPose;
-
-        xTransitionPerFrame = (endPose.getX()-startPose.getX())/50/transitionTime;// 50 is code refreshes per second
-        yTransitionPerFrame = (endPose.getY()-startPose.getY())/50/transitionTime;
-        angleTransitionPerFrame = endPose.getRotation().minus(startPose.getRotation()).getDegrees()/50/transitionTime;
+        // need to use the global one so its converted
+        xTransitionPerFrame = (this.endPose.getX()-this.startPose.getX())/50/transitionTime;// 50 is code refreshes per second
+        yTransitionPerFrame = (this.endPose.getY()-this.startPose.getY())/50/transitionTime;
+        angleTransitionPerFrame = this.endPose.getRotation().minus(this.startPose.getRotation()).getDegrees()/50/transitionTime;
     }
 
     @Override

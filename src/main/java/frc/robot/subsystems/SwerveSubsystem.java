@@ -505,6 +505,12 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("BackLeft Encoder", backLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("BackRight Encoder",
                 backRight.absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        
+        SmartDashboard.putNumber("BackLeftDriveEncoder", backLeft.getDrivePosition());
+        SmartDashboard.putNumber("BackRightDriveEncoder", backRight.getDrivePosition());
+        SmartDashboard.putNumber("FrontLeftDriveEncoder", frontLeft.getDrivePosition());
+        SmartDashboard.putNumber("FrontRightDriveEncoder", frontRight.getDrivePosition());
+
 
         SmartDashboard.putNumber("read frontLeft Encoder", frontLeft.getAbsolutePosition());
         SmartDashboard.putNumber("read frontRight Encoder", frontRight.getAbsolutePosition());
