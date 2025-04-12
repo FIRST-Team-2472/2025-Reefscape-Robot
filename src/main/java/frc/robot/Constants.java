@@ -197,7 +197,7 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.06;// subject to change was 0.04
+        public static final double kAcceptableDistanceError = 0.03;// subject to change was 0.04
         public static final double kAcceptableAngleError = 3;
     }
 
@@ -221,8 +221,8 @@ public final class Constants {
     public static final class SensorConstants {
         public static final int kPigeonID = 0;
 
-        public static final double sizeOfFieldMetersX = 17.55;
-        public static final double sizeOfFieldMetersY = 8;
+        public static final double sizeOfFieldMetersX = 17.548225;
+        public static final double sizeOfFieldMetersY = 8.0518;
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
