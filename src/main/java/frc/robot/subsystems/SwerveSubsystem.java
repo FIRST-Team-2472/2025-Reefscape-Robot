@@ -512,6 +512,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     PoseEstimate estimate = limelightSubsystem.getTrustedPose();
     if (estimate != null) {
+        SmartDashboard.putBoolean("NullEstimate", false);
       boolean doRejectUpdate = false;
       if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) {
         doRejectUpdate = true;
@@ -519,11 +520,15 @@ public class SwerveSubsystem extends SubsystemBase {
       if (estimate.tagCount == 0) {
         doRejectUpdate = true;
       }
+      SmartDashboard.putNumber("estimate.tagCount", estimate.tagCount);
+      SmartDashboard.putBoolean("rejecting update", doRejectUpdate);
       if (!doRejectUpdate) {
         robotPoseEstimator.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
       } else {
       }
-  }
+    } else {
+        SmartDashboard.putBoolean("NullEstimate", true);
+    }
 }
 
     @Override

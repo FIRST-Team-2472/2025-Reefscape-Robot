@@ -228,8 +228,8 @@ public final class Constants {
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
     public final class VisionConstants {
-        public static String kFrontLimelightName = "limeLight-front";
-        public static String kSideLimelightName = null;
+        public static String kFrontLimelightName = "limelight-obj";
+        public static String kSideLimelightName = null;//"limelight-side";
         public static double kMaxAllowedTagDistance = 5.0;
     }
 
