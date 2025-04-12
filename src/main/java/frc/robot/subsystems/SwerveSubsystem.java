@@ -302,7 +302,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return robotPoseEstimator.getEstimatedPosition();
     }
 
-    public Pose2d getFilteredPose(double odometryConfidence) {
+    /*public Pose2d getFilteredPose(double odometryConfidence) {
         return this.positionFilteringSubsystem.getFilteredBotPose(odometer, odometryConfidence);
     }
 
@@ -312,7 +312,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void calibrateOdometry() {
         odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(1.0));
-    }
+    }*/
 
     public void initializeDriveToPointAndRotate(Pose2d targetPosition) {
         xPowerController.calculate(getPose().getX(), targetPosition.getX());
@@ -478,7 +478,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonYaw = getHeading();
 
         // Send Gyro data to Limelight for higher accuracy
-        LimelightHelpers.SetRobotOrientation("limelight-front", odometer.getPoseMeters().getRotation().getDegrees(),
+        /*LimelightHelpers.SetRobotOrientation("limelight-front", odometer.getPoseMeters().getRotation().getDegrees(),
                 0.0, 0.0, 0.0, 0.0, 0.0);
 
         // Pose2d filteredBotPose = getFilteredPose();
@@ -493,7 +493,7 @@ public class SwerveSubsystem extends SubsystemBase {
             periods--;
         } catch (Exception NullPointerException) {
             // TODO: handle exception
-        }
+        }*/
 
         
         

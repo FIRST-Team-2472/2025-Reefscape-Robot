@@ -165,7 +165,7 @@ public class CommandSequences {
     // TODO: Works on Blue but not Red
     public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
         swerveSubsystem.setPoseEstimator(middle.toFieldPose2d());
-        swerveSubsystem.calibrateOdometry(0.0f);
+        //swerveSubsystem.calibrateOdometry(0.0f);
         Pose2d currentPos = swerveSubsystem.getPoseEstimator().getEstimatedPosition();
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 0.9f, currentPos.getY(), currentPos.getRotation().getDegrees()));
     }

@@ -217,7 +217,7 @@ public class TestSwerveSubsystem {
         
     }
     private void assertTest(double expectedXD, double expectedYD, double expectedRotationD){
-        var odometerPostUpdate = swerveSubsystem.getOdometer().getPoseMeters();
+        var odometerPostUpdate = swerveSubsystem.getPoseEstimator().getEstimatedPosition();
         var expectedX = new BigDecimal(expectedXD).setScale(2, RoundingMode.HALF_UP);
         var expectedY = new BigDecimal(expectedYD).setScale(2, RoundingMode.HALF_UP);
         var expectedRotation = new BigDecimal(expectedRotationD).setScale(2, RoundingMode.HALF_UP);

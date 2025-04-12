@@ -32,7 +32,7 @@ public class SwerveJoystickCmd extends Command {
     public void execute() {
 
         if(resetHeadingButton.get())
-            swerveSubsystem.zeroOdometerHeading();
+            swerveSubsystem.zeroRobotHeading();
 
         // 1. Get real-time joystick inputs flipping the x and y of controller to the fields x and y
         double xSpeed = ySpdFunction.get();
