@@ -19,7 +19,6 @@ import frc.robot.commands.SwerveFollowTransitionCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
@@ -250,13 +249,6 @@ public class CommandSequences {
         );
     }
 
-    // TODO: Works on Blue but not Red
-    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
-        swerveSubsystem.setPoseEstimator(swerveSubsystem.getPose());
-        //swerveSubsystem.calibrateOdometry(0.0f);
-        Pose2d currentPos = swerveSubsystem.getPoseEstimator().getEstimatedPosition();
-        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 1, currentPos.getY(), currentPos.getRotation().getDegrees()));
-    }
     public Command driveForwardTest(SwerveSubsystem swerveSubsystem) {
         swerveSubsystem.setPoseEstimator(simplePose(1, 0, 0).toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(3, 0, 0));

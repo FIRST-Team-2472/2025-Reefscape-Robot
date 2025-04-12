@@ -227,6 +227,11 @@ public final class Constants {
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
+    public final class VisionConstants {
+        public static String kFrontLimelightName = "limeLight-front";
+        public static String kSideLimelightName = null;
+        public static double kMaxAllowedTagDistance = 5.0;
+    }
 
     public static class LEDConstants {
         public static int kChannel1 = 0;
