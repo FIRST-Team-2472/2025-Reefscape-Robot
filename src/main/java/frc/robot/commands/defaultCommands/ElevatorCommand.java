@@ -8,7 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.Constants.SensorConstants;
 import frc.robot.MotorPowerController;
-import frc.robot.SensorStatus;
+import frc.robot.RobotStatus;
 
 public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
@@ -25,7 +25,7 @@ public class ElevatorCommand extends Command{
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
+        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
     }
 
   @Override
@@ -55,8 +55,8 @@ public class ElevatorCommand extends Command{
 
     SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
 
-    SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight));
-    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, SensorStatus.kElevatorHeight), .6), -1)); //negative because up is reverse
+    SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight));
+    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), .6), -1)); //negative because up is reverse
   }
 
   // Called once the command ends or is interrupted.

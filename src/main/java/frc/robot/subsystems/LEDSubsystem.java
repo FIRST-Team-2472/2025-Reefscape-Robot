@@ -1,85 +1,67 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.RobotStatus;
+
+import static edu.wpi.first.units.Units.*;
+import static frc.robot.Constants.LEDConstants.*;
+
+import java.util.Map;
 
 public class LEDSubsystem extends SubsystemBase {
-    private static LEDSubsystem INSTANCE;
+
+    AddressableLED LEDs = new AddressableLED(kLEDPWMPort);
+    AddressableLEDBuffer LEDBuffer;
     
-    private final DigitalOutput channel1,channel2,channel3;
-
-    private LEDStatusMode currentStatusMode;
-
-    private boolean disableLEDs;
-    private boolean robotDisabled;
 
     public LEDSubsystem() {
-        // DIO outputs
-        channel1 = new DigitalOutput(Constants.LEDConstants.kChannel1);
-        channel2 = new DigitalOutput(Constants.LEDConstants.kChannel2);
-        channel3 = new DigitalOutput(Constants.LEDConstants.kChannel3);
-        robotDisabled = true;
+        LEDBuffer = new AddressableLEDBuffer(kBackLEDStripLEDCount + kElevatorLEDStripLEDCount);
 
-        currentStatusMode = LEDStatusMode.OFF;
-    }
-
-    public static LEDSubsystem getInstance() {  // Method to allow calling this class and getting the single instance from anywhere, creating the instance if the first time.
-        if (INSTANCE == null) {
-            INSTANCE = new LEDSubsystem();
-        }
-        return INSTANCE;
-    }
-
-    public static enum LEDStatusMode {
-        OFF(0), 
-        RED(1),
-        GREEN(2),
-        BLUE(3),
-        YELLOW(4),
-        PURPLE(5),
-        CYAN(6),
-        CENTURION(7);
+        LEDs.setLength(LEDBuffer.getLength());
         
+        LEDs.setData(LEDBuffer);
 
-        private final int code;
+        LEDs.start();
 
-        private LEDStatusMode(int code) {
-            this.code = code;
-        }
-
-        public int getPositionTicks() {
-            return code;
-        }
     }
 
     @Override
     public void periodic() {
-        int code = 0;
-        if(!disableLEDs) {
-        code = currentStatusMode.code;
-        } else {
-            //LEDs are disabled
-            code = 0;
+        // TODO Auto-generated method stub
+        super.periodic();
+        LEDPattern pattern;   
+
+        if(RobotStatus.hasCoral){
+            pattern = LEDPattern.solid(Color.kGreen);
+        }else if(RobotStatus.seeCoral)   {
+            pattern = LEDPattern.solid(Color.kPurple);
+        }else if(RobotStatus.isDispensing)   {
+            // all hues at maximum saturation and full brightness
+            pattern = LEDPattern.rainbow(255, 225);
+            // Create a new pattern that scrolls the rainbow pattern across the LED strip
+            pattern = pattern.scrollAtAbsoluteSpeed(kRainbowScrollSpeed, kLEDSpacing);
+        }else{
+            pattern = LEDPattern.steps(Map.of(0.00, Color.kRed, 0.25, Color.kYellow, 0.50, Color.kRed, 0.75, Color.kYellow));
         }
+        // this will need tweaking so it only happens on the one LED strip
+        // the numbers come from the match time - 15 seconds and 15 seconds left of match
+        LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> (DriverStation.getMatchTime() - 135) / 15);
+        pattern = pattern.mask(countdownMask);
+        
+        // Apply the LED pattern to the data buffer
+        pattern.applyTo(LEDBuffer);
 
-        // Code for encoding the code to binary on the digitalOutput pins
-        channel1.set((code & 1) > 0);   // 2^0
-        channel2.set((code & 2) > 0);   // 2^1
-        channel3.set((code & 4) > 0);   // 2^2
-
-    }
-
-    // Disables LEDs (turns them off)
-    public void LEDMode(LEDStatusMode code) {
-        currentStatusMode = code;
-    }
-    public void disableLEDs() {
-        disableLEDs = true;
-    }
-
-    // Enables LEDs (turns them on)
-    public void enableLEDs() {
-        disableLEDs = false;
+        // Write the data to the LED strip
+        LEDs.setData(LEDBuffer);
     }
 }
