@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.SensorStatus;
 
@@ -10,7 +11,7 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class LimeLightSubsystem extends SubsystemBase {
 
-    private String[] LimeLights = { "limelight-front" };
+    private String[] LimeLights = { Constants.SensorConstants.PRIMARY_LIMELIGHT };
     private double[] LimeLightConfidence = { 0 };
     private double[] LimeLightArea = { 0 };
     private double[] LimeLightDist = { 0 };

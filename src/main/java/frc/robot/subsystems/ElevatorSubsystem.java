@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.MotorPowerController;
 import frc.robot.SensorStatus;
 
 import com.revrobotics.spark.SparkMax;
@@ -24,14 +25,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double lastLeftElevatorReading = 0;
   public double lastRightElevatorReading = 0;
 
-
   public ElevatorSubsystem() {
     final LimitSwitchConfig limitSwitchConfig = new LimitSwitchConfig();
     limitSwitchConfig.forwardLimitSwitchEnabled(true);
     limitSwitchConfig.reverseLimitSwitchEnabled(true);
     limitSwitchConfig.forwardLimitSwitchType(LimitSwitchConfig.Type.kNormallyClosed);
     limitSwitchConfig.reverseLimitSwitchType(LimitSwitchConfig.Type.kNormallyOpen);
-
 
     SparkMaxConfig config = new SparkMaxConfig();
     config.smartCurrentLimit(35);
