@@ -47,9 +47,13 @@ public class CoralDispenserCommand extends Command{
                 coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
                 SensorStatus.hasCoral = false;
             }
-        else if(xboxControllerLeftTrigger.get() > 0.5) {
+        else if(xboxControllerLeftTrigger.get() > 0.3) {
             coralDispenserSubsystem.runMotors(-.3, .3);
             SensorStatus.hasCoral = false;
+        }else{
+            coralDispenserSubsystem.runMotors(0, 0);
+            CollectionDelay.reset();
+            CollectionDelay.stop();
         }
             
         

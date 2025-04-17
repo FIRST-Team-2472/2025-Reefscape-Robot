@@ -139,7 +139,7 @@ public class RobotContainer {
     }
 
     ShuffleboardTab autoTestingBoard = Shuffleboard.getTab("Auto Testing");
-    autoTestingBoard.add("Auto choices", testChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    autoTestingBoard.add("Auto choices - in testing", testChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
     elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, () -> -xboxController.getLeftY(),
         () -> xboxController.y().getAsBoolean(), () -> xboxController.b().getAsBoolean(),
