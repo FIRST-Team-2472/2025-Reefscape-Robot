@@ -30,7 +30,7 @@ public class AutoCoralDispenseCommand extends Command{
             coralDispenserSubsystem.runMotors(1, -1);
         }
 
-        coralDispenserSubsystem.hascoral = false;
+        coralDispenserSubsystem.hasCoral = false;
     }
 
     @Override

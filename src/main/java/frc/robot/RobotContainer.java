@@ -127,9 +127,9 @@ public class RobotContainer {
     autoChooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
     autoChooser.addOption(CageTwoToIL4ToLL4, CageTwoToIL4ToLL4);
 
-    if(DriverStation.isFMSAttached() == true) {
-    ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
-    driverBoard.add("Auto choices", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    if (DriverStation.isFMSAttached() == true) {
+      ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
+      driverBoard.add("Auto choices", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
     } else {
       ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
       driverBoard.add("Auto choices", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -138,37 +138,32 @@ public class RobotContainer {
       autoTestingBoard.add("Auto choices", testChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
     }
 
-      ShuffleboardTab autoTestingBoard = Shuffleboard.getTab("Auto Testing");
-      autoTestingBoard.add("Auto choices", testChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
-    }
+    ShuffleboardTab autoTestingBoard = Shuffleboard.getTab("Auto Testing");
+    autoTestingBoard.add("Auto choices", testChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem,
-        () -> -xboxController.getLeftY(),
-        () -> xboxController.y().getAsBoolean(),
-        () -> xboxController.b().getAsBoolean(),
-        () -> xboxController.a().getAsBoolean(),
-        () -> xboxController.x().getAsBoolean()));
+    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, () -> -xboxController.getLeftY(),
+        () -> xboxController.y().getAsBoolean(), () -> xboxController.b().getAsBoolean(),
+        () -> xboxController.a().getAsBoolean(), () -> xboxController.x().getAsBoolean()));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem,
-        () -> xboxController.getRightTriggerAxis(),
-        () -> xboxController.getLeftTriggerAxis()));
+        () -> xboxController.getRightTriggerAxis(), () -> xboxController.getLeftTriggerAxis()));
 
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem,
-        () -> leftJoystick.getRawButton(1),
-        () -> leftJoystick.getRawButton(4)));
+        () -> leftJoystick.getRawButton(1), () -> leftJoystick.getRawButton(4)));
 
-    climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem,
-        () -> xboxController.getRightY(),
-        () -> xboxController.leftBumper().getAsBoolean(),
-        () -> xboxController.rightBumper().getAsBoolean()));
+    climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, () -> xboxController.getRightY(),
+        () -> xboxController.leftBumper().getAsBoolean(), () -> xboxController.rightBumper().getAsBoolean()));
 
     configureBindings();
+
   }
 
   private void configureBindings() {
-    //xboxController.povUp().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(0)));
-    //xboxController.povDown().onTrue(new InstantCommand(() -> coralCollectionSubsystem.setServoAngle(180)));
-    //Controllers need to be added
+    // xboxController.povUp().onTrue(new InstantCommand(() ->
+    // coralCollectionSubsystem.setServoAngle(0)));
+    // xboxController.povDown().onTrue(new InstantCommand(() ->
+    // coralCollectionSubsystem.setServoAngle(180)));
+    // Controllers need to be added
     /*
      * xboxController.a().onTrue(new
      * AutoPrepForClimbCommand(coralCollectionSubsystem, 30));
@@ -397,3 +392,4 @@ public class RobotContainer {
 
     return null;
   }
+}
