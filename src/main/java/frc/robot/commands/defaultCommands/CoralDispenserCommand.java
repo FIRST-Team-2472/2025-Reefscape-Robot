@@ -28,12 +28,12 @@ public class CoralDispenserCommand extends Command{
     public void execute() {
         if(xboxControllerRightTrigger.get() > 0.3)
             if(RobotStatus.kElevatorHeight > 8 && RobotStatus.kElevatorHeight < 10) {
-                coralDispenserSubsytem.runMotors(.9, -.3);
+                coralDispenserSubsystem.runMotors(.9, -.3);
                 RobotStatus.hasCoral = false;
             }
             else if (RobotStatus.kElevatorHeight < 3) {
                 if (!RobotStatus.hasCoral) {
-                    coralDispenserSubsytem.runMotors(.2, -.2);
+                    coralDispenserSubsystem.runMotors(.2, -.2);
                 } else {
                     if(CollectionDelay.hasElapsed(delay))
                         coralDispenserSubsystem.runMotors(0, 0);
@@ -45,11 +45,10 @@ public class CoralDispenserCommand extends Command{
             }
             else {
                 coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
-                coralDispenserSubsystem.hascoral = false;
-            }
-        }else if(xboxControllerLeftTrigger.get() > 0.3) {
+                coralDispenserSubsystem.hasCoral = false;
+            }else if(xboxControllerLeftTrigger.get() > 0.3) {
             coralDispenserSubsystem.runMotors(-.3, .3);
-            coralDispenserSubsystem.hascoral = false;
+            coralDispenserSubsystem.hasCoral = false;
         }else{
             coralDispenserSubsystem.runMotors(0, 0);
             CollectionDelay.reset();

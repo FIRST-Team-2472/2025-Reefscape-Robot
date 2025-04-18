@@ -24,6 +24,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -114,6 +115,8 @@ public class SwerveSubsystem extends SubsystemBase {
     double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+
+    public Timer gameTimer = new Timer();
 
     public SwerveSubsystem() {
         this.limelightSubsystem = Limelight.getInstance();

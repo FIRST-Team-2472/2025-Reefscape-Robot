@@ -70,7 +70,7 @@ public class RobotContainer {
   private final CommandSequences commandSequences = new CommandSequences();
 
   //Add subsystems below this comment
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   CoralCollectionSubsystem coralCollectionSubsystem = new CoralCollectionSubsystem();

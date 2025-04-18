@@ -14,7 +14,7 @@ public class ElevatorCommand extends Command{
     ElevatorSubsystem elevatorSubsystem;
     Supplier<Double> joystickY;
     MotorPowerController motorPowerController;
-    double elevatorSetHeight = SensorStatus.kElevatorHeight;
+    double elevatorSetHeight = RobotStatus.kElevatorHeight;
     Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed;
 
     public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> joystickY, Supplier<Boolean> XboxYPressed, Supplier<Boolean> XboxBPressed, Supplier<Boolean> XboxAPressed, Supplier<Boolean> XboxXPressed){
@@ -30,7 +30,7 @@ public class ElevatorCommand extends Command{
 
   @Override
   public void initialize() {
-        elevatorSetHeight = SensorStatus.kElevatorHeight;
+        elevatorSetHeight = RobotStatus.kElevatorHeight;
   }
   
   // Called every time the scheduler runs while the command is scheduled.

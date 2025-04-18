@@ -11,7 +11,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
-    private LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
 
@@ -35,7 +34,6 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
-        ledSubsystem.Timer(swerveSubsystem.gameTimer);
         if(resetHeadingButton.get())
             swerveSubsystem.zeroRobotHeading();
 
