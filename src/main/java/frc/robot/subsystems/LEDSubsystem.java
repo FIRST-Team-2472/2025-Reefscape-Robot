@@ -58,4 +58,57 @@ public class LEDSubsystem extends SubsystemBase {
         // Write the data to the LED strip
         LEDs.setData(LEDBuffer);
     }
+
+    public void off(boolean off) {
+        this.off = off;
+    }
+
+    public void green(boolean g) {
+        green = g;
+    }
+
+    public void blue(boolean b) {
+        blue = b;
+    }
+
+    public void yellow(boolean y) {
+        yellow = y;
+    }
+
+    public void cyan(boolean c) {
+        cyan = c;
+    }
+
+    public void red(boolean r) {
+        red = r;
+    }
+
+    public void purple(boolean p) {
+        purple = p;
+    }
+
+    public void Timer(Timer t) {
+        if (t.hasElapsed(140)){
+            red(t.get() % .5 > .25);
+            off(t.get() % .5 < .25);
+            green(false);
+            purple(false);
+            blue(false);
+            yellow(false);
+            cyan(false);
+        } else if (t.hasElapsed(130)) {
+            blue(t.get() % 1 > .5);
+            off(t.get() % 1 < .5);
+            red(false);
+            green(false);
+            purple(false);
+            yellow(false);
+            cyan(false);
+        }
+    }
+
+    private void coral() {
+        green(SensorStatus.hasCoral);
+        purple(SensorStatus.seeCoral);
+    }
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -27,11 +28,13 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   public AlgaeCollectionSubsystem() {
 
     SparkMaxConfig config = new SparkMaxConfig();
+    SparkMaxConfig config2 = new SparkMaxConfig();
     config.smartCurrentLimit(35);
-    config.idleMode(IdleMode.kCoast);
+    config.idleMode(IdleMode.kBrake);
     pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    config.smartCurrentLimit(15);// it will burn at 10-13 so this is already semi pushing it
+    config2.smartCurrentLimit(15);// it will burn at 10-13 so this is already semi pushing it
+    config2.idleMode(IdleMode.kCoast);
     spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     RobotStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read, converting it to degrees as
@@ -41,7 +44,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   public void runPivotMotor(double powerPercent) {
     if(RobotStatus.kPivotAngle > 200)
       Math.max(0, powerPercent);// clamps it so it cant drive down when beyond this angle
-    else if(RobotStatus.kPivotAngle < 115)
+    else if(RobotStatus.kPivotAngle < 105)
       Math.min(0, powerPercent);// clamps it so it cant drive up when beyond this angle
     pivotmotor.set(powerPercent);
   }
@@ -51,7 +54,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   }
 
   public void setAngleSetpoint(double angle) {
-    angle = Math.min(200, Math.max(120, angle)); // clamp betweein vertical and on the ground
+    angle = Math.min(200, Math.max(105, angle)); // clamp betweein vertical and on the ground
     pivotAngleSetPoint = angle;
   }
 

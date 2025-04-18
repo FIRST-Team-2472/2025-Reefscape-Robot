@@ -26,10 +26,6 @@ public class AlgaeCollectionCommand extends Command{
 
     @Override
     public void execute() {
-        if(AlgaeSubsystem.spinmotor.getOutputCurrent() > 5)// 10 is subject to change
-            hasAlgea = true;
-        else
-            hasAlgea = false;
 
         if (leftJoystickTrigger.get()) {
             AlgaeSubsystem.runSpinMotor(.5);
@@ -46,7 +42,7 @@ public class AlgaeCollectionCommand extends Command{
             }
             else{
                 AlgaeSubsystem.runSpinMotor(0);
-                currentSetAngle = 120;
+                currentSetAngle = 105;
             }
 
 

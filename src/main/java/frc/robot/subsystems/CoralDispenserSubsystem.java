@@ -36,7 +36,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
             laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
         }catch (ConfigurationFailedException e) {
-            System.out.println("Configuration failed" + e);
+            //System.out.println("Configuration failed" + e);
         }
     }
     public void runMotors(double leftPower, double rightPower){
@@ -80,9 +80,11 @@ public class CoralDispenserSubsystem extends SubsystemBase{
             if (fails > 0) {
                 fails--;
             }
+        }else if(measurement != null){
+            //do nothing
         }else{
             fails++;
-            System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
+            //System.out.println("Oh no! The target is not in range, or we can't get a reliable measurement");
         }
         autoIntake();
         SmartDashboard.putBoolean("seeCoral", seeCoral);

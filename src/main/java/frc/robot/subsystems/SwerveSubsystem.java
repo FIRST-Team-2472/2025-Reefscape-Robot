@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Transform2d;
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathSharedStore;
@@ -18,7 +21,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
@@ -28,7 +30,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
@@ -85,6 +86,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private Pigeon2 gyro = new Pigeon2(SensorConstants.kPigeonID);
+    private double frontLeftEncoderLast, frontRightEncoderLast, backLeftEncoderLast, backRightEncoderLast = 0;
     // Sets the preliminary odometry. This gets refined by the PhotonVision class,
     // but this is the original.
     //private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
@@ -105,9 +107,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     double lastXDrive = 0;
     double lastYDrive = 0;
-    double distanceError = 0;
+    /* double distanceError = 0;
     double xError = 0;
-    double yError = 0;
+    double yError = 0; */
+
+    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
@@ -123,6 +127,8 @@ public class SwerveSubsystem extends SubsystemBase {
         rollSB = programmerBoard.add("Roll", 0).getEntry();
         pitchSB = programmerBoard.add("Pitch", 0).getEntry();
         programmerBoard.add("Pigeon Orientation", gyro.getAngle()).getEntry();
+        //wheelAccelerationFinder = new NewAccelerationLimiter(0.5, 0.5);
+        speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
         speedLimiter = new NewNewAccelLimiter(TargetPosConstants.kForwardMaxAcceleration, TargetPosConstants.kBackwardMaxAcceleration);
 
@@ -225,19 +231,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public ChassisSpeeds getChassisSpeedsRobotRelative() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotation2d());
     }
-    public boolean isStalling(){
-        int stallScount = 0;
-        if(frontLeft.isStalling())
-            stallScount++;
-        if(frontRight.isStalling())
-            stallScount++;
-        if(backLeft.isStalling())
-            stallScount++;
-        if(backRight.isStalling())
-            stallScount++;
-        return stallScount >=2;
-
-    }
 
     // gets our current velocity relative to the x of the robot (front/back)
     public double getXSpeedRobotRel() {
@@ -313,7 +306,16 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void calibrateOdometry(double odometryConfidence) {
-        odometer.resetPosition(getRotation2d(), getModulePositions(), getFilteredPose(odometryConfidence));
+        Pose2d filteredPose = this.calculateFilteredPose(odometryConfidence);
+        Pose2d odometryPose = this.getOdometryPose();
+        //System.out.println(filteredPose);
+        //System.out.println(this.getOdometryPose());
+        //System.out.println(filteredPose.minus(this.getOdometryPose()));
+
+        // Calculate difference between odometry pose and filtered pose
+        // and set the odometry offset to that difference
+
+        this.odometryOffset = new Pose2d(filteredPose.getX() - odometryPose.getX(), filteredPose.getY() - odometryPose.getY(), new Rotation2d());
     }
 
     public void calibrateOdometry() {
@@ -475,6 +477,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
+        logSwerveDesiredStates(desiredStates);
         // if their speed is larger then the physical max speed, it reduces all speeds
         // until they are smaller than physical max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
@@ -586,5 +589,41 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("backLeftCurrent", backLeft.getCurrent());
         SmartDashboard.putNumber("frontRightCurrent", frontRight.getCurrent());
         SmartDashboard.putNumber("backRightCurrent", backRight.getCurrent());
+
+        frontLeftEncoderLast = frontLeft.getDrivePositionTwo();
+        frontRightEncoderLast = frontRight.getDrivePositionTwo();
+        backLeftEncoderLast = backLeft.getDrivePositionTwo();
+        backRightEncoderLast = backRight.getDrivePositionTwo();
+
+        logSwerveStates();
+        logOdometry();
+        logPigeonState();
+    }
+
+    // Send the swerve modules' encoder positions to Advantage Kit
+    public void logSwerveStates() {
+
+        Logger.recordOutput("SwerveState", new SwerveModuleState[] {
+                frontLeft.getState(),
+                frontRight.getState(),
+                backLeft.getState(),
+                backRight.getState()
+        });
+    }
+
+    // Send Swerve Desired Rotation and speed to Advantage Kit
+    public void logSwerveDesiredStates(SwerveModuleState[] desiredStates) {
+        Logger.recordOutput("DesiredSwerveState", desiredStates);
+    }
+
+    // Send Pigeon Rotation to Advantage Kit (useful for seeing robot rotation)
+    public void logPigeonState() {
+        Logger.recordOutput("PigeonGyro", gyro.getRotation2d());
+    }
+
+    // Send Odometry Position on field to Advantage Kit
+    public void logOdometry() {
+        Logger.recordOutput("Odometry/Location", getPose()
+        );
     }
 }

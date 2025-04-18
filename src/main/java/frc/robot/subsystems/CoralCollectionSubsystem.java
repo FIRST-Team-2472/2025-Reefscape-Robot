@@ -7,7 +7,6 @@ public class CoralCollectionSubsystem extends SubsystemBase{
     Servo intakeServo = new Servo(9);
     public CoralCollectionSubsystem() {
         intakeServo.setAngle(110);
-
     }
     public void setServoAngle(double angle){
         intakeServo.setAngle(angle);

@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kSprocketCircumference = 5.538628;// slightly rounded and in inches
         public static final double kElevatorMotorRotationsToInches = kSprocketCircumference * kElevatorGearRatio * -2; // times two because its a two stage elevator negative because the encoder reads negative when going up
 
-        public static final double kElevatorL4Height = 57;
+        public static final double kElevatorL4Height = 57.5;
         public static final double kElevatorL3Height = 32;
         public static final double kElevatorL2Height = 16;
         public static final double kElevatorL1Height = 9;
@@ -58,7 +58,7 @@ public final class Constants {
     }
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = .0989191;
+        public static final double kWheelDiameterMeters = .0952492;
         // gear ratio is inversed (1/gear ratio) so we can multiply instead of dividing
         // the Rot to meter funtion
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -99,7 +99,7 @@ public final class Constants {
 
         // Positive should be counter clockwise
         public static final boolean kFrontLeftTurningEncoderReversed = false;
-        public static final boolean kBackLeftTurningEncoderReversed = false;
+        public static final boolean kBackLeftTurningEncoderReversed = false; 
         public static final boolean kFrontRightTurningEncoderReversed = false;
         public static final boolean kBackRightTurningEncoderReversed = false;
 
@@ -132,6 +132,7 @@ public final class Constants {
 
     }
 
+    //never used ANYWHERE
     public static final class TeleDriveConstants {
         // Motion constants for joystick drive mode -> dependant on max speed
         // Max x/y speed of robot in this drive mode
@@ -145,6 +146,7 @@ public final class Constants {
         public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI * 2;
     }
 
+    //never used ANYWHERE
     public static final class AutoConstants {
         // Motion constants for sequential path drive mode
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 9.44; // was 9.44; (changed 2/20/25)//was 4 before 9.44 (changed somtime before 2/20/25)
@@ -231,6 +233,7 @@ public final class Constants {
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
+        public static String PRIMARY_LIMELIGHT = "limelight-obj";
     }
     public final class VisionConstants {
         public static String kFrontLimelightName = "limelight-obj";
