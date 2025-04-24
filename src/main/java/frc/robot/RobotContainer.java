@@ -67,8 +67,6 @@ public class RobotContainer {
 
   private final SendableChooser<String> autoChooser = new SendableChooser<>();
   private final SendableChooser<String> testChooser = new SendableChooser<>();
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
   private final CommandSequences commandSequences = new CommandSequences();
 
   // Add subsystems below this comment
