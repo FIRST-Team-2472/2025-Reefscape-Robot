@@ -59,7 +59,7 @@ public class LEDSubsystem extends SubsystemBase {
         LEDs.setData(LEDBuffer);
     }
 
-    public void off(boolean off) {
+    /* public void off(boolean off) {
         this.off = off;
     }
 
@@ -85,7 +85,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void purple(boolean p) {
         purple = p;
-    }
+    } 
 
     public void Timer(Timer t) {
         if (t.hasElapsed(140)){
@@ -105,10 +105,10 @@ public class LEDSubsystem extends SubsystemBase {
             yellow(false);
             cyan(false);
         }
-    }
+    } 
 
     private void coral() {
         green(RobotStatus.hasCoral);
         purple(RobotStatus.seeCoral);
-    }
+    } */
 }
