@@ -92,8 +92,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
-        () -> -leftJoystick.getX(),
-        () -> -leftJoystick.getY(),
+        () -> -leftJoystick.getX(), // negative because we get the inverse value
+        () -> -leftJoystick.getY(), // negative because we get the inverse value
         () -> rightJoystick.getX(),
         () -> rightJoystick.getRawButton(1),
         () -> rightJoystick.getRawButton(4)));
@@ -139,18 +139,25 @@ public class RobotContainer {
     ShuffleboardTab autoTestingBoard = Shuffleboard.getTab("Auto Testing");
     autoTestingBoard.add("Auto choices - in testing", testChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, () -> -xboxController.getLeftY(),
-        () -> xboxController.y().getAsBoolean(), () -> xboxController.b().getAsBoolean(),
-        () -> xboxController.a().getAsBoolean(), () -> xboxController.x().getAsBoolean()));
+    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
+        () -> -xboxController.getLeftY(),
+        () -> xboxController.y().getAsBoolean(), 
+        () -> xboxController.b().getAsBoolean(),
+        () -> xboxController.a().getAsBoolean(), 
+        () -> xboxController.x().getAsBoolean()));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem,
-        () -> xboxController.getRightTriggerAxis(), () -> xboxController.getLeftTriggerAxis()));
+        () -> xboxController.getRightTriggerAxis(), 
+        () -> xboxController.getLeftTriggerAxis()));
 
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem,
-        () -> leftJoystick.getRawButton(1), () -> leftJoystick.getRawButton(4)));
+        () -> leftJoystick.getRawButton(1), 
+        () -> leftJoystick.getRawButton(4)));
 
-    climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, () -> xboxController.getRightY(),
-        () -> xboxController.leftBumper().getAsBoolean(), () -> xboxController.rightBumper().getAsBoolean()));
+    climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
+        () -> xboxController.getRightY(),
+        () -> xboxController.leftBumper().getAsBoolean(), 
+        () -> xboxController.rightBumper().getAsBoolean()));
 
     configureBindings();
 

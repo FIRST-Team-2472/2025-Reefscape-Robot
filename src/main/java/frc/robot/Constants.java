@@ -115,6 +115,7 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
         // To find set the motors forward record the value (don't inverse the value)
+        // 180 degrees means the wheels are running backwards. Preferably set to 0
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
         public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;

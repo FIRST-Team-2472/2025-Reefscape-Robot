@@ -31,7 +31,7 @@ public class HoldElevatorCommand extends Command {
     @Override
     public void execute() {
         double power = motorPowerController.calculate(targetHeight, SensorStatus.kElevatorHeight);
-        elevatorSubsystem.runElevatorMotors(-power);
+        elevatorSubsystem.runElevatorMotors(-power); // Runs with negative power because the motor is inverted
     }
 
     // Called once the command ends or is interrupted.
