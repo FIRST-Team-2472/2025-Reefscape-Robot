@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.MotorPowerController;
-import frc.robot.SensorStatus;
+import frc.robot.RobotStatus;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class HoldElevatorCommand extends Command {
@@ -16,7 +16,7 @@ public class HoldElevatorCommand extends Command {
     public HoldElevatorCommand(ElevatorSubsystem elevatorSubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.elevatorSubsystem = elevatorSubsystem;
-        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, SensorStatus.kElevatorHeight, 5);
+        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
 
 
         addRequirements(elevatorSubsystem);
@@ -24,14 +24,14 @@ public class HoldElevatorCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        targetHeight = SensorStatus.kElevatorHeight;
+        targetHeight = RobotStatus.kElevatorHeight;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double power = motorPowerController.calculate(targetHeight, SensorStatus.kElevatorHeight);
-        elevatorSubsystem.runElevatorMotors(-power); // Runs with negative power because the motor is inverted
+        double power = motorPowerController.calculate(targetHeight, RobotStatus.kElevatorHeight);
+        elevatorSubsystem.runElevatorMotors(-power);
     }
 
     // Called once the command ends or is interrupted.

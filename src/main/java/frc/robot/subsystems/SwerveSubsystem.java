@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
-import frc.robot.SensorStatus;
+import frc.robot.RobotStatus;
 import frc.robot.MotorPowerController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -546,9 +546,9 @@ public class SwerveSubsystem extends SubsystemBase {
         pitchSB.setDouble(getPitch());
         rollSB.setDouble(getRoll());
 
-        SensorStatus.pigeonPitch = getPitch();
-        SensorStatus.pigeonRoll = getRoll();
-        SensorStatus.pigeonYaw = getHeading();
+        RobotStatus.pigeonPitch = getPitch();
+        RobotStatus.pigeonRoll = getRoll();
+        RobotStatus.pigeonYaw = getHeading();
 
         updateOdometryWithVision();
 

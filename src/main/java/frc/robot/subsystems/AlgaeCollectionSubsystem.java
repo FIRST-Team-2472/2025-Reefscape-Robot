@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MotorPowerController;
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.SensorConstants;
-import frc.robot.SensorStatus;
+import frc.robot.RobotStatus;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,14 +37,14 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     config2.idleMode(IdleMode.kCoast);
     spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    SensorStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read, converting it to degrees as
+    RobotStatus.kPivotAngle = absoluteEncoder.get() * 360;// updating it before its read, converting it to degrees as
                                                            // well
   }
 
   public void runPivotMotor(double powerPercent) {
-    if(SensorStatus.kPivotAngle > 200)
+    if(RobotStatus.kPivotAngle > 200)
       Math.max(0, powerPercent);// clamps it so it cant drive down when beyond this angle
-    else if(SensorStatus.kPivotAngle < 105)
+    else if(RobotStatus.kPivotAngle < 115)
       Math.min(0, powerPercent);// clamps it so it cant drive up when beyond this angle
     pivotmotor.set(powerPercent);
   }
@@ -61,12 +61,12 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kPivotAngle = (absoluteEncoder.get() * 360 + 180) % 360;// converting it to degrees and offsetting it
+    RobotStatus.kPivotAngle = (absoluteEncoder.get() * 360 + 180) % 360;// converting it to degrees and offsetting it
                                                                          // by 180
-    SmartDashboard.putNumber("Algea Collector angle", SensorStatus.kPivotAngle);
+    SmartDashboard.putNumber("Algea Collector angle", RobotStatus.kPivotAngle);
     SmartDashboard.putNumber("Spin motor output", spinmotor.getOutputCurrent());
 
     // driving it to hold its angle
-    runPivotMotor(-angleController.calculate(pivotAngleSetPoint, SensorStatus.kPivotAngle));
+    runPivotMotor(-angleController.calculate(pivotAngleSetPoint, RobotStatus.kPivotAngle));
   }
 }

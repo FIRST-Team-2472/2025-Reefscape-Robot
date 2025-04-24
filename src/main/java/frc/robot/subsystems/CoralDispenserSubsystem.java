@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CoralDispenserConstants;
-import frc.robot.SensorStatus;
+import static frc.robot.Constants.CoralDispenserConstants.*;
+import frc.robot.RobotStatus;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.ConfigurationFailedException;
@@ -17,8 +17,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 public class CoralDispenserSubsystem extends SubsystemBase{
-    private SparkMax leftMotor = new SparkMax(CoralDispenserConstants.kLeftMotorID, MotorType.kBrushless);
-    private SparkMax rightMotor = new SparkMax(CoralDispenserConstants.kRightMotorID, MotorType.kBrushless);
+    private SparkMax leftMotor = new SparkMax(kLeftMotorID, MotorType.kBrushless);
+    private SparkMax rightMotor = new SparkMax(kRightMotorID, MotorType.kBrushless);
     private LaserCan laserCan = new LaserCan(0);
     int fails = 0;
     public boolean seeCoral, hasCoral = false;
@@ -42,15 +42,21 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     public void runMotors(double leftPower, double rightPower){
         leftMotor.set(leftPower);
         rightMotor.set(rightPower);
+        // update dispensing status for our LED's this could be done in the command but its easier to do it here
+        if(leftPower > kDispenseSpeedThreshold && rightPower < -kDispenseSpeedThreshold){
+            RobotStatus.isDispensing = true;
+        }else{
+            RobotStatus.isDispensing = false;
+        }
     }
 
     public void autoIntake() {
         if (fails < 7) {
-            if (seeCoral && SensorStatus.kTimeOfFlightDistance > 80) {
+            if (seeCoral && RobotStatus.kTimeOfFlightDistance > 80) {
                 hasCoral = true;
                 seeCoral = false;
             }
-            if (SensorStatus.kTimeOfFlightDistance < 80) {
+            if (RobotStatus.kTimeOfFlightDistance < 80) {
                 seeCoral = true;
             }
         } else {
@@ -70,7 +76,7 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         if (measurement != null && measurement.status ==LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
             double distance = measurement.distance_mm;
             SmartDashboard.putNumber("distance sensor", distance);
-            SensorStatus.kTimeOfFlightDistance = distance;
+            RobotStatus.kTimeOfFlightDistance = distance;
             if (fails > 0) {
                 fails--;
             }
@@ -83,8 +89,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
         autoIntake();
         SmartDashboard.putBoolean("seeCoral", seeCoral);
         SmartDashboard.putBoolean("hasCoral", hasCoral);
-        SensorStatus.seeCoral = seeCoral;
-        SensorStatus.hasCoral = hasCoral;
+        RobotStatus.seeCoral = seeCoral;
+        RobotStatus.hasCoral = hasCoral;
     }
 
 }

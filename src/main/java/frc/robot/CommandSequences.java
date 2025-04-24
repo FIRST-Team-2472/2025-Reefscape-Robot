@@ -67,7 +67,7 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new CollectCoralCmd(coralDispenserSubsystem),
-                SensorStatus.seeCoral == true ?
+                RobotStatus.seeCoral == true ?
                     new SwerveDriveToPointCmd(null, reefNodesMap.get('C')) : null
             )
         );

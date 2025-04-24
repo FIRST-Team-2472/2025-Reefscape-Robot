@@ -4,8 +4,9 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.SensorStatus;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Robot;
+import frc.robot.RobotStatus;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class CoralDispenserCommand extends Command{
@@ -28,12 +29,12 @@ public class CoralDispenserCommand extends Command{
     @Override
     public void execute() {
         if(xboxControllerRightTrigger.get() > 0.3)
-            if(SensorStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && SensorStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1) {
+            if(RobotStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && RobotStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1) {
                 coralDispenserSubsystem.runMotors(.9, -.3);
-                SensorStatus.hasCoral = false;
+                RobotStatus.hasCoral = false;
             }
-            else if (SensorStatus.kElevatorHeight < 3) {
-                if (!SensorStatus.hasCoral) {
+            else if (RobotStatus.kElevatorHeight < 3) {
+                if (!RobotStatus.hasCoral) {
                     coralDispenserSubsystem.runMotors(.2, -.2);
                 } else {
                     if(CollectionDelay.hasElapsed(delay))
@@ -46,15 +47,17 @@ public class CoralDispenserCommand extends Command{
             }
             else {
                 coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
-                SensorStatus.hasCoral = false;
+                RobotStatus.hasCoral = false;
             }
         else if(xboxControllerLeftTrigger.get() > 0.3) {
             coralDispenserSubsystem.runMotors(-.3, .3);
-            SensorStatus.hasCoral = false;
+            RobotStatus.hasCoral = false;
         }else{
             coralDispenserSubsystem.runMotors(0, 0);
             CollectionDelay.reset();
             CollectionDelay.stop();
+            coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
+                RobotStatus.hasCoral = false;
         }
             
         

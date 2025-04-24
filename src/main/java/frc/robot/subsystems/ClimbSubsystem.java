@@ -9,7 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.SensorConstants;
-import frc.robot.SensorStatus;
+import frc.robot.RobotStatus;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,7 +23,7 @@ public class ClimbSubsystem extends SubsystemBase{
           config.idleMode(IdleMode.kBrake);
       climberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-      SensorStatus.kClimberAngle = absoluteEncoder.get()*360;// setting it before the pid reads it and multiplying it by 360 to convert it from rotations to degrees
+      RobotStatus.kClimberAngle = absoluteEncoder.get()*360;// setting it before the pid reads it and multiplying it by 360 to convert it from rotations to degrees
     }
 
     /**
@@ -37,7 +37,7 @@ public class ClimbSubsystem extends SubsystemBase{
      @Override
   public void periodic() {
     // updating the sensors status to be read by other files
-    SensorStatus.kClimberAngle = (absoluteEncoder.get()*360+120) % 360;//multiplying it by 360 to convert it from rotations to degrees
-    SmartDashboard.putNumber("Climber angle", SensorStatus.kClimberAngle);
+    RobotStatus.kClimberAngle = (absoluteEncoder.get()*360+120) % 360;//multiplying it by 360 to convert it from rotations to degrees
+    SmartDashboard.putNumber("Climber angle", RobotStatus.kClimberAngle);
   }
 }
