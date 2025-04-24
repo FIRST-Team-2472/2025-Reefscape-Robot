@@ -37,6 +37,7 @@ import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.CoralCollectionSubsystem;
@@ -73,8 +74,9 @@ public class RobotContainer {
   private final LimeLightSubsystem limeLightSubsystem = new LimeLightSubsystem();
   private final PositionFilteringSubsystem positionFilteringSubsystem = new PositionFilteringSubsystem(
       limeLightSubsystem);
-  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(positionFilteringSubsystem);
+  public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
+  //Add subsystems below this comment
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   CoralCollectionSubsystem coralCollectionSubsystem = new CoralCollectionSubsystem();

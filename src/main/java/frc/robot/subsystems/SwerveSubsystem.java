@@ -23,7 +23,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -39,9 +40,12 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.Constants.TargetPosConstants;
 import frc.robot.Constants.TeleDriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.extras.NewNewAccelLimiter;
 import frc.robot.extras.SwerveModule;
+import frc.robot.Constants.VisionConstants.*;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -90,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator robotPoseEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, 
         getRotation2d(), getModulePositions(), new Pose2d());
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
-    private PositionFilteringSubsystem positionFilteringSubsystem;
+    private Limelight limelightSubsystem;
     private int periods = 0; // period counter used for limelight update timing
 
     private NewNewAccelLimiter speedLimiter;
@@ -112,12 +116,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
-    private Pose2d odometryOffset = new Pose2d();
-
-    public Timer gameTimer = new Timer();
-
-    public SwerveSubsystem(PositionFilteringSubsystem positionFilteringSubsystem) {
-        this.positionFilteringSubsystem = positionFilteringSubsystem;
+    public SwerveSubsystem() {
+        this.limelightSubsystem = Limelight.getInstance();
 
         // Gets tabs from Shuffleboard
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
@@ -149,7 +149,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem(Pigeon2 gyro, // This constructor is used for testing
             SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight,
             GenericEntry headingShuffleBoard, GenericEntry odometerShuffleBoard, GenericEntry rollSB,
-            GenericEntry pitchSB, PositionFilteringSubsystem positionFilteringSubsystem, int periods) {
+            GenericEntry pitchSB, int periods) {
         this.gyro = gyro;
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
@@ -159,7 +159,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this.odometerShuffleBoard = odometerShuffleBoard;
         this.rollSB = rollSB;
         this.pitchSB = pitchSB;
-        this.positionFilteringSubsystem = positionFilteringSubsystem;
+        this.limelightSubsystem = Limelight.getInstance();
         this.periods = periods;
     }
 
@@ -493,6 +493,44 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.resetEncoders();
         backRight.resetEncoders();
     }
+    public void updateOdometryWithVision() {
+    LimelightHelpers.SetRobotOrientation(
+        VisionConstants.kFrontLimelightName,
+        robotPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
+    LimelightHelpers.SetRobotOrientation(
+        VisionConstants.kSideLimelightName,
+        robotPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+        0,
+        0,
+        0,
+        0,
+        0);
+
+    PoseEstimate estimate = limelightSubsystem.getTrustedPose();
+    if (estimate != null) {
+        SmartDashboard.putBoolean("NullEstimate", false);
+      boolean doRejectUpdate = false;
+      if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) {
+        doRejectUpdate = true;
+      }
+      if (estimate.tagCount == 0) {
+        doRejectUpdate = true;
+      }
+      SmartDashboard.putNumber("estimate.tagCount", estimate.tagCount);
+      SmartDashboard.putBoolean("rejecting update", doRejectUpdate);
+      if (!doRejectUpdate) {
+        robotPoseEstimator.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+      } else {
+      }
+    } else {
+        SmartDashboard.putBoolean("NullEstimate", true);
+    }
+}
 
     @Override
     public void periodic() {
@@ -512,39 +550,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SensorStatus.pigeonRoll = getRoll();
         SensorStatus.pigeonYaw = getHeading();
 
-        // Send Gyro data to Limelight for higher accuracy
-        /*LimelightHelpers.SetRobotOrientation("limelight-front", odometer.getPoseMeters().getRotation().getDegrees(),
-                0.0, 0.0, 0.0, 0.0, 0.0);
-
-        // Pose2d filteredBotPose = getFilteredPose();
-        // SmartDashboard.putNumber("Filtered Pose X", filteredBotPose.getX());
-        // SmartDashboard.putNumber("Filtered Pose Y", filteredBotPose.getY());
-
-        try {
-            if (periods == 0) {
-                calibrateOdometry();
-                periods = 10;
-            }
-
-            periods--;
-        } catch (Exception NullPointerException) {
-            // TODO: handle exception
-        }*/
-
-        SmartDashboard.putNumber("filtered X", getPose().getX());
-        SmartDashboard.putNumber("filtered Y", getPose().getY());
-        
-        velocityX += gyro.getAccelerationX().getValueAsDouble();
-        velocityY += gyro.getAccelerationY().getValueAsDouble();
-        SmartDashboard.putNumber("gyro X velocity",velocityX);
-        SmartDashboard.putNumber("gyro Y velocity",velocityY);
-        double totalVelocity = Math.sqrt(velocityX*velocityX + velocityY*velocityY);
-        SmartDashboard.putNumber("gyro total velocity", totalVelocity);
-
-        SmartDashboard.putNumber("odometer X velocity", chassisSpeeds.vxMetersPerSecond);
-        SmartDashboard.putNumber("odometer Y velocity", chassisSpeeds.vyMetersPerSecond);
-        double odometerTotalVelocity = Math.sqrt(chassisSpeeds.vxMetersPerSecond*chassisSpeeds.vxMetersPerSecond + chassisSpeeds.vyMetersPerSecond*chassisSpeeds.vyMetersPerSecond);
-        SmartDashboard.putNumber("odometer total velocity", odometerTotalVelocity);
+        updateOdometryWithVision();
 
         SmartDashboard.putNumber("frontLeft Encoder",
                 frontLeft.absoluteEncoder.getAbsolutePosition().getValueAsDouble());

@@ -200,7 +200,7 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.015;// subject to change was 0.04
+        public static final double kAcceptableDistanceError = 0.03;// subject to change was 0.04
         public static final double kAcceptableAngleError = 3;
     }
 
@@ -230,6 +230,11 @@ public final class Constants {
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
         public static String PRIMARY_LIMELIGHT = "limelight-obj";
+    }
+    public final class VisionConstants {
+        public static String kFrontLimelightName = "limelight-obj";
+        public static String kSideLimelightName = null;//"limelight-side";
+        public static double kMaxAllowedTagDistance = 5.0;
     }
 
     public static class LEDConstants {
