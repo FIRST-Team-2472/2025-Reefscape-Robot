@@ -572,7 +572,7 @@ public class SwerveSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("odometerX", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("EstimatedX", robotPoseEstimator.getEstimatedPosition().getX());
         //SmartDashboard.putNumber("odometerY", odometer.getPoseMeters().getY());
-        SmartDashboard.putNumber("EatimatedY", robotPoseEstimator.getEstimatedPosition().getY());
+        SmartDashboard.putNumber("EstimatedY", robotPoseEstimator.getEstimatedPosition().getY());
         //SmartDashboard.putNumberArray("odometer", new double[] { odometer.getPoseMeters().getX(),
                 //odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().getRadians() });
         SmartDashboard.putNumberArray("EstimatedPosition", new double[] { robotPoseEstimator.getEstimatedPosition().getX(),
