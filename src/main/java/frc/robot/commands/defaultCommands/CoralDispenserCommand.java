@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.SensorStatus;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 
 public class CoralDispenserCommand extends Command{
@@ -27,7 +28,7 @@ public class CoralDispenserCommand extends Command{
     @Override
     public void execute() {
         if(xboxControllerRightTrigger.get() > 0.3)
-            if(SensorStatus.kElevatorHeight > 8 && SensorStatus.kElevatorHeight < 10) {
+            if(SensorStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && SensorStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1) {
                 coralDispenserSubsystem.runMotors(.9, -.3);
                 SensorStatus.hasCoral = false;
             }

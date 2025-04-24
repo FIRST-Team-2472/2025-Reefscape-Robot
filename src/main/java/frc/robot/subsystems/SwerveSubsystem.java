@@ -176,11 +176,6 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    /*public void zeroOdometerHeading() {
-        odometer.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(),
-                new Pose2d(odometer.getPoseMeters().getX(), odometer.getPoseMeters().getY(), new Rotation2d()));
-    }*/
-
     public void zeroRobotHeading() {
         robotPoseEstimator.resetPosition(getRotation2d(), getModulePositions(), new Pose2d(robotPoseEstimator.getEstimatedPosition().getX(), robotPoseEstimator.getEstimatedPosition().getY(), new Rotation2d()));
     }
