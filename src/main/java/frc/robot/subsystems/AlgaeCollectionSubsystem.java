@@ -54,7 +54,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
   }
 
   public void setAngleSetpoint(double angle) {
-    angle = Math.min(200, Math.max(105, angle)); // clamp betweein vertical and on the ground
+    angle = Math.min(220, Math.max(105, angle)); // clamp betweein vertical and on the ground
     pivotAngleSetPoint = angle;
   }
 

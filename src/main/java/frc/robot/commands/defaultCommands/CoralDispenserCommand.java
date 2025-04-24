@@ -31,9 +31,8 @@ public class CoralDispenserCommand extends Command{
         if(xboxControllerRightTrigger.get() > 0.3)
             if(RobotStatus.kElevatorHeight > ElevatorConstants.kElevatorL1Height - 1 && RobotStatus.kElevatorHeight < ElevatorConstants.kElevatorL1Height + 1) {
                 coralDispenserSubsystem.runMotors(.9, -.3);
-                RobotStatus.hasCoral = false;
-            }
-            else if (RobotStatus.kElevatorHeight < 3) {
+                coralDispenserSubsystem.hasCoral = false;
+            } else if (RobotStatus.kElevatorHeight < 3) {
                 if (!RobotStatus.hasCoral) {
                     coralDispenserSubsystem.runMotors(.2, -.2);
                 } else {
@@ -47,17 +46,15 @@ public class CoralDispenserCommand extends Command{
             }
             else {
                 coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
-                RobotStatus.hasCoral = false;
+                coralDispenserSubsystem.hasCoral = false;
             }
         else if(xboxControllerLeftTrigger.get() > 0.3) {
             coralDispenserSubsystem.runMotors(-.3, .3);
-            RobotStatus.hasCoral = false;
+            coralDispenserSubsystem.hasCoral = false;
         }else{
             coralDispenserSubsystem.runMotors(0, 0);
             CollectionDelay.reset();
             CollectionDelay.stop();
-            coralDispenserSubsystem.runMotors(.8, -.8);//subject to change
-                RobotStatus.hasCoral = false;
         }
             
         

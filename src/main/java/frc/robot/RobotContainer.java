@@ -79,6 +79,7 @@ public class RobotContainer {
 
   ClimbSubsystem climbSubsystem = new ClimbSubsystem();
   CoralDispenserSubsystem coralDispenserSubsystem = new CoralDispenserSubsystem();
+  LEDSubsystem ledSubsystem = new LEDSubsystem();
 
   // Make sure this xbox controller is correct and add driver sticks
   CommandXboxController xboxController = new CommandXboxController(OperatorConstants.kXboxControllerPort);
@@ -148,7 +149,8 @@ public class RobotContainer {
 
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem,
         () -> leftJoystick.getRawButton(1), 
-        () -> leftJoystick.getRawButton(4)));
+        () -> leftJoystick.getRawButton(4),
+        () -> leftJoystick.getRawButton(3)));
 
     climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
         () -> xboxController.getRightY(),

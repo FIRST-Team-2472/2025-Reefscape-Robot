@@ -238,14 +238,14 @@ public final class Constants {
     }
     public final class VisionConstants {
         public static String kFrontLimelightName = "limelight-obj";
-        public static String kSideLimelightName = null;//"limelight-side";
+        public static String kSideLimelightName = "limelight-side";
         public static double kMaxAllowedTagDistance = 5.0;
     }
     public final class LEDConstants {
-        public static int kBackLEDStripLEDCount = -1; // I forgot
-        public static int kElevatorLEDStripLEDCount = -1; // I forgot
+        public static int kBackLEDStripLEDCount = 20; // I forgot
+        public static int kElevatorLEDStripLEDCount = 9; // I forgot
         public static int kLEDPWMPort = 1;
         public static Distance kLEDSpacing = Meters.of(1.0 / 6); // 6 per meter 
-        public static LinearVelocity kRainbowScrollSpeed = MetersPerSecond.of(1);
+        public static LinearVelocity kRainbowScrollSpeed = MetersPerSecond.of(3);
     }   
 }

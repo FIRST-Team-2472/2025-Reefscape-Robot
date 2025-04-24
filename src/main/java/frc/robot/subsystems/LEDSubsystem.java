@@ -34,9 +34,10 @@ public class LEDSubsystem extends SubsystemBase {
         // TODO Auto-generated method stub
         super.periodic();
         LEDPattern pattern;   
+        Color h = new Color(0,255,0);
 
         if(RobotStatus.hasCoral){
-            pattern = LEDPattern.solid(Color.kGreen);
+            pattern = LEDPattern.solid(h);
         }else if(RobotStatus.seeCoral)   {
             pattern = LEDPattern.solid(Color.kPurple);
         }else if(RobotStatus.isDispensing)   {
@@ -49,8 +50,8 @@ public class LEDSubsystem extends SubsystemBase {
         }
         // this will need tweaking so it only happens on the one LED strip
         // the numbers come from the match time - 15 seconds and 15 seconds left of match
-        LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> (DriverStation.getMatchTime() - 135) / 15);
-        pattern = pattern.mask(countdownMask);
+        //LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> (DriverStation.getMatchTime() - 135) / 15);
+        //pattern = pattern.mask(countdownMask);
         
         // Apply the LED pattern to the data buffer
         pattern.applyTo(LEDBuffer);

@@ -59,7 +59,7 @@ public class ElevatorCommand extends Command{
     SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
 
     SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight));
-    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), .6), -1)); //negative because up is reverse
+    elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), 1), -1)); //negative because up is reverse
   }
 
   // Called once the command ends or is interrupted.
