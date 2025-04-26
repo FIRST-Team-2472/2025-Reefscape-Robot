@@ -91,7 +91,7 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
         () -> -leftJoystick.getX(), // negative because we get the inverse value
         () -> -leftJoystick.getY(), // negative because we get the inverse value
-        () -> rightJoystick.getX(),
+        () -> -rightJoystick.getX(),
         () -> rightJoystick.getRawButton(1),
         () -> rightJoystick.getRawButton(4)));
 

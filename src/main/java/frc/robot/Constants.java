@@ -234,7 +234,6 @@ public final class Constants {
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
-        public static String PRIMARY_LIMELIGHT = "limelight-obj";
     }
     public final class VisionConstants {
         public static String kFrontLimelightName = "limelight-obj";

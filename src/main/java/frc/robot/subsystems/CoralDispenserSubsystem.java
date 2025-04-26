@@ -73,7 +73,8 @@ public class CoralDispenserSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         LaserCan.Measurement measurement = laserCan.getMeasurement();
-        if (measurement != null && measurement.status ==LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+        // sensor reads unreliably with high distance so we ignore beyond 3 inches 
+        if (measurement != null && measurement.status ==LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT && RobotStatus.kElevatorHeight < 3) {
             double distance = measurement.distance_mm;
             SmartDashboard.putNumber("distance sensor", distance);
             RobotStatus.kTimeOfFlightDistance = distance;
