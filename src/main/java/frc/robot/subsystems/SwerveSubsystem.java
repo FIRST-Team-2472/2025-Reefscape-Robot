@@ -559,7 +559,7 @@ public class SwerveSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("estimate.tagCount", estimate.tagCount);
             SmartDashboard.putBoolean("rejecting update", doRejectUpdate);
             if (!doRejectUpdate) {
-                robotPoseEstimator.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
+                robotPoseEstimator.addVisionMeasurement(estimate.pose, MathSharedStore.getTimestamp() - estimate.latency);
             } else {
             }
         } else {
