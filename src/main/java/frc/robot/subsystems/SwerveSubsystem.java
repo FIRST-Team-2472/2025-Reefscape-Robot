@@ -126,7 +126,7 @@ public class SwerveSubsystem extends SubsystemBase {
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
     public SwerveSubsystem() {
-        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.5, 0.5, Double.MAX_VALUE));
+        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, Double.MAX_VALUE));
         this.limelightSubsystem = Limelight.getInstance();
 
         // Gets tabs from Shuffleboard
