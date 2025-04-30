@@ -195,8 +195,8 @@ public final class Constants {
         public static final double kMaxAngularSpeed = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 16;
 
-        public static final double kForwardMaxAcceleration = .04;
-        public static final double kBackwardMaxAcceleration = .1;
+        public static final double kForwardMaxAcceleration = .03;
+        public static final double kBackwardMaxAcceleration = .075;
         public static final double kMaxAngularAcceleration = Math.PI / 3;
         public static final double kBackwardAngularAcceleration = -Math.PI * 9;
 
@@ -236,8 +236,8 @@ public final class Constants {
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
     public final class VisionConstants {
-        public static String kFrontLimelightName = "limelight-obj";
-        public static String kSideLimelightName = "limelight-side";
+        public static String kFrontLimelightName = "limelight-side";
+        public static String kSideLimelightName = "limelight-obj";
         public static double kMaxAllowedTagDistance = 5.0;
     }
     public final class LEDConstants {

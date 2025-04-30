@@ -44,7 +44,7 @@ public class SwerveDriveToPointCmd extends Command {
   public boolean isFinished() {
     // use this function if you overide the command to finish it
 
-    if ((swerveSubsystem.isExactlyInPosition(targetPosition) || swerveSubsystem.isNearlyInPosition(targetPosition) && swerveSubsystem.isAtAngle(targetPosition.getRotation())) || timer.hasElapsed(5)){
+    if ((swerveSubsystem.isExactlyInPosition(targetPosition) || swerveSubsystem.isNearlyInPosition(targetPosition) && swerveSubsystem.isAtAngle(targetPosition.getRotation()))){
       //System.out.println("Finished Driving");
       return true;
     }
