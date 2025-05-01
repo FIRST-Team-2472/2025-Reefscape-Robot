@@ -126,7 +126,7 @@ public class SwerveSubsystem extends SubsystemBase {
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
     public SwerveSubsystem() {
-        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, Double.MAX_VALUE));
+        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.4, 0.4, Double.MAX_VALUE));
         this.limelightSubsystem = Limelight.getInstance();
 
         // Gets tabs from Shuffleboard
@@ -562,7 +562,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 SmartDashboard.putBoolean("working", true);
                 SmartDashboard.putNumber("limelight X", estimate.pose.getX());
                 SmartDashboard.putNumber("limelight Y", estimate.pose.getY());
-                robotPoseEstimator.addVisionMeasurement(estimate.pose, MathSharedStore.getTimestamp() - estimate.latency);
+                robotPoseEstimator.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
             } else {
             }
         } else {

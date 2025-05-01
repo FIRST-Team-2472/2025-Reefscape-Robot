@@ -43,7 +43,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public void runElevatorMotors(double powerPercent){
-    rightElevatorMotor.set(powerPercent);
+    rightElevatorMotor.set(powerPercent-.02);
+    SmartDashboard.putNumber("elevator Power", powerPercent);
   }
 
   @Override

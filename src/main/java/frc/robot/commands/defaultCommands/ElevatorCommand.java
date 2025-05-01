@@ -25,7 +25,7 @@ public class ElevatorCommand extends Command{
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
         addRequirements(elevatorSubsystem);
-        motorPowerController = new MotorPowerController(0.07, 0.05, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
+        motorPowerController = new MotorPowerController(0.07, 0.01, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
     }
 
   @Override

@@ -205,7 +205,7 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.03;// subject to change was 0.04
+        public static final double kAcceptableDistanceError = 0.01;// subject to change was 0.04
         public static final double kAcceptableAngleError = 3;
     }
 
@@ -236,7 +236,7 @@ public final class Constants {
         public static int kClimberABSEncoderDIOPort = 1; // set later
     }
     public final class VisionConstants {
-        public static String kFrontLimelightName = "limelight-side";
+        public static String kFrontLimelightName = null;//"limelight-side";
         public static String kSideLimelightName = "limelight-obj";
         public static double kMaxAllowedTagDistance = 5.0;
     }
