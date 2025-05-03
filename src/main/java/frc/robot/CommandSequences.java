@@ -95,7 +95,7 @@ public class CommandSequences {
     }
 
     public Command CageTwoToI(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[1].toFieldPose2d());
+        //swerveSubsystem.setPoseEstimator(cageNodes[1].toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('I'));
     }
 
