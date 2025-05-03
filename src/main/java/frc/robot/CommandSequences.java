@@ -140,7 +140,6 @@ public class CommandSequences {
     }
 
     public Command CageFiveToF(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[4].toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
     }
 

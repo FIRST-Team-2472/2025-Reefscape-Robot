@@ -100,7 +100,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator robotPoseEstimator = new SwerveDrivePoseEstimator(
             DriveConstants.kDriveKinematics,
-            getRotation2d(), getModulePositions(), new Pose2d());
+            getRotation2d(), getModulePositions(), new Pose2d(),
+            VecBuilder.fill(0.5, 0.5, 0.1),
+            VecBuilder.fill(0.1, 0.1, Double.MAX_VALUE));
+            
     private GenericEntry headingShuffleBoard, odometerShuffleBoard, rollSB, pitchSB;
     private Limelight limelightSubsystem;
     private int periods = 0; // period counter used for limelight update timing
@@ -126,7 +129,6 @@ public class SwerveSubsystem extends SubsystemBase {
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
     public SwerveSubsystem() {
-        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, Double.MAX_VALUE));
         this.limelightSubsystem = Limelight.getInstance();
 
         // Gets tabs from Shuffleboard
