@@ -121,12 +121,12 @@ public class SwerveSubsystem extends SubsystemBase {
      * double yError = 0;
      */
 
-    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY;
+    double xError, yError, xSpeed, ySpeed, distanceError, angleDifference, speed, velocityX, velocityY, lastYawValue;
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
     public SwerveSubsystem() {
-        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.4, 0.4, Double.MAX_VALUE));
+        robotPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1, 0.1, Double.MAX_VALUE));
         this.limelightSubsystem = Limelight.getInstance();
 
         // Gets tabs from Shuffleboard
@@ -532,7 +532,7 @@ public class SwerveSubsystem extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation(
                 VisionConstants.kFrontLimelightName,
                 robotPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-                0,
+                gyro.getYaw().getValueAsDouble() - lastYawValue,
                 0,
                 0,
                 0,
@@ -540,11 +540,13 @@ public class SwerveSubsystem extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation(
                 VisionConstants.kSideLimelightName,
                 robotPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-                0,
+                gyro.getYaw().getValueAsDouble() - lastYawValue,
                 0,
                 0,
                 0,
                 0);
+        
+        lastYawValue = gyro.getYaw().getValueAsDouble();
 
         PoseEstimate estimate = limelightSubsystem.getTrustedPose();
         if (estimate != null) {
