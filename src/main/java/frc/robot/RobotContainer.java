@@ -46,24 +46,26 @@ import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.commands.RunSwerve;
 
 public class RobotContainer {
-  private final String MiddleToH = "Drive from Middle and Sit", driveforward = "Drive forward",
-      MiddleToHL1 = "Drive from Middle and Place on H L1", MiddleToHL4 = "Drive from Middle and Place on H L4",
-      CageThreeToHL1 = "Drive from Cage 3 and Place on H L1", CageTwoToIL4 = "Drive from Cage 2 and Place on I L4",
-      coralcollectionautotest = "Test Coral Collection - TEST FIRST!!!",
-      MiddleToGL1 = "Drive from Middle and Place on G L1",
-      MiddleToGL4 = "Drive from Middle and Place on G L4", CageThreeToHL4 = "Drive from Cage 3 and Place on H L4",
-      CageThreeToGL1 = "Drive from Cage 3 and Place on G L1", CageThreeToGL4 = "Drive from Cage 3 and Place on G L4",
-      CageFourToHL1 = "Drive from Cage 4 and Place on H L1", CageFourToHL4 = "Drive from Cage 4 and Place on H L4",
-      CageFourToGL1 = "Drive from Cage 4 and Place on G L1", CageFourToGL4 = "Drive from Cage 4 and Place on G L4",
-      CageOneToIL1 = "Drive from Cage 1 and Place on I L1", CageOneToIL4 = "Drive from Cage 1 and Place on I L4",
-      CageTwoToIL1 = "Drive from Cage 2 and Place on I L1",
-      CageFiveToFL1 = "Drive from Cage 5 and Place on F L1", CageFiveToFL4 = "Drive from Cage 5 and Place on F L4",
-      CageSixToFL1 = "Drive from Cage 6 and Place on F L1", CageSixToFL4 = "Drive from Cage 6 and Place on F L4",
-      DriveForwardTest = "Drive Forward Test", setOdodmetryToTest = "set Odometry to test",
-      CageFiveToFL4ToCL4 = "Drive from Cage 5 to FL4 CL4", CageTwoToIL4ToLL4 = "Drive from Cage 2 to IL4 LL4";
 
   private String m_autoSelected;
+  private final String
+    HToSit = "Drive To H and Sit",
+    HL1 = "Drive To and Place on H L1", 
+    HL4 = "Drive To and Place on H L4",
+    IL4 = "Drive To and Place on I L4",
+    FL4 = "Drive To and Place on F L4",
+    DriveForwardTest = "Drive Forward Test",
+    IL4ToLL4 = "Drive To IL4 LL4",
+    FL4ToCL4 = "Drive To FL4 CL4"; 
+
   private String m_testSelected;
+  private final String
+    coralcollectionautotest = "Test Coral Collection - TEST FIRST!!!",
+    GL1 = "Drive To and Place on G L1",
+    GL4 = "Drive To and Place on G L4",
+    IL1 = "Drive To and Place on I L1",
+    FL1 = "Drive To and Place on F L1", 
+    setOdodmetryToTest = "set Odometry to test";
 
   private final SendableChooser<String> autoChooser = new SendableChooser<>();
   private final SendableChooser<String> testChooser = new SendableChooser<>();
@@ -96,32 +98,21 @@ public class RobotContainer {
         () -> rightJoystick.getRawButton(1),
         () -> rightJoystick.getRawButton(4)));
 
-    testChooser.addOption(coralcollectionautotest, coralcollectionautotest);
-    autoChooser.addOption(MiddleToH, MiddleToH);
-    autoChooser.addOption(MiddleToHL1, MiddleToHL1);
-    autoChooser.addOption(MiddleToHL4, MiddleToHL4);
-    testChooser.addOption(CageThreeToHL1, CageThreeToHL1);
-    autoChooser.addOption(CageTwoToIL4, CageTwoToIL4);
-    testChooser.addOption(MiddleToGL1, MiddleToGL1);
-    testChooser.addOption(MiddleToGL4, MiddleToGL4);
-    testChooser.addOption(CageThreeToHL4, CageThreeToHL4);
-    testChooser.addOption(CageThreeToGL1, CageThreeToGL1);
-    testChooser.addOption(CageThreeToGL4, CageThreeToGL4);
-    testChooser.addOption(CageFourToHL1, CageFourToHL1);
-    testChooser.addOption(CageFourToHL4, CageFourToHL4);
-    testChooser.addOption(CageFourToGL1, CageFourToGL1);
-    testChooser.addOption(CageFourToGL4, CageFourToGL4);
-    testChooser.addOption(CageOneToIL1, CageOneToIL1);
-    testChooser.addOption(CageOneToIL4, CageOneToIL4);
-    testChooser.addOption(CageTwoToIL1, CageTwoToIL1);
-    testChooser.addOption(CageFiveToFL1, CageFiveToFL1);
-    autoChooser.addOption(CageFiveToFL4, CageFiveToFL4);
-    testChooser.addOption(CageSixToFL1, CageSixToFL1);
-    testChooser.addOption(CageSixToFL4, CageSixToFL4);
     autoChooser.addOption(DriveForwardTest, DriveForwardTest);
+    autoChooser.addOption(HToSit, HToSit);
+    autoChooser.addOption(HL1, HL1);
+    autoChooser.addOption(HL4, HL4);
+    autoChooser.addOption(IL4, IL4);
+    autoChooser.addOption(FL4, FL4);
+    autoChooser.addOption(IL4ToLL4, IL4ToLL4);
+    autoChooser.addOption(FL4ToCL4, FL4ToCL4);
+
+    testChooser.addOption(GL1, GL1);
+    testChooser.addOption(GL4, GL4);
+    testChooser.addOption(IL1, IL1);
+    testChooser.addOption(FL1, FL1);
+    testChooser.addOption(coralcollectionautotest, coralcollectionautotest);
     testChooser.addOption(setOdodmetryToTest, setOdodmetryToTest);
-    autoChooser.addOption(CageFiveToFL4ToCL4, CageFiveToFL4ToCL4);
-    autoChooser.addOption(CageTwoToIL4ToLL4, CageTwoToIL4ToLL4);
 
     if (DriverStation.isFMSAttached() == true) {
       ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
@@ -196,37 +187,31 @@ public class RobotContainer {
 
     if (m_autoSelected != null) {
       switch (m_autoSelected) {
-        case MiddleToH:
+        case HToSit:
           return new SequentialCommandGroup(
-              commandSequences.MiddleToH(swerveSubsystem));
+              commandSequences.StartToH(swerveSubsystem));
 
-        case MiddleToHL1:
+        case HL1:
           return new SequentialCommandGroup(
-              commandSequences.MiddleToH(swerveSubsystem),
+              commandSequences.StartToH(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL1Height));
 
-        case MiddleToHL4:
+        case HL4:
           return new SequentialCommandGroup(
-              commandSequences.MiddleToH(swerveSubsystem),
+              commandSequences.StartToH(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL4Height));
 
-        case CageTwoToIL4:
+        case IL4:
           return new SequentialCommandGroup(
-              commandSequences.CageTwoToI(swerveSubsystem),
+              commandSequences.StartToI(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL4Height));
 
-        case CageThreeToGL4:
+        case FL4:
           return new SequentialCommandGroup(
-              commandSequences.CageThreeToG(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
-
-        case CageFiveToFL4:
-          return new SequentialCommandGroup(
-              commandSequences.CageFiveToF(swerveSubsystem),
+              commandSequences.StartToF(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL4Height));
 
@@ -234,10 +219,10 @@ public class RobotContainer {
           return new SequentialCommandGroup(
               commandSequences.driveForwardTest(swerveSubsystem));
 
-        case CageTwoToIL4ToLL4:
+        case IL4ToLL4:
               return new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
-                  commandSequences.CageTwoToI(swerveSubsystem),
+                  commandSequences.StartToI(swerveSubsystem),
                   new SequentialCommandGroup(
                       new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .2),
                       new HoldElevatorCommand(elevatorSubsystem)
@@ -256,10 +241,10 @@ public class RobotContainer {
                 commandSequences.LeftPlayerToL(swerveSubsystem),
                 commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
               );
-        case CageFiveToFL4ToCL4:
+        case FL4ToCL4:
               return new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
-                  commandSequences.CageFiveToF(swerveSubsystem),
+                  commandSequences.StartToF(swerveSubsystem),
                   new SequentialCommandGroup(
                     new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .2),
                     new HoldElevatorCommand(elevatorSubsystem)
@@ -289,122 +274,32 @@ public class RobotContainer {
           return new SequentialCommandGroup(
               commandSequences.coralcollectionautotest(coralDispenserSubsystem));
 
-        case CageThreeToHL1:
+        case GL1:
           return new SequentialCommandGroup(
-              commandSequences.CageThreeToH(swerveSubsystem),
+              commandSequences.StartToG(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL1Height));
 
-        case MiddleToGL1:
+        case GL4:
           return new SequentialCommandGroup(
-              commandSequences.MiddleToG(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL1Height));
-
-        case MiddleToGL4:
-          return new SequentialCommandGroup(
-              commandSequences.MiddleToG(swerveSubsystem),
+              commandSequences.StartToG(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL4Height));
 
-        case CageThreeToHL4:
+        case IL1:
           return new SequentialCommandGroup(
-              commandSequences.CageThreeToH(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
-
-        case CageThreeToGL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageThreeToG(swerveSubsystem),
+              commandSequences.StartToI(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL1Height));
 
-        case CageThreeToGL4:
+        case FL1:
           return new SequentialCommandGroup(
-              commandSequences.CageThreeToG(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
-
-        case CageFourToHL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageFourToH(swerveSubsystem),
+              commandSequences.StartToF(swerveSubsystem),
               commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
                   ElevatorConstants.kElevatorL1Height));
-
-        case CageFourToHL4:
-          return new SequentialCommandGroup(
-              commandSequences.CageFourToH(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
-
-        case CageFourToGL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageFourToG(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL1Height));
-
-        case CageFourToGL4:
-          return new SequentialCommandGroup(
-              commandSequences.CageFourToG(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
-
-        case CageOneToIL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageOneToI(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL1Height));
-
-        case CageOneToIL4:
-          return new SequentialCommandGroup(
-              commandSequences.CageOneToI(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
-
-        case CageTwoToIL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageTwoToI(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL1Height));
-
-        case CageFiveToFL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageFiveToF(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL1Height));
-
-        case CageSixToFL1:
-          return new SequentialCommandGroup(
-              commandSequences.CageSixToF(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL1Height));
-
-        case CageSixToFL4:
-          return new SequentialCommandGroup(
-              commandSequences.CageSixToF(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height));
 
         case setOdodmetryToTest:
           commandSequences.setOdodmeteryToTest(swerveSubsystem);
-
-        case CageFiveToFL4ToCL4:
-          return new SequentialCommandGroup(
-            new SequentialCommandGroup(
-                  commandSequences.CageFiveToF(swerveSubsystem),
-                  commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
-            ),
-            new ParallelCommandGroup(
-                  commandSequences.setElevatorL0(elevatorSubsystem),
-                  commandSequences.FToRightPlayer(swerveSubsystem)
-            ),
-                
-              commandSequences.collectCoral(coralDispenserSubsystem),
-
-              commandSequences.RightPlayerToD(swerveSubsystem),
-              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                  ElevatorConstants.kElevatorL4Height)
-          );
       }
     }
 

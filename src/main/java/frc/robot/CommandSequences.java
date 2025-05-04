@@ -29,14 +29,6 @@ public class CommandSequences {
     PosPose2d processor;
 
     public CommandSequences() {
-        // x is centered on starting line
-        cageNodes[0] = simplePose(7.114, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.114, 6.165, 180); //Cage Position 2
-        cageNodes[2] = simplePose(7.114, 5.077, 180); //Cage Position 3
-        cageNodes[3] = simplePose(7.114, 2.929, 180); //Cage Position 4
-        cageNodes[4] = simplePose(7.114, 1.898, 180); //Cage Position 5
-        cageNodes[5] = simplePose(7.114, 0.794, 180); //Cage on far right from driver POV
-
 
         reefNodesMap.put('A', simplePose(3.168, 4.190, 0));
         reefNodesMap.put('B', simplePose(3.168, 3.860, 0));
@@ -51,11 +43,9 @@ public class CommandSequences {
         reefNodesMap.put('K', simplePose(3.972, 5.249, 300));
         reefNodesMap.put('L', simplePose(3.686, 5.085, 300));
 
-
         leftHumanPlayer = simplePose(1.127, 6.982, 306);
         rightHumanPlayer = simplePose(1.127, 1.035, 54);
 
-        middle =  simplePose(7.115, 4, 180);
         rightReefPassage = simplePose(5.8, 1.7, 75);
         leftReefPassage = simplePose(5.8, 7, 285);
 
@@ -74,106 +64,44 @@ public class CommandSequences {
     }
     //Starting Position to reef
 
-    public Command CageOneToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[0].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
 
     public Command setOdodmeteryToTest(SwerveSubsystem swerveSubsystem){
         swerveSubsystem.setPoseEstimator(simplePose(2.18, 4, 0));
         return null;
     }
 
-    public Command CageOneToI(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[0].toFieldPose2d());
+    public Command StartToI(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('I'));
     }
 
-    public Command CageTwoToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[1].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
-
-    public Command CageTwoToI(SwerveSubsystem swerveSubsystem){
-        //swerveSubsystem.setPoseEstimator(cageNodes[1].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('I'));
-    }
-
-    public Command CageThreeToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[2].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
-
-    public Command CageThreeToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[2].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command MiddleToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(middle.toFieldPose2d());
+    public Command StartToH(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
     }
     
-    public Command MiddleToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(middle.toFieldPose2d());
+    public Command StartToG(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
     }
 
-    public Command CageFourToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[3].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
-
-    public Command CageFourToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[3].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command CageFourToF(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[3].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
-    }
-
-    public Command CageFiveToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[4].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command CageFiveToF(SwerveSubsystem swerveSubsystem){
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
-    }
-
-    public Command CageSixToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[5].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command CageSixToF(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(cageNodes[5].toFieldPose2d());
+    public Command StartToF(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
     }
 
     //Reef to Source
     
     public Command HToLeftPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(reefNodesMap.get('H').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
     }
 
     public Command GToRightPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setPoseEstimator(reefNodesMap.get('G').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
     }
 
     public Command FToRightPlayer(SwerveSubsystem swerveSubsystem){
-        //swerveSubsystem.setPoseEstimator(reefNodesMap.get('F').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
     }
 
     public Command IToLeftPlayer(SwerveSubsystem swerveSubsystem){
-        //swerveSubsystem.setPoseEstimator(reefNodesMap.get('I').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
-        //return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
     }
 
     //Source to Reef
