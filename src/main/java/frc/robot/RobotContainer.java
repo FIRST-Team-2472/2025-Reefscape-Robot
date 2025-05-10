@@ -236,8 +236,11 @@ public class RobotContainer {
                   commandSequences.setElevatorL0(elevatorSubsystem),
                   commandSequences.IToLeftPlayer(swerveSubsystem)
                 ),
-                commandSequences.collectCoral(coralDispenserSubsystem),
-    
+                new ParallelDeadlineGroup(
+                  commandSequences.collectCoral(coralDispenserSubsystem), 
+                new RunSwerve(swerveSubsystem, -0.05, .05)),
+                
+  
                 commandSequences.LeftPlayerToL(swerveSubsystem),
                 commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
               );
@@ -258,7 +261,9 @@ public class RobotContainer {
                       commandSequences.setElevatorL0(elevatorSubsystem),
                       commandSequences.FToRightPlayer(swerveSubsystem)
                 ),                  
-                commandSequences.collectCoral(coralDispenserSubsystem),
+                new ParallelDeadlineGroup(
+                  commandSequences.collectCoral(coralDispenserSubsystem), 
+                new RunSwerve(swerveSubsystem, -0.05, -0.05)),
     
                   commandSequences.RightPlayerToD(swerveSubsystem),
                   commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
