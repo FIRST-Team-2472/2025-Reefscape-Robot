@@ -46,7 +46,7 @@ public class LEDSubsystem extends SubsystemBase {
             // Create a new pattern that scrolls the rainbow pattern across the LED strip
             pattern = pattern.scrollAtAbsoluteSpeed(kRainbowScrollSpeed, kLEDSpacing);
         }else{
-            pattern = LEDPattern.steps(Map.of(0.00, Color.kRed, 0.25, Color.kYellow, 0.50, Color.kRed, 0.75, Color.kYellow));
+            pattern = LEDPattern.steps(Map.of(0.00, Color.kRed, 0.2, Color.kPurple, 0.40, Color.kRed, 0.6, Color.kPurple, .8, Color.kRed));
         }
         // this will need tweaking so it only happens on the one LED strip
         // the numbers come from the match time - 15 seconds and 15 seconds left of match
