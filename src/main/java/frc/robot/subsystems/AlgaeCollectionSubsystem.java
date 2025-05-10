@@ -33,7 +33,7 @@ public class AlgaeCollectionSubsystem extends SubsystemBase {
     config.idleMode(IdleMode.kBrake);
     pivotmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    config2.smartCurrentLimit(15);// it will burn at 10-13 so this is already semi pushing it
+    config2.smartCurrentLimit(8);// it will burn at 10-13 so this is already semi pushing it
     config2.idleMode(IdleMode.kCoast);
     spinmotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
