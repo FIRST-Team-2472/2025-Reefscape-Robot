@@ -50,8 +50,10 @@ public class LEDSubsystem extends SubsystemBase {
         }
         // this will need tweaking so it only happens on the one LED strip
         // the numbers come from the match time - 15 seconds and 15 seconds left of match
-        LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> (DriverStation.getMatchTime() - 135) / 15);
-        pattern = pattern.mask(countdownMask);
+        if(DriverStation.isFMSAttached()){
+            LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> (DriverStation.getMatchTime() - 135) / 15);
+            pattern = pattern.mask(countdownMask);
+        }
         
         // Apply the LED pattern to the data buffer
         pattern.applyTo(LEDBuffer);
