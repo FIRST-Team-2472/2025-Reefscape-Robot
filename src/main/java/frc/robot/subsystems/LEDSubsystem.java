@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotStatus;
+import frc.robot.Constants.ElevatorConstants;
 
 import static frc.robot.Constants.LEDConstants.*;
 
@@ -35,7 +36,7 @@ public class LEDSubsystem extends SubsystemBase {
         super.periodic();
         LEDPattern pattern;   
         Color h = new Color(0,255,0);
-        Color yellow = new Color(255, 0, 150);
+        Color yellow = new Color(187, 0, 75);
 
         if(RobotStatus.hasCoral){
             pattern = LEDPattern.solid(h);
@@ -52,7 +53,7 @@ public class LEDSubsystem extends SubsystemBase {
         // this will need tweaking so it only happens on the one LED strip
         // the numbers come from the match time - 15 seconds and 15 seconds left of match
         if(DriverStation.isFMSAttached()){
-            LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> (DriverStation.getMatchTime() - 135) / 15);
+            LEDPattern countdownMask = LEDPattern.progressMaskLayer(() -> DriverStation.getMatchTime() / 15);
             pattern = pattern.mask(countdownMask);
         }
         
