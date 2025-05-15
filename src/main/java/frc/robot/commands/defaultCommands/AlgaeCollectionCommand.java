@@ -29,7 +29,7 @@ public class AlgaeCollectionCommand extends Command{
     public void execute() {
 
         if (leftJoystickTrigger.get()) {
-            AlgaeSubsystem.runSpinMotor(.5);
+            AlgaeSubsystem.runSpinMotor(.4);
             currentSetAngle = 175;
 
         }else if(leftJoystickButtonFour.get()){

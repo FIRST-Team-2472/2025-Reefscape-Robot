@@ -138,17 +138,16 @@ public class RobotContainer {
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem,
         () -> xboxController.getRightTriggerAxis(), 
         () -> xboxController.getLeftTriggerAxis()));
-/**
     algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem,
         () -> leftJoystick.getRawButton(1), 
         () -> leftJoystick.getRawButton(4),
         () -> leftJoystick.getRawButton(3)));
-
+/*
     climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
         () -> xboxController.getRightY(),
         () -> xboxController.leftBumper().getAsBoolean(), 
         () -> xboxController.rightBumper().getAsBoolean()));
-*//
+*/
     configureBindings();
 
   }
