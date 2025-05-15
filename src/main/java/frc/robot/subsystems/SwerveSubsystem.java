@@ -434,7 +434,7 @@ public class SwerveSubsystem extends SubsystemBase {
         lastYDrive = ySpeed;
         // Converts robot speeds to speeds relative to field
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, robotPoseEstimator.getEstimatedPosition().getRotation());
+                xSpeed*.33, ySpeed*.33, turningSpeed*.33, robotPoseEstimator.getEstimatedPosition().getRotation());
 
         // Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
