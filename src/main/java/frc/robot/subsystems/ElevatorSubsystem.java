@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.SensorConstants;
 import frc.robot.RobotStatus;
 
 import com.revrobotics.spark.SparkMax;
@@ -43,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public void runElevatorMotors(double powerPercent){
-    rightElevatorMotor.set(powerPercent*.33 -.02);
+      rightElevatorMotor.set(powerPercent*.33 -.02);
     SmartDashboard.putNumber("elevator Power", powerPercent);
   }
 

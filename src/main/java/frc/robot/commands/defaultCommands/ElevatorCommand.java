@@ -36,6 +36,7 @@ public class ElevatorCommand extends Command{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (!RobotStatus.seeCoral){
     double y = joystickY.get();
     if(Math.abs(y) <= OperatorConstants.kXboxControllerDeadband)
         y = 0;
@@ -60,6 +61,7 @@ public class ElevatorCommand extends Command{
 
     SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight));
     elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), 1), -1)); //negative because up is reverse
+    }
   }
 
   // Called once the command ends or is interrupted.
