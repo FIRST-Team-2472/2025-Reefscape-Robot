@@ -1,31 +1,39 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.SensorStatus;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 
-public class CollectCoralCmd extends Command {
-    CoralDispenserSubsystem coralDispenserSubsystem;
+public class CollectCoralCmd extends Command{
 
-    public CollectCoralCmd(CoralDispenserSubsystem coralDispenserSubsystem) {
+    Timer timer;
+
+    CoralDispenserSubsystem coralDispenserSubsystem;
+    int framesCoralSeen = 0;
+    public CollectCoralCmd(CoralDispenserSubsystem coralDispenserSubsystem){
         addRequirements(coralDispenserSubsystem);
         this.coralDispenserSubsystem = coralDispenserSubsystem;
+
+
     }
-
     @Override
-    public void initialize() {}
-
+    public void initialize() {
+        framesCoralSeen = 0;
+    }
     @Override
     public void execute() {
-        coralDispenserSubsystem.runMotors(.5, -.5);
+        if(SensorStatus.seeCoral)
+            framesCoralSeen ++;
+        coralDispenserSubsystem.runMotors(.3, -.3);
     }
-
     @Override
     public void end(boolean interrupted) {
-        coralDispenserSubsystem.runMotors(0, 0);
-    }
+        coralDispenserSubsystem.runMotors(0,0);
 
+    }
     @Override
     public boolean isFinished() {
-        return coralDispenserSubsystem.hascoral;
+        return coralDispenserSubsystem.hascoral && framesCoralSeen > 20;
     }
 }
