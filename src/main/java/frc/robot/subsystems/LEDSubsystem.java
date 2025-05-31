@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.SensorStatus;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 public class LEDSubsystem extends SubsystemBase {
 
@@ -17,7 +15,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     private LEDStatusMode currentStatusMode;
 
-    public boolean disableLEDs,red,green,blue,yellow,purple,cyan,off;
+    public boolean disableLEDs, red, green, blue, yellow, purple, cyan, off;
 
     public Color color = Color.kBlack;
 
@@ -92,34 +90,33 @@ public class LEDSubsystem extends SubsystemBase {
         channel2.set((code & 2) > 0); // 2^1
         channel3.set((code & 4) > 0); // 2^2
 
-       /* switch(code) {
-            case (1): 
-            color = Color.kFirstRed;
-            break;
-            case(2):
-            color = Color.kDarkGreen;
-            break;
-            case (3): 
-            color = Color.kFirstBlue;
-            break;
-            case (4): 
-            color = Color.kFirstRed;
-            break;
-            case (5): 
-            color = Color.kGoldenrod;
-            break;
-            case (6): 
-            color = Color.kMediumPurple;
-            break;
-            case (7): 
-            color = Color.kWhite;
-            break;
-            default:
-            color = Color.kBlack;
-        }
-*/
-        
-        
+        /* switch(code) {
+                    case (1):
+                    color = Color.kFirstRed;
+                    break;
+                    case(2):
+                    color = Color.kDarkGreen;
+                    break;
+                    case (3):
+                    color = Color.kFirstBlue;
+                    break;
+                    case (4):
+                    color = Color.kFirstRed;
+                    break;
+                    case (5):
+                    color = Color.kGoldenrod;
+                    break;
+                    case (6):
+                    color = Color.kMediumPurple;
+                    break;
+                    case (7):
+                    color = Color.kWhite;
+                    break;
+                    default:
+                    color = Color.kBlack;
+                }
+        */
+
         coral();
     }
 
@@ -164,7 +161,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public void Timer(Timer t) {
-        if (t.hasElapsed(140)){
+        if (t.hasElapsed(140)) {
             red(t.get() % .5 > .25);
             off(t.get() % .5 < .25);
             green(false);

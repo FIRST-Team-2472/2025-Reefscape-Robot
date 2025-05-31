@@ -1,10 +1,6 @@
 package frc.robot.subsystems;
 
-import java.util.Arrays;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -32,10 +28,12 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         double[] limeLightConfidences = limeLightSubsystem.getConfidences();
         // System.out.println(limeLightBotPoses.length);
 
-//        for (int i = 0; i < numLimeLights; i++) {
-//            /* System.out.println("PositionFilteringSubsystem: Confidence: " + limeLightConfidences[i] + ", Pose: ("
-//                    + limeLightBotPoses[i].getX() + ", " + limeLightBotPoses[i].getY() + ")"); */
-//        }
+        //        for (int i = 0; i < numLimeLights; i++) {
+        //            /* System.out.println("PositionFilteringSubsystem: Confidence: " +
+        // limeLightConfidences[i] + ", Pose: ("
+        //                    + limeLightBotPoses[i].getX() + ", " + limeLightBotPoses[i].getY() +
+        // ")"); */
+        //        }
 
         // if (numLimeLights == 0) {
         // Constants.SensorStatus.filteredBotPose = odometryBotPose;
@@ -51,7 +49,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         System.arraycopy(limeLightConfidences, 0, confs, 1, numLimeLights); // Maybe remove the -1?
         confs[0] = odometryConfidence;
 
-        //System.out.println("PositionFilteringSubsystem: Original Confidences: " + Arrays.toString(confs));
+        // System.out.println("PositionFilteringSubsystem: Original Confidences: " +
+        // Arrays.toString(confs));
 
         // Now find the total confidence so we can normalize all the positions
         double totalConfidence = 0d;
@@ -60,26 +59,28 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         }
 
         if (totalConfidence == 0.0d) {
-            //System.out.println("PositionFilteringSubsystem: Total Confidence is 0, returning odometry pose");
+            // System.out.println("PositionFilteringSubsystem: Total Confidence is 0, returning
+            // odometry pose");
             return odometryBotPose;
         }
 
-        //System.out.println("PositionFilteringSubsystem: Total Confidence: " + totalConfidence);
+        // System.out.println("PositionFilteringSubsystem: Total Confidence: " + totalConfidence);
 
         for (int i = 0; i < confs.length; i++) {
             confs[i] /= totalConfidence;
         }
 
-        //System.out.println("PositionFilteringSubsystem: Normalized Confidences: " + Arrays.toString(confs));
+        // System.out.println("PositionFilteringSubsystem: Normalized Confidences: " +
+        // Arrays.toString(confs));
 
         // Multiply all positions to normalize them
         for (int i = 0; i < numLimeLights; i++) {
             weightedX += limeLightBotPoses[i].getX() * confs[i + 1];
             /* System.out.println("PositionFilteringSubsystem: LimeLightBotPose[" + i + "].X: "
-                    + limeLightBotPoses[i].getX() + ", Confidence: " + confs[i + 1]); */
+            + limeLightBotPoses[i].getX() + ", Confidence: " + confs[i + 1]); */
             weightedY += limeLightBotPoses[i].getY() * confs[i + 1];
             /* System.out.println("PositionFilteringSubsystem: LimeLightBotPose[" + i + "].Y: "
-                    + limeLightBotPoses[i].getY() + ", Confidence: " + confs[i + 1]); */
+            + limeLightBotPoses[i].getY() + ", Confidence: " + confs[i + 1]); */
             weightedAngle += limeLightBotPoses[i].getRotation().getRadians() * confs[i + 1];
         }
 
@@ -92,8 +93,8 @@ public class PositionFilteringSubsystem extends SubsystemBase {
         System.out.println("PositionFilteringSubsystem: OdometryBotPose.Y: " + odometryBotPose.getY() + ", Confidence: "
                 + confs[0]); */
 
-        //System.out.println("PositionFilteringSubsystem: Weighted X: " + weightedX);
-        //System.out.println("PositionFilteringSubsystem: Weighted Y: " + weightedY);
+        // System.out.println("PositionFilteringSubsystem: Weighted X: " + weightedX);
+        // System.out.println("PositionFilteringSubsystem: Weighted Y: " + weightedY);
 
         Pose2d filteredBotPose = new Pose2d(weightedX, weightedY, odometryBotPose.getRotation());
 
