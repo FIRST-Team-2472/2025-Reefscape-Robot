@@ -19,7 +19,6 @@ import frc.robot.commands.SwerveFollowTransitionCmd;
 import frc.robot.extras.PosPose2d;
 import frc.robot.subsystems.CoralDispenserSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.PositionFilteringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class CommandSequences {
@@ -30,14 +29,6 @@ public class CommandSequences {
     PosPose2d processor;
 
     public CommandSequences() {
-        // x is centered on starting line
-        cageNodes[0] = simplePose(7.114, 7.279, 180); //Cage on far left from driver POV
-        cageNodes[1] = simplePose(7.114, 6.165, 180); //Cage Position 2
-        cageNodes[2] = simplePose(7.114, 5.077, 180); //Cage Position 3
-        cageNodes[3] = simplePose(7.114, 2.929, 180); //Cage Position 4
-        cageNodes[4] = simplePose(7.114, 1.898, 180); //Cage Position 5
-        cageNodes[5] = simplePose(7.114, 0.794, 180); //Cage on far right from driver POV
-
 
         reefNodesMap.put('A', simplePose(3.168, 4.190, 0));
         reefNodesMap.put('B', simplePose(3.168, 3.860, 0));
@@ -47,16 +38,14 @@ public class CommandSequences {
         reefNodesMap.put('F', simplePose(5.294, 2.962, 120));
         reefNodesMap.put('G', simplePose(5.81, 3.86, 180));
         reefNodesMap.put('H', simplePose(5.79, 4.2, 180));
-        reefNodesMap.put('I', simplePose(5.292, 5.094, 240)); 
+        reefNodesMap.put('I', simplePose(5.292, 5.094, 240)); //5.278, 4.956
         reefNodesMap.put('J', simplePose(5.006, 5.253, 240));
         reefNodesMap.put('K', simplePose(3.972, 5.249, 300));
         reefNodesMap.put('L', simplePose(3.686, 5.085, 300));
 
-
         leftHumanPlayer = simplePose(1.127, 6.982, 306);
         rightHumanPlayer = simplePose(1.127, 1.035, 54);
 
-        middle =  simplePose(7.115, 4, 180);
         rightReefPassage = simplePose(5.8, 1.7, 75);
         leftReefPassage = simplePose(5.8, 7, 285);
 
@@ -68,114 +57,51 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new CollectCoralCmd(coralDispenserSubsystem),
-                coralDispenserSubsystem.seecoral == true ?
+                RobotStatus.seeCoral == true ?
                     new SwerveDriveToPointCmd(null, reefNodesMap.get('C')) : null
             )
         );
     }
     //Starting Position to reef
 
-    public Command CageOneToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
 
     public Command setOdodmeteryToTest(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(simplePose(2.18, 4, 0));
+        swerveSubsystem.setPoseEstimator(simplePose(2.18, 4, 0));
         return null;
     }
 
-    public Command CageOneToI(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[0].toFieldPose2d());
+    public Command StartToI(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('I'));
     }
 
-    public Command CageTwoToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[1].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
-
-    public Command CageTwoToI(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[1].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('I'));
-    }
-
-    public Command CageThreeToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
-
-    public Command CageThreeToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[2].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command MiddleToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+    public Command StartToH(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
     }
     
-    public Command MiddleToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(middle.toFieldPose2d());
+    public Command StartToG(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
     }
 
-    public Command CageFourToH(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('H'));
-    }
-
-    public Command CageFourToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command CageFourToF(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[3].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
-    }
-
-    public Command CageFiveToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[4].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command CageFiveToF(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[4].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
-    }
-
-    public Command CageSixToG(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[5].toFieldPose2d());
-        return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('G'));
-    }
-
-    public Command CageSixToF(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(cageNodes[5].toFieldPose2d());
+    public Command StartToF(SwerveSubsystem swerveSubsystem){
         return new SwerveDriveToPointCmd(swerveSubsystem, reefNodesMap.get('F'));
     }
 
     //Reef to Source
     
     public Command HToLeftPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(reefNodesMap.get('H').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
     }
 
     public Command GToRightPlayer(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(reefNodesMap.get('G').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
     }
 
     public Command FToRightPlayer(SwerveSubsystem swerveSubsystem){
-        //swerveSubsystem.setOdometry(reefNodesMap.get('F').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, rightReefPassage, rightHumanPlayer, 1);
     }
 
     public Command IToLeftPlayer(SwerveSubsystem swerveSubsystem){
-        //swerveSubsystem.setOdometry(reefNodesMap.get('I').toFieldPose2d());
         return new SwerveFollowTransitionCmd(swerveSubsystem, leftReefPassage, leftHumanPlayer, 1);
-        //return new SwerveDriveToPointCmd(swerveSubsystem, leftHumanPlayer);
     }
 
     //Source to Reef
@@ -243,22 +169,15 @@ public class CommandSequences {
     //Things below this comment are not used in the code and need testing
 
     public Command swerveFollowTransitionTest(SwerveSubsystem swerveSubsystem){
-        swerveSubsystem.setOdometry(simplePose(2, 2, 0).toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(simplePose(2, 2, 0).toFieldPose2d());
 
         return new SequentialCommandGroup(
             new SwerveFollowTransitionCmd(swerveSubsystem, simplePose(3.4, .6, 0), simplePose(5, 2, 0), 1)
         );
     }
 
-    // TODO: Works on Blue but not Red
-    public Command driveForward(SwerveSubsystem swerveSubsystem, PositionFilteringSubsystem positionFilteringSubsystem) {
-        swerveSubsystem.setOdometry(swerveSubsystem.getPose());
-        //swerveSubsystem.calibrateOdometry(0.0f);
-        Pose2d currentPos = swerveSubsystem.getOdometer().getPoseMeters();
-        return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(currentPos.getX() - 1, currentPos.getY(), currentPos.getRotation().getDegrees()));
-    }
     public Command driveForwardTest(SwerveSubsystem swerveSubsystem) {
-        swerveSubsystem.setOdometry(simplePose(1, 0, 0).toFieldPose2d());
+        swerveSubsystem.setPoseEstimator(simplePose(1, 0, 0).toFieldPose2d());
         return new SwerveDriveToPointCmd(swerveSubsystem, simplePose(3, 0, 0));
     }
 

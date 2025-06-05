@@ -11,7 +11,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
-    private LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
 
@@ -35,9 +34,8 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute() {
-        ledSubsystem.Timer(swerveSubsystem.gameTimer);
         if(resetHeadingButton.get())
-            swerveSubsystem.zeroOdometerHeading();
+            swerveSubsystem.zeroRobotHeading();
 
         // 1. Get real-time joystick inputs flipping the x and y of controller to the fields x and y
         double xSpeed = ySpdFunction.get();
@@ -56,14 +54,14 @@ public class SwerveJoystickCmd extends Command {
             xSpeed = input_2_speed(xSpeed);
             ySpeed = input_2_speed(ySpeed);
 
-        } else if(slowButton.get()){
+        } else {
             xSpeed *= .3;
             ySpeed *= .3;
             turningSpeed *= .3;
         }
 
         // 4. invert direction if on red alliance
-        if(!SwerveSubsystem.isOnRed()){
+        if(SwerveSubsystem.isOnRed()){
             xSpeed *= -1;
             ySpeed *= -1;
         }

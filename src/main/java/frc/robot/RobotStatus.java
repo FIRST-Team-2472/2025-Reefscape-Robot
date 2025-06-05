@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 
-public class SensorStatus {
+public class RobotStatus {
     public static boolean kLeftLimitSwitchValue = false;
     public static boolean kMiddleLimitSwitchValue = false;
     public static boolean kRightLimitSwitchValue = false;
@@ -24,6 +24,8 @@ public class SensorStatus {
     public static double kClimberAngle = 0;
     public static double kPivotAngle = 0;
 
-    public static boolean hasCoral = false;
     public static boolean seeCoral = false;
+    public static boolean hasCoral = false;
+
+    public static boolean isDispensing = false;
 }

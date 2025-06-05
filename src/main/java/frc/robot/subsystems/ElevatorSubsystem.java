@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.MotorPowerController;
-import frc.robot.SensorStatus;
+import frc.robot.RobotStatus;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -44,7 +43,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public void runElevatorMotors(double powerPercent){
-    rightElevatorMotor.set(powerPercent);
+    rightElevatorMotor.set(powerPercent-.02);
+    SmartDashboard.putNumber("elevator Power", powerPercent);
   }
 
   @Override
@@ -54,14 +54,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     // updating the sensors status to be read by other files
     // code to check that both motors are working and returning the other motors value if one isnt
     if (!leftElevatorMotor.hasActiveFault() && leftElevatorMotor.getEncoder().getPosition() != lastLeftElevatorReading) {
-      SensorStatus.kElevatorHeight = leftElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
+      RobotStatus.kElevatorHeight = leftElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
     } else {
-      SensorStatus.kElevatorHeight = rightElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
+      RobotStatus.kElevatorHeight = rightElevatorMotor.getEncoder().getPosition() * ElevatorConstants.kElevatorMotorRotationsToInches;
     }
     
     lastLeftElevatorReading = leftElevatorMotor.getEncoder().getPosition();
     lastRightElevatorReading = rightElevatorMotor.getEncoder().getPosition();
-    SmartDashboard.putNumber("elevatorHeight", SensorStatus.kElevatorHeight);
+    SmartDashboard.putNumber("elevatorHeight", RobotStatus.kElevatorHeight);
     SmartDashboard.putNumber("RightElevatorPower", rightElevatorMotor.getOutputCurrent());
     SmartDashboard.putNumber("LeftElevatorPower", leftElevatorMotor.getOutputCurrent());
   }

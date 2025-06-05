@@ -6,6 +6,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import static edu.wpi.first.units.Units.*;
+
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 
 public final class Constants {
     /**
@@ -45,6 +49,7 @@ public final class Constants {
     public static final class CoralDispenserConstants {
         public static final int kLeftMotorID = 17; 
         public static final int kRightMotorID = 44; 
+        public static final double kDispenseSpeedThreshold = .3;
     }
     public static final class AlgaeConstants {
         public static final int kPivotMotorID = 18;
@@ -115,10 +120,11 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
         // To find set the motors forward record the value (don't inverse the value)
+        // 180 degrees means the wheels are running backwards. Preferably set to 0
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetDegrees = 0;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 180; 
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 180;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 180;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetDegrees = 0; 
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetDegrees = 0;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetDegrees = 0;
 
         // Max physical speed of our motors. Required for motor speed caculations
         // To find set the modules to 100% and see what speed cap out at
@@ -189,8 +195,8 @@ public final class Constants {
         public static final double kMaxAngularSpeed = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 16;
 
-        public static final double kForwardMaxAcceleration = .04;
-        public static final double kBackwardMaxAcceleration = .1;
+        public static final double kForwardMaxAcceleration = .03;
+        public static final double kBackwardMaxAcceleration = .075;
         public static final double kMaxAngularAcceleration = Math.PI / 3;
         public static final double kBackwardAngularAcceleration = -Math.PI * 9;
 
@@ -199,7 +205,7 @@ public final class Constants {
 
         public static final double kPDriveController = .1;
         public static final double kPAngleController = .05;
-        public static final double kAcceptableDistanceError = 0.015;// subject to change was 0.04
+        public static final double kAcceptableDistanceError = 0.01;// subject to change was 0.04
         public static final double kAcceptableAngleError = 3;
     }
 
@@ -228,12 +234,17 @@ public final class Constants {
 
         public static int kAlgeaABSEncoderDIOPort = 0; // set later
         public static int kClimberABSEncoderDIOPort = 1; // set later
-        public static String PRIMARY_LIMELIGHT = "limelight-obj";
     }
-
-    public static class LEDConstants {
-        public static int kChannel1 = 2;
-        public static int kChannel2 = 3;
-        public static int kChannel3 = 4;
-      }
+    public final class VisionConstants {
+        public static String kFrontLimelightName = null;//"limelight-side";
+        public static String kSideLimelightName = "limelight-obj";
+        public static double kMaxAllowedTagDistance = 5.0;
+    }
+    public final class LEDConstants {
+        public static int kBackLEDStripLEDCount = 20; // I forgot
+        public static int kElevatorLEDStripLEDCount = 9; // I forgot
+        public static int kLEDPWMPort = 1;
+        public static Distance kLEDSpacing = Meters.of(1.0 / 6); // 6 per meter 
+        public static LinearVelocity kRainbowScrollSpeed = MetersPerSecond.of(3);
+    }   
 }
