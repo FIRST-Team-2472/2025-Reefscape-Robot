@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -26,14 +27,8 @@ public class SwerveModule {
     private double absoluteEncoderOffset;
     private boolean absoluteEncoderReversed;
 
-    public SwerveModule(
-            int driveMotorId,
-            int turningMotorId,
-            boolean driveMotorReversed,
-            boolean turningMotorReversed,
-            int absoluteEncoderId,
-            double absoluteEncoderOffset,
-            boolean absoluteEncoderReversed) {
+    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
+            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
 
         driveMotor = new TalonFX(driveMotorId);
         turningMotor = new TalonFX(turningMotorId);
@@ -62,22 +57,18 @@ public class SwerveModule {
         driveMotor.setNeutralMode(NeutralModeValue.Brake);
         turningMotor.setNeutralMode(NeutralModeValue.Brake);
     }
-
-    public boolean isStalling() {
-        // return driveMotor.getTorqueCurrent().getValueAsDouble() > 5;
+    public boolean isStalling(){
+        //return driveMotor.getTorqueCurrent().getValueAsDouble() > 5;
         return driveMotor.getVelocity().getValueAsDouble() < 0.1;
     }
-
-    public double getCurrent() {
+    public double getCurrent(){
         return driveMotor.getTorqueCurrent().getValueAsDouble();
     }
 
     public double getDrivePosition() {
-        return -driveMotor.getRotorPosition().getValueAsDouble()
-                * ModuleConstants.kDriveEncoderRot2Meter;
+        return driveMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kDriveEncoderRot2Meter;
     }
-
-    public double getDrivePositionTwo() {
+    public double getDrivePositionTwo(){
         return driveMotor.getPosition().getValueAsDouble();
     }
 
@@ -86,21 +77,16 @@ public class SwerveModule {
         // Isn't currently bound to a certian range. Will count up indefintly
 
         // measured in revolutions not radians. easier to understand
-        return (turningMotor.getRotorPosition().getValueAsDouble()
-                        * ModuleConstants.kTurningEncoderRot2Rad)
-                / (2 * Math.PI);
+        return (turningMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kTurningEncoderRot2Rad) / (2 * Math.PI);
     }
 
     public double getDriveVelocity() {
-        return driveMotor.getRotorVelocity().getValueAsDouble()
-                * ModuleConstants.kDriveEncoderRPMS2MeterPerSec;
+        return driveMotor.getRotorVelocity().getValueAsDouble() * ModuleConstants.kDriveEncoderRPMS2MeterPerSec;
     }
 
     public double getTurningVelocity() {
         // measured in revolutions not radians. easier to understand
-        return (driveMotor.getRotorVelocity().getValueAsDouble()
-                        * ModuleConstants.kTurningEncoderRPMS2RadPerSec)
-                / (2 * Math.PI);
+        return (driveMotor.getRotorVelocity().getValueAsDouble() * ModuleConstants.kTurningEncoderRPMS2RadPerSec) / (2 * Math.PI);
     }
 
     public double getAbsolutePosition() {
@@ -108,7 +94,7 @@ public class SwerveModule {
         double angle = 360 * absoluteEncoder.getAbsolutePosition().getValueAsDouble();
         angle -= absoluteEncoderOffset;
         angle *= absoluteEncoderReversed ? -1 : 1;
-
+        
         return angle;
     }
 
@@ -118,13 +104,11 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(
-                getDriveVelocity(), Rotation2d.fromDegrees(getAbsolutePosition()));
+        return new SwerveModuleState(getDriveVelocity(), Rotation2d.fromDegrees(getAbsolutePosition()));
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(
-                getDrivePosition(), Rotation2d.fromDegrees(getAbsolutePosition()));
+        return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getAbsolutePosition()));
     }
 
     // a swerve module state is composed of a speed and direction
@@ -137,11 +121,9 @@ public class SwerveModule {
         // make the swerve module doesn't ever turn more than 90 degrees instead of 180;
         state = SwerveModuleState.optimize(state, getState().angle);
 
-        // driveMotor.set(state.speedMetersPerSecond/DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        //driveMotor.set(state.speedMetersPerSecond/DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         driveMotor.set(state.speedMetersPerSecond);
-        turningMotor.set(
-                turningPidController.calculate(
-                        getState().angle.getRadians(), state.angle.getRadians()));
+        turningMotor.set(turningPidController.calculate(getState().angle.getRadians(), state.angle.getRadians()));
     }
 
     public void stop() {
@@ -149,8 +131,8 @@ public class SwerveModule {
         turningMotor.stopMotor();
     }
 
-    public double map(
-            double inputMax, double inputMin, double outputMax, double outputMin, double value) {
-        return ((value - inputMin) / (inputMax - inputMin)) * (outputMax - outputMin) + outputMin;
+    public double map(double inputMax, double inputMin, double outputMax, double outputMin, double value){
+        return ((value - inputMin)/(inputMax - inputMin)) * (outputMax - outputMin) + outputMin;
     }
+
 }

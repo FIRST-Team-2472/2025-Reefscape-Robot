@@ -3,105 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.114,
-        "y": 7.279
+        "x": 5.278,
+        "y": 5.098
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.119903027536333,
-        "y": 7.029069701184699
+        "x": 4.525652885383625,
+        "y": 3.794896572556354
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.114,
-        "y": 6.145
+        "x": 12.266,
+        "y": 2.964
       },
       "prevControl": {
-        "x": 7.106022890977337,
-        "y": 6.407739662774336
-      },
-      "nextControl": {
-        "x": 7.131503013014098,
-        "y": 5.56850847609156
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.114,
-        "y": 5.077
-      },
-      "prevControl": {
-        "x": 7.123513074869987,
-        "y": 5.326818937245594
-      },
-      "nextControl": {
-        "x": 7.104486925130013,
-        "y": 4.827181062754406
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.114,
-        "y": 4.0
-      },
-      "prevControl": {
-        "x": 7.117085675177836,
-        "y": 4.370240958517203
-      },
-      "nextControl": {
-        "x": 7.111209136638268,
-        "y": 3.6651326317298603
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.114,
-        "y": 2.929
-      },
-      "prevControl": {
-        "x": 7.103263775877231,
-        "y": 3.2778298066836307
-      },
-      "nextControl": {
-        "x": 7.125945694922569,
-        "y": 2.540873373460599
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.114,
-        "y": 1.898
-      },
-      "prevControl": {
-        "x": 7.1056464139028055,
-        "y": 2.262864330039878
-      },
-      "nextControl": {
-        "x": 7.121686233434723,
-        "y": 1.562284011673477
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.114,
-        "y": 0.794
-      },
-      "prevControl": {
-        "x": 7.085809219007498,
-        "y": 1.0959759261876414
+        "x": 17.639540816326534,
+        "y": 1.3947385204081626
       },
       "nextControl": null,
       "isLocked": false,
@@ -122,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }
