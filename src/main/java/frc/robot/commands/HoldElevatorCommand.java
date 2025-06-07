@@ -12,15 +12,15 @@ public class HoldElevatorCommand extends Command {
 
     double targetHeight;
 
-
     public HoldElevatorCommand(ElevatorSubsystem elevatorSubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.elevatorSubsystem = elevatorSubsystem;
-        motorPowerController = new MotorPowerController(0.07, 0.01, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
-
+        motorPowerController =
+                new MotorPowerController(0.07, 0.01, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
 
         addRequirements(elevatorSubsystem);
     }
+
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
@@ -45,5 +45,4 @@ public class HoldElevatorCommand extends Command {
     public boolean isFinished() {
         return false;
     }
-    
 }
