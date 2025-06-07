@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class DrivePose2d extends Pose2d{
+public class DrivePose2d extends Pose2d {
     // drive position -> only one that can be directly feed to the odometer. The
     // only postion the odometer can actually use
 
@@ -27,7 +27,8 @@ public class DrivePose2d extends Pose2d{
 
     public FieldPose2d toFieldPose2d() {
         if (SwerveSubsystem.isOnRed()) {
-            return new FieldPose2d(SensorConstants.sizeOfFieldMetersX - getX(), getY(), getRotation());
+            return new FieldPose2d(
+                    SensorConstants.sizeOfFieldMetersX - getX(), getY(), getRotation());
         }
         return new FieldPose2d(getX(), Math.abs(getY()), getRotation());
     }

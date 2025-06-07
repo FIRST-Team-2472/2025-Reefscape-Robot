@@ -21,7 +21,11 @@ public class SwerveFollowTransitionCmd extends Command {
      * @param endPose the pose to transition to and end at
      * @param transitionTime the time it should take to fully transition to the end pose
      */
-    public SwerveFollowTransitionCmd(SwerveSubsystem swerveSubsystem, PosPose2d startPose, PosPose2d endPose, double transitionTime){
+    public SwerveFollowTransitionCmd(
+            SwerveSubsystem swerveSubsystem,
+            PosPose2d startPose,
+            PosPose2d endPose,
+            double transitionTime) {
         addRequirements(swerveSubsystem);
 
         this.swerveSubsystem = swerveSubsystem;
@@ -29,9 +33,15 @@ public class SwerveFollowTransitionCmd extends Command {
         this.endPose = endPose;
         targetPose = this.startPose;
 
-        xTransitionPerFrame = (endPose.getX()-startPose.getX())/50/transitionTime;// 50 is code refreshes per second
-        yTransitionPerFrame = (endPose.getY()-startPose.getY())/50/transitionTime;
-        angleTransitionPerFrame = endPose.getRotation().minus(startPose.getRotation()).getDegrees()/50/transitionTime;
+        xTransitionPerFrame =
+                (endPose.getX() - startPose.getX())
+                        / 50
+                        / transitionTime; // 50 is code refreshes per second
+        yTransitionPerFrame = (endPose.getY() - startPose.getY()) / 50 / transitionTime;
+        angleTransitionPerFrame =
+                endPose.getRotation().minus(startPose.getRotation()).getDegrees()
+                        / 50
+                        / transitionTime;
     }
 
     @Override
@@ -46,16 +56,24 @@ public class SwerveFollowTransitionCmd extends Command {
         swerveSubsystem.executeDriveToPointAndRotate(drivePose);
     }
 
-    public void calculateCurrentPose(){
-        //if we are at the end pose we will just return
-        //the < .01 is because doubles rarely exactly equal eachother
-        if(Math.abs(targetPose.getX() - endPose.getX()) < .01 && Math.abs(targetPose.getY() - endPose.getY()) < .01  && Math.abs(targetPose.getRotation().minus(endPose.getRotation()).getDegrees())  < .01){
+    public void calculateCurrentPose() {
+        // if we are at the end pose we will just return
+        // the < .01 is because doubles rarely exactly equal eachother
+        if (Math.abs(targetPose.getX() - endPose.getX()) < .01
+                && Math.abs(targetPose.getY() - endPose.getY()) < .01
+                && Math.abs(targetPose.getRotation().minus(endPose.getRotation()).getDegrees())
+                        < .01) {
             targetPose = endPose;
             return;
         }
-            
-        //creating a new pose by adding the transition per frame to the old one
-        targetPose = new PosPose2d(targetPose.getX() + xTransitionPerFrame, targetPose.getY() + yTransitionPerFrame, Rotation2d.fromDegrees(targetPose.getRotation().getDegrees() + angleTransitionPerFrame));
+
+        // creating a new pose by adding the transition per frame to the old one
+        targetPose =
+                new PosPose2d(
+                        targetPose.getX() + xTransitionPerFrame,
+                        targetPose.getY() + yTransitionPerFrame,
+                        Rotation2d.fromDegrees(
+                                targetPose.getRotation().getDegrees() + angleTransitionPerFrame));
         drivePose = targetPose.toFieldPose2d();
     }
 
@@ -67,9 +85,12 @@ public class SwerveFollowTransitionCmd extends Command {
     @Override
     public boolean isFinished() {
         // use this function if you overide the command to finsih it
-        if ((swerveSubsystem.isExactlyInPosition(endPose) || (swerveSubsystem.isNearlyInPosition(endPose) && swerveSubsystem.isAtAngle(endPose.getRotation()))) || timer.hasElapsed(3.5)){
-        return true;
+        if ((swerveSubsystem.isExactlyInPosition(endPose)
+                        || (swerveSubsystem.isNearlyInPosition(endPose)
+                                && swerveSubsystem.isAtAngle(endPose.getRotation())))
+                || timer.hasElapsed(3.5)) {
+            return true;
         }
-        return false;    
+        return false;
     }
 }

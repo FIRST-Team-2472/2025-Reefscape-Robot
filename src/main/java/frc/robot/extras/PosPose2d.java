@@ -8,7 +8,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class PosPose2d extends Pose2d {
     // positive/blue position -> simplfyed position for comparisions to auto points
 
-
     public PosPose2d() {
         super();
     }
@@ -27,7 +26,10 @@ public class PosPose2d extends Pose2d {
 
     public FieldPose2d toFieldPose2d() {
         if (SwerveSubsystem.isOnRed()) {
-            return new FieldPose2d(SensorConstants.sizeOfFieldMetersX - getX(), SensorConstants.sizeOfFieldMetersY - getY(),  Rotation2d.fromDegrees((getRotation().getDegrees())+180));
+            return new FieldPose2d(
+                    SensorConstants.sizeOfFieldMetersX - getX(),
+                    SensorConstants.sizeOfFieldMetersY - getY(),
+                    Rotation2d.fromDegrees((getRotation().getDegrees()) + 180));
         }
         return new FieldPose2d(getX(), getY(), getRotation());
     }

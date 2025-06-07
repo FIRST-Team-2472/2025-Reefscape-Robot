@@ -11,7 +11,7 @@ public class PositivePoint extends Translation2d {
         super();
     }
 
-    //These values are expected to be positive
+    // These values are expected to be positive
     public PositivePoint(double m_x, double m_y) {
         super(m_x, m_y);
     }

@@ -1,11 +1,22 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2025.3.1"
+    // Adds spotless plugin for code formatting
+    id "com.diffplug.spotless" version "7.0.2"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+spotless {
+    java {
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        googleJavaFormat().aosp()
+        removeUnusedImports()
+    }
 }
 
 sourceSets {
@@ -110,6 +121,12 @@ jar {
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
+
+// Ensure spotlessApply runs before build
+tasks.named('build') {
+    dependsOn 'spotlessApply'
+}
+
 
 // Configure jar and deploy tasks
 deployArtifact.jarTask = jar
