@@ -7,12 +7,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.extras.NewNewAccelLimiter;
 
 public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> slowButton, resetHeadingButton;
+    private final NewNewAccelLimiter xSpeedLimiter, ySpeedLimiter, turningSpeedLimiter;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
@@ -22,6 +24,9 @@ public class SwerveJoystickCmd extends Command {
         this.turningSpdFunction = turningSpdFunction;
         this.slowButton = slowButton;
         this.resetHeadingButton = resetHeadingButton;
+        xSpeedLimiter = new NewNewAccelLimiter(.02, .1);
+        ySpeedLimiter = new NewNewAccelLimiter(.02, .1);
+        turningSpeedLimiter = new NewNewAccelLimiter(.02, .1);
 
         addRequirements(swerveSubsystem);
     }
@@ -49,23 +54,20 @@ public class SwerveJoystickCmd extends Command {
         ySpeed = Math.abs(ySpeed) > OperatorConstants.kFlightControllerDeadband ?  ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > OperatorConstants.kFlightControllerDeadband ?  turningSpeed : 0.0;
 
-        // 3. Apply polynomial function or slowmode to joystick values
-        if (!slowButton.get()) {
-            xSpeed = input_2_speed(xSpeed);
-            ySpeed = input_2_speed(ySpeed);
-
-        } else {
-            xSpeed *= .3;
-            ySpeed *= .3;
-            turningSpeed *= .3;
-        }
-
         // 4. invert direction if on red alliance
         if(SwerveSubsystem.isOnRed()){
             xSpeed *= -1;
             ySpeed *= -1;
         }
-        
+
+        //kid drive specific
+        xSpeed *= .3;
+        ySpeed *= .3;
+        turningSpeed *=.3;
+        xSpeed = xSpeedLimiter.calculate(xSpeed);
+        ySpeed = ySpeedLimiter.calculate(ySpeed);
+        turningSpeed = turningSpeedLimiter.calculate(turningSpeed);
+
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
 
