@@ -43,7 +43,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public void runElevatorMotors(double powerPercent){
-    rightElevatorMotor.set(powerPercent-.02);
+    //dont let it move if it sees coral thinking it will get in the way (only enables in kidMode)
+    if((!RobotStatus.seeCoral && RobotStatus.kidMode) || !RobotStatus.kidMode)
+      rightElevatorMotor.set(powerPercent-.02);
     SmartDashboard.putNumber("elevator Power", powerPercent);
   }
 

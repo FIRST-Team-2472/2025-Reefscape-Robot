@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.RobotStatus;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.extras.NewNewAccelLimiter;
@@ -13,14 +14,17 @@ public class SwerveJoystickCmd extends Command {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> slowButton, resetHeadingButton;
+    private final Supplier<Boolean> slowButton, resetHeadingButton, leftModeToggle, rightModeToggle;
     private final NewNewAccelLimiter xSpeedLimiter, ySpeedLimiter, turningSpeedLimiter;
+    private final Timer modeToggleCooldownTimer = new Timer();
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton) {
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> slowButton, Supplier<Boolean> resetHeadingButton, Supplier<Boolean> leftModeToggle, Supplier<Boolean> rightModeToggle) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
+        this.leftModeToggle = leftModeToggle;
+        this.rightModeToggle = rightModeToggle;
         this.turningSpdFunction = turningSpdFunction;
         this.slowButton = slowButton;
         this.resetHeadingButton = resetHeadingButton;
@@ -33,12 +37,17 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void initialize() {
-      
+        modeToggleCooldownTimer.start();
         System.out.println("Swerve Joystick contoslled!");
     }
 
     @Override
     public void execute() {
+        //toggle between on and off for kid mode vs demoing
+        if(leftModeToggle.get() && rightModeToggle.get() && modeToggleCooldownTimer.get() > 1) {
+            modeToggleCooldownTimer.restart();
+            RobotStatus.kidMode = !RobotStatus.kidMode;
+        }
         if(resetHeadingButton.get())
             swerveSubsystem.zeroRobotHeading();
 
@@ -59,14 +68,23 @@ public class SwerveJoystickCmd extends Command {
             xSpeed *= -1;
             ySpeed *= -1;
         }
-
+        if(slowButton.get()){
+            xSpeed *=.3;
+            ySpeed *=.3;
+            turningSpeed *=.3;
+        }
         //kid drive specific
-        xSpeed *= .3;
-        ySpeed *= .3;
-        turningSpeed *=.3;
-        xSpeed = xSpeedLimiter.calculate(xSpeed);
-        ySpeed = ySpeedLimiter.calculate(ySpeed);
-        turningSpeed = turningSpeedLimiter.calculate(turningSpeed);
+        if(RobotStatus.kidMode){
+            xSpeed *= .3;
+            ySpeed *= .3;
+            turningSpeed *=.3;
+            xSpeed = xSpeedLimiter.calculate(xSpeed);
+            ySpeed = ySpeedLimiter.calculate(ySpeed);
+            turningSpeed = turningSpeedLimiter.calculate(turningSpeed);
+        }else if(!slowButton.get()){
+            xSpeed = input_2_speed(xSpeed);
+            ySpeed = input_2_speed(ySpeed);
+        }
 
         swerveSubsystem.runModulesFieldRelative(xSpeed, ySpeed, turningSpeed);
     }
