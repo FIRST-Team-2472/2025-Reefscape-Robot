@@ -146,7 +146,7 @@ public final class Constants {
         // Max rotational acceleration of robot in this drive mode
         public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI * 2;
         
-        public static final double kKidDriveMultiplier = 0.6; // multiplies the speed and rotation of the robot in kid mode
+        public static final double kKidDriveMultiplier = 0.45; // multiplies the speed and rotation of the robot in kid mode
     }
 
     //never used ANYWHERE
