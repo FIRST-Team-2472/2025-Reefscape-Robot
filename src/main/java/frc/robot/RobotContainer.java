@@ -96,7 +96,9 @@ public class RobotContainer {
         () -> -leftJoystick.getY(), // negative because we get the inverse value
         () -> -rightJoystick.getX(),
         () -> rightJoystick.getRawButton(1),
-        () -> rightJoystick.getRawButton(4)));
+        () -> rightJoystick.getRawButton(4),
+        () -> leftJoystick.getRawButton(11),// change button
+        () -> rightJoystick.getRawButton(11)));
 
     autoChooser.addOption(DriveForwardTest, DriveForwardTest);
     autoChooser.addOption(HToSit, HToSit);

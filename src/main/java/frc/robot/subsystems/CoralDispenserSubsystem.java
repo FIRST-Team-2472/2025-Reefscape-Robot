@@ -16,7 +16,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 
-public class CoralDispenserSubsystem extends SubsystemBase{
+public class CoralDispenserSubsystem extends SubsystemBase {
     private SparkMax leftMotor = new SparkMax(kLeftMotorID, MotorType.kBrushless);
     private SparkMax rightMotor = new SparkMax(kRightMotorID, MotorType.kBrushless);
     private LaserCan laserCan = new LaserCan(0);
