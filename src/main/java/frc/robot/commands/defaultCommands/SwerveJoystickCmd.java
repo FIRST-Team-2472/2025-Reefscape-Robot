@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.RobotStatus;
 import frc.robot.subsystems.LEDSubsystem;
@@ -75,9 +76,9 @@ public class SwerveJoystickCmd extends Command {
         }
         //kid drive specific
         if(RobotStatus.kidMode){
-            xSpeed *= .3;
-            ySpeed *= .3;
-            turningSpeed *=.3;
+            xSpeed *= Constants.TeleDriveConstants.kKidDriveMultiplier;
+            ySpeed *= Constants.TeleDriveConstants.kKidDriveMultiplier;
+            turningSpeed *= Constants.TeleDriveConstants.kKidDriveMultiplier;
             xSpeed = xSpeedLimiter.calculate(xSpeed);
             ySpeed = ySpeedLimiter.calculate(ySpeed);
             turningSpeed = turningSpeedLimiter.calculate(turningSpeed);

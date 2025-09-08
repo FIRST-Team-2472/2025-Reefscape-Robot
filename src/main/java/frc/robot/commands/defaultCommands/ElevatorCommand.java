@@ -7,6 +7,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.Constants.SensorConstants;
+import frc.robot.Constants;
 import frc.robot.MotorPowerController;
 import frc.robot.RobotStatus;
 
@@ -41,7 +42,7 @@ public class ElevatorCommand extends Command{
         y = 0;
     //if kid mode we slow down the inputs to match the ability of the robot in the mode
     if(RobotStatus.kidMode)
-        elevatorSetHeight += y*.3;
+        elevatorSetHeight += y*Constants.TeleDriveConstants.kKidDriveMultiplier;
     else
         elevatorSetHeight += y;
     if(XboxYPressed.get())
@@ -64,7 +65,7 @@ public class ElevatorCommand extends Command{
     SmartDashboard.putNumber("elevator drive factor", -motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight));
     //if kid mode we add power limits too if not we just use the pid controller
     if(RobotStatus.kidMode)
-        elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), .3), -.3)); //negative because up is reverse
+        elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), Constants.TeleDriveConstants.kKidDriveMultiplier), -Constants.TeleDriveConstants.kKidDriveMultiplier)); //negative because up is reverse
     else
         elevatorSubsystem.runElevatorMotors(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight)); //negative because up is reverse
   }
