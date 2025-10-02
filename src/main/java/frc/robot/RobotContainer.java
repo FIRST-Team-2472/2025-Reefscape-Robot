@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import org.w3c.dom.ls.LSParserFilter;
+
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -142,7 +144,8 @@ public class RobotContainer {
         () -> xboxController.y().getAsBoolean(), 
         () -> xboxController.b().getAsBoolean(),
         () -> xboxController.a().getAsBoolean(), 
-        () -> xboxController.x().getAsBoolean()));
+        () -> xboxController.x().getAsBoolean(),
+        () -> leftJoystick.getRawButton(2)));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem,
         () -> xboxController.getRightTriggerAxis(), 

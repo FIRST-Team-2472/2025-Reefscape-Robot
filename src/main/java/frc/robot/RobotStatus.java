@@ -7,6 +7,7 @@ public class RobotStatus {
     public static boolean kMiddleLimitSwitchValue = false;
     public static boolean kRightLimitSwitchValue = false;
     public static boolean kidMode = false;
+    public static boolean elevatorSafety = true;
 
     public static double kElevatorHeight = 0;
 

@@ -1,4 +1,5 @@
 package frc.robot.commands.defaultCommands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -16,21 +17,24 @@ public class ElevatorCommand extends Command{
     Supplier<Double> joystickY;
     MotorPowerController motorPowerController;
     double elevatorSetHeight = RobotStatus.kElevatorHeight;
-    Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed;
+    Supplier<Boolean> XboxYPressed,XboxBPressed,XboxAPressed,XboxXPressed,toggleElevatorRestrictions;
+    private final Timer modeToggleCooldownTimer = new Timer();
 
-    public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> joystickY, Supplier<Boolean> XboxYPressed, Supplier<Boolean> XboxBPressed, Supplier<Boolean> XboxAPressed, Supplier<Boolean> XboxXPressed){
+    public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, Supplier<Double> joystickY, Supplier<Boolean> XboxYPressed, Supplier<Boolean> XboxBPressed, Supplier<Boolean> XboxAPressed, Supplier<Boolean> XboxXPressed, Supplier<Boolean> toggleElevatorRestrictions){
         this.elevatorSubsystem = elevatorSubsystem;
         this.joystickY = joystickY;
         this.XboxYPressed = XboxYPressed;
         this.XboxBPressed = XboxBPressed;
         this.XboxAPressed = XboxAPressed;
         this.XboxXPressed = XboxXPressed;
+        this.toggleElevatorRestrictions = toggleElevatorRestrictions;
         addRequirements(elevatorSubsystem);
         motorPowerController = new MotorPowerController(0.07, 0.01, 0.2, 1, 1, RobotStatus.kElevatorHeight, 5);
     }
 
   @Override
   public void initialize() {
+        modeToggleCooldownTimer.start();
         elevatorSetHeight = RobotStatus.kElevatorHeight;
   }
   
@@ -59,6 +63,8 @@ public class ElevatorCommand extends Command{
         elevatorSetHeight = ElevatorConstants.kElevatorMaxHeight;
     if (elevatorSetHeight < 0)
         elevatorSetHeight = 0;
+    if(RobotStatus.elevatorSafety && RobotStatus.seeCoral)
+        elevatorSetHeight = 0;
 
     SmartDashboard.putNumber("elevatorSetHeight", elevatorSetHeight);
 
@@ -68,6 +74,12 @@ public class ElevatorCommand extends Command{
         elevatorSubsystem.runElevatorMotors(Math.max(Math.min(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight), Constants.TeleDriveConstants.kKidDriveMultiplier), -Constants.TeleDriveConstants.kKidDriveMultiplier)); //negative because up is reverse
     else
         elevatorSubsystem.runElevatorMotors(-motorPowerController.calculate(elevatorSetHeight, RobotStatus.kElevatorHeight)); //negative because up is reverse
+    
+    if(toggleElevatorRestrictions.get() && modeToggleCooldownTimer.get() > .3){
+        RobotStatus.elevatorSafety = !RobotStatus.elevatorSafety;
+        modeToggleCooldownTimer.reset();
+    }
+    SmartDashboard.putBoolean("Elevator Safety", RobotStatus.elevatorSafety);
   }
 
   // Called once the command ends or is interrupted.
