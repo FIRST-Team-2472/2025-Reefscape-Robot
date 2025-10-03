@@ -66,7 +66,7 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        return driveMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kDriveEncoderRot2Meter;
+        return driveMotor.getPosition().getValueAsDouble() * ModuleConstants.kDriveEncoderRot2Meter;
     }
     public double getDrivePositionTwo(){
         return driveMotor.getPosition().getValueAsDouble();
@@ -77,16 +77,16 @@ public class SwerveModule {
         // Isn't currently bound to a certian range. Will count up indefintly
 
         // measured in revolutions not radians. easier to understand
-        return (turningMotor.getRotorPosition().getValueAsDouble() * ModuleConstants.kTurningEncoderRot2Rad) / (2 * Math.PI);
+        return (turningMotor.getPosition().getValueAsDouble() * ModuleConstants.kTurningEncoderRot2Rad) / (2 * Math.PI);
     }
 
     public double getDriveVelocity() {
-        return driveMotor.getRotorVelocity().getValueAsDouble() * ModuleConstants.kDriveEncoderRPMS2MeterPerSec;
+        return driveMotor.getVelocity().getValueAsDouble() * ModuleConstants.kDriveEncoderRPMS2MeterPerSec;
     }
 
     public double getTurningVelocity() {
         // measured in revolutions not radians. easier to understand
-        return (driveMotor.getRotorVelocity().getValueAsDouble() * ModuleConstants.kTurningEncoderRPMS2RadPerSec) / (2 * Math.PI);
+        return (driveMotor.getVelocity().getValueAsDouble() * ModuleConstants.kTurningEncoderRPMS2RadPerSec) / (2 * Math.PI);
     }
 
     public double getAbsolutePosition() {
