@@ -207,8 +207,8 @@ public class CommandSequences {
         return new SequentialCommandGroup(
             new AutoElevatorCommand(elevatorSubsystem, elevatorHeight),
             new ParallelDeadlineGroup(
-                new AutoCoralDispenseCommand(coralDispenserSubsystem),
-                new HoldElevatorCommand(elevatorSubsystem)
+                new AutoCoralDispenseCommand(coralDispenserSubsystem)/* ,
+                new HoldElevatorCommand(elevatorSubsystem)*/
             )
         );
     }
