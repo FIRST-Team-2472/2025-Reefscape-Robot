@@ -27,7 +27,6 @@ public class AlgaeCollectionCommand extends Command{
 
     @Override
     public void execute() {
-
         if (leftJoystickTrigger.get()) {
             AlgaeSubsystem.runSpinMotor(.5);
             currentSetAngle = 175;
