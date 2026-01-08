@@ -3,9 +3,10 @@ package frc.robot.extras;
 import frc.robot.extras.LidarMapComponents.Polygon;
 
 public class LidarMap {
-    public Polygon[] map = new Polygon[2];
+    public static Polygon[] map = new Polygon[2];
 
-    public LidarMap() {//all numbers are magic so far
+    public LidarMap() {
+        //all numbers are magic so far
         // Define polygons and add them to the map array
         // Polygon 1 aka the field walls 
         //currently just a 10x10 square
