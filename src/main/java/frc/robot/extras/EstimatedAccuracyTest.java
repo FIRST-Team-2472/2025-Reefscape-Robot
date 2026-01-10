@@ -7,13 +7,13 @@ public class EstimatedAccuracyTest {
     public EstimatedAccuracyTest() {
         // This class is currently a placeholder for future implementation
     }
-    public static void Main(String[] args) {
+    public static void main(String[] args) {
         for(int i = 0; i < 10; i++) {
             double trueX = Math.random() * 10;
             double trueY = Math.random() * 10;
             double trueRotation = Math.random() * 360;
 
-            double maxTranslationalInaccuracy  =0.03; // 3 cm
+            double maxTranslationalInaccuracy  = 0.03; // 3 cm
             double maxAngleInaccuracy = 3; // 3 degrees
 
             double innacurateX = trueX + (Math.random() * 2 - 1) * maxTranslationalInaccuracy;

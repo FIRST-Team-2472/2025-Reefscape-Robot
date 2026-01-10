@@ -10,6 +10,8 @@ public class LidarMap {
         // Define polygons and add them to the map array
         // Polygon 1 aka the field walls 
         //currently just a 10x10 square
+    }
+    public static Polygon[] getMap() {
         map[0] = new Polygon(new frc.robot.extras.LidarMapComponents.LineSegment[] {
                 new frc.robot.extras.LidarMapComponents.LineSegment(
                         new frc.robot.extras.LidarMapComponents.MapPoint(0, 0),
@@ -46,5 +48,6 @@ public class LidarMap {
                         new frc.robot.extras.LidarMapComponents.MapPoint(6.000, 4.423),
                         new frc.robot.extras.LidarMapComponents.MapPoint(6.000, 5.577))
         });
+        return map;
     }
 }

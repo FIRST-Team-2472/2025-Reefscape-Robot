@@ -8,7 +8,7 @@ public class LidarSimulator {
         double[] PerfectPointCloud = new double[167];
         for(int i = 0; i < 167; i++){//multiply by .6 because we have one measurement per .6 degrees
             //minus 50 to start at one side of the cone
-            PerfectPointCloud[i] = getSmallestRayDistance(LidarMap.map[0], LidarMap.map[1], robotPose, angle + i*.6 -50);
+            PerfectPointCloud[i] = getSmallestRayDistance(LidarMap.getMap()[0],LidarMap.getMap()[1], robotPose, angle + i*.6 -50);
             if(PerfectPointCloud[i] <0.025|| PerfectPointCloud[i] > 0.3){
                 PerfectPointCloud[i] = 0;// simulate no return for too close or too far objects
             }
@@ -20,7 +20,7 @@ public class LidarSimulator {
         for(int i = 0; i < 167; i++){//multiply by .6 because we have one measurement per .6 degrees
             //minus 50 to start at one side of the cone
             // random * 6 because angular innacuracy is +-3 degrees
-            MessyPointCloud[i] = getSmallestRayDistance(LidarMap.map[0], LidarMap.map[1], robotPose, angle + i*.6 -50 + Math.random()*6 -3);
+            MessyPointCloud[i] = getSmallestRayDistance(LidarMap.getMap()[0],LidarMap.getMap()[1], robotPose, angle + i*.6 -50 + Math.random()*6 -3);
             if(MessyPointCloud[i] <0.025|| MessyPointCloud[i] > 0.3){
                 MessyPointCloud[i] = 0;// simulate no return for too close or too far objects
             }else if(MessyPointCloud[i] <0.1){

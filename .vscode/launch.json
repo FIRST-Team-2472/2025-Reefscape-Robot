@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "EstimatedAccuracyTest",
+      "request": "launch",
+      "mainClass": "frc.robot.extras.EstimatedAccuracyTest",
+      "projectName": "2025-Reefscape-Robot"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "frc.robot.Main",
