@@ -36,7 +36,7 @@ import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
-import frc.robot.extras.EstimatedAccuracyTest;
+
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Limelight;
@@ -50,8 +50,7 @@ import frc.robot.commands.RunSwerve;
 public class RobotContainer {
 
   private String m_autoSelected;
-    private final String 
-      MiddleToHL1 = "Drive from Middle and Place on H L1",
+  private final String MiddleToHL1 = "Drive from Middle and Place on H L1",
       CageThreeToHL1 = "Drive from Cage 3 and Place on H L1", CageTwoToIL4 = "Drive from Cage 2 and Place on I L4",
       MiddleToGL1 = "Drive from Middle and Place on G L1",
       MiddleToGL4 = "Drive from Middle and Place on G L4", CageThreeToHL4 = "Drive from Cage 3 and Place on H L4",
@@ -69,7 +68,7 @@ public class RobotContainer {
 
   // Add subsystems below this comment
   public final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  //Add subsystems below this comment
+  // Add subsystems below this comment
 
   ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   CoralCollectionSubsystem coralCollectionSubsystem = new CoralCollectionSubsystem();
@@ -93,56 +92,56 @@ public class RobotContainer {
         () -> -rightJoystick.getX(),
         () -> rightJoystick.getRawButton(1),
         () -> rightJoystick.getRawButton(4),
-        () -> leftJoystick.getRawButton(11),// change button
+        () -> leftJoystick.getRawButton(11), // change button
         () -> rightJoystick.getRawButton(11)));
 
-        
-        autoChooser.addOption(MiddleToHL1, MiddleToHL1);
-        autoChooser.addOption(CageThreeToHL1, CageThreeToHL1);
-        autoChooser.addOption(CageTwoToIL4, CageTwoToIL4);
-        autoChooser.addOption(MiddleToGL1, MiddleToGL1);
-        autoChooser.addOption(MiddleToGL4, MiddleToGL4);
-        autoChooser.addOption(CageThreeToHL4, CageThreeToHL4);
-        autoChooser.addOption(CageThreeToGL1, CageThreeToGL1);
-        autoChooser.addOption(CageThreeToGL4, CageThreeToGL4);
-        autoChooser.addOption(CageFourToHL1, CageFourToHL1);
-        autoChooser.addOption(CageFourToHL4, CageFourToHL4);
-        autoChooser.addOption(CageFourToGL1, CageFourToGL1);
-        autoChooser.addOption(CageFourToGL4, CageFourToGL4);
-        autoChooser.addOption(CageOneToIL1, CageOneToIL1);
-        autoChooser.addOption(CageOneToIL4, CageOneToIL4);
-        autoChooser.addOption(CageTwoToIL1, CageTwoToIL1);
-        autoChooser.addOption(CageFiveToFL1, CageFiveToFL1);
-        autoChooser.addOption(CageFiveToFL4, CageFiveToFL4);
-        autoChooser.addOption(CageSixToFL1, CageSixToFL1);
-        autoChooser.addOption(CageSixToFL4, CageSixToFL4);
+    autoChooser.addOption(MiddleToHL1, MiddleToHL1);
+    autoChooser.addOption(CageThreeToHL1, CageThreeToHL1);
+    autoChooser.addOption(CageTwoToIL4, CageTwoToIL4);
+    autoChooser.addOption(MiddleToGL1, MiddleToGL1);
+    autoChooser.addOption(MiddleToGL4, MiddleToGL4);
+    autoChooser.addOption(CageThreeToHL4, CageThreeToHL4);
+    autoChooser.addOption(CageThreeToGL1, CageThreeToGL1);
+    autoChooser.addOption(CageThreeToGL4, CageThreeToGL4);
+    autoChooser.addOption(CageFourToHL1, CageFourToHL1);
+    autoChooser.addOption(CageFourToHL4, CageFourToHL4);
+    autoChooser.addOption(CageFourToGL1, CageFourToGL1);
+    autoChooser.addOption(CageFourToGL4, CageFourToGL4);
+    autoChooser.addOption(CageOneToIL1, CageOneToIL1);
+    autoChooser.addOption(CageOneToIL4, CageOneToIL4);
+    autoChooser.addOption(CageTwoToIL1, CageTwoToIL1);
+    autoChooser.addOption(CageFiveToFL1, CageFiveToFL1);
+    autoChooser.addOption(CageFiveToFL4, CageFiveToFL4);
+    autoChooser.addOption(CageSixToFL1, CageSixToFL1);
+    autoChooser.addOption(CageSixToFL4, CageSixToFL4);
 
-      ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
-      driverBoard.add("Auto choices", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
+    driverBoard.add("Auto choices", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem, 
+    elevatorSubsystem.setDefaultCommand(new ElevatorCommand(elevatorSubsystem,
         () -> -xboxController.getLeftY(),
-        () -> xboxController.y().getAsBoolean(), 
+        () -> xboxController.y().getAsBoolean(),
         () -> xboxController.b().getAsBoolean(),
-        () -> xboxController.a().getAsBoolean(), 
+        () -> xboxController.a().getAsBoolean(),
         () -> xboxController.x().getAsBoolean(),
         () -> leftJoystick.getRawButton(2)));
 
     coralDispenserSubsystem.setDefaultCommand(new CoralDispenserCommand(coralDispenserSubsystem,
-        () -> xboxController.getRightTriggerAxis(), 
+        () -> xboxController.getRightTriggerAxis(),
         () -> xboxController.getLeftTriggerAxis()));
     if (!RobotStatus.kidMode) {
-    algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem,
-        () -> leftJoystick.getRawButton(1), 
-        () -> leftJoystick.getRawButton(4),
-        () -> leftJoystick.getRawButton(3)));
+      algaeCollectionSubsystem.setDefaultCommand(new AlgaeCollectionCommand(algaeCollectionSubsystem,
+          () -> leftJoystick.getRawButton(1),
+          () -> leftJoystick.getRawButton(4),
+          () -> leftJoystick.getRawButton(3)));
     }
 
-    /*climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem, 
-        () -> xboxController.getRightY(),
-        () -> xboxController.leftBumper().getAsBoolean(), 
-        () -> xboxController.rightBumper().getAsBoolean()));
-    */
+    /*
+     * climbSubsystem.setDefaultCommand(new ClimbCommand(climbSubsystem,
+     * () -> xboxController.getRightY(),
+     * () -> xboxController.leftBumper().getAsBoolean(),
+     * () -> xboxController.rightBumper().getAsBoolean()));
+     */
     configureBindings();
 
   }
@@ -163,31 +162,19 @@ public class RobotContainer {
       public boolean runsWhenDisabled() {
         return true;
       }
+
       @Override
       public void initialize() {
         swerveSubsystem.zeroRobotHeading();
-      } 
-      @Override
-          public boolean isFinished() {
-              return true;
-          }
-    };
-    SmartDashboard.putData("Zero Gyro", zeroGyro);
-    
-    InstantCommand testAccuracy = new InstantCommand(){
-      public boolean runsWhenDisabled(){
-        return true;
       }
-      @Override
-      public void initialize(){
-        EstimatedAccuracyTest.main(new String[0]);
-      }
+
       @Override
       public boolean isFinished() {
         return true;
-      }      
+      }
     };
-    SmartDashboard.putData("Test Accuracy", testAccuracy);
+    SmartDashboard.putData("Zero Gyro", zeroGyro);
+
   }
 
   public Command getAutonomousCommand() {
@@ -221,56 +208,45 @@ public class RobotContainer {
                   ElevatorConstants.kElevatorL4Height));
 
         case CageTwoToIL4ToLL4:
-              return new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
+          return new SequentialCommandGroup(
+              new ParallelDeadlineGroup(
                   commandSequences.CageTwoToI(swerveSubsystem),
                   new SequentialCommandGroup(
                       new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .5),
-                      new HoldElevatorCommand(elevatorSubsystem)
-                  ) 
-                ),
-                new ParallelDeadlineGroup(
-                  new AutoCoralDispenseCommand(coralDispenserSubsystem), 
-                  new HoldElevatorCommand(elevatorSubsystem)
-                ),
-                new ParallelCommandGroup(
-                  commandSequences.setElevatorL0(elevatorSubsystem),
-                  commandSequences.IToLeftPlayer(swerveSubsystem)
-                ),
+                      new HoldElevatorCommand(elevatorSubsystem))),
               new ParallelDeadlineGroup(
-                commandSequences.collectCoral(coralDispenserSubsystem),
-                new RunSwerve(swerveSubsystem, 0.1, -0.1)
-              ),
-    
-                commandSequences.LeftPlayerToL(swerveSubsystem),
-                commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem, ElevatorConstants.kElevatorL4Height)
-              );
+                  new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                  new HoldElevatorCommand(elevatorSubsystem)),
+              new ParallelCommandGroup(
+                  commandSequences.setElevatorL0(elevatorSubsystem),
+                  commandSequences.IToLeftPlayer(swerveSubsystem)),
+              new ParallelDeadlineGroup(
+                  commandSequences.collectCoral(coralDispenserSubsystem),
+                  new RunSwerve(swerveSubsystem, 0.1, -0.1)),
+
+              commandSequences.LeftPlayerToL(swerveSubsystem),
+              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
+                  ElevatorConstants.kElevatorL4Height));
         case CageFiveToFL4ToCL4:
-              return new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
+          return new SequentialCommandGroup(
+              new ParallelDeadlineGroup(
                   commandSequences.CageFiveToF(swerveSubsystem),
                   new SequentialCommandGroup(
-                    new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .5),
-                    new HoldElevatorCommand(elevatorSubsystem)
-                  ) 
-                ),
-                new ParallelDeadlineGroup(
-                  new AutoCoralDispenseCommand(coralDispenserSubsystem), 
-                  new HoldElevatorCommand(elevatorSubsystem)
-                ),
-                new ParallelCommandGroup(
-                      commandSequences.setElevatorL0(elevatorSubsystem),
-                      commandSequences.FToRightPlayer(swerveSubsystem)
-                ),                  
-                new ParallelDeadlineGroup(
+                      new AutoElevatorCommand(elevatorSubsystem, ElevatorConstants.kElevatorL4Height, .5),
+                      new HoldElevatorCommand(elevatorSubsystem))),
+              new ParallelDeadlineGroup(
+                  new AutoCoralDispenseCommand(coralDispenserSubsystem),
+                  new HoldElevatorCommand(elevatorSubsystem)),
+              new ParallelCommandGroup(
+                  commandSequences.setElevatorL0(elevatorSubsystem),
+                  commandSequences.FToRightPlayer(swerveSubsystem)),
+              new ParallelDeadlineGroup(
                   commandSequences.collectCoral(coralDispenserSubsystem),
-                  new RunSwerve(swerveSubsystem, 0.1, 0.1)
-                ),
+                  new RunSwerve(swerveSubsystem, 0.1, 0.1)),
 
-                  commandSequences.RightPlayerToD(swerveSubsystem),
-                  commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
-                      ElevatorConstants.kElevatorL4Height)
-              );
+              commandSequences.RightPlayerToD(swerveSubsystem),
+              commandSequences.placeOnReef(elevatorSubsystem, coralDispenserSubsystem,
+                  ElevatorConstants.kElevatorL4Height));
 
         case CageThreeToHL1:
           return new SequentialCommandGroup(
@@ -365,8 +341,8 @@ public class RobotContainer {
         default:
           return null;
       }
-        
-      }
+
+    }
 
     return null;
   }
