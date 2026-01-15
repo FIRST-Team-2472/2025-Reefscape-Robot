@@ -22,7 +22,7 @@ public class EstimatedAccuracyTest {
             double innacurateY = trueY + (Math.random() * 2 - 1) * maxTranslationalInaccuracy;
             double innacurateRotation = trueRotation + (Math.random() * 2 - 1) * maxAngleInaccuracy;
 
-            //currently set to our lidars innacuracy
+            //currently set to lidar with messy data
             double[] SimulatedScan = LidarSimulator.getMessySimData(
                 new frc.robot.extras.LidarMapComponents.MapPoint(trueX, trueY),
                 trueRotation

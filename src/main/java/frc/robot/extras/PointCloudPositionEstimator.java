@@ -28,6 +28,7 @@ public class PointCloudPositionEstimator {
         double bestScore = Double.MAX_VALUE;
         int bestIndex = -1;
         for (int i = 0; i < particleScores.length; i++) {
+            System.out.println("Particle " + i + " score: " + particleScores[i]);
             if (particleScores[i] < bestScore) {
                 bestScore = particleScores[i];
                 bestIndex = i;
@@ -45,7 +46,7 @@ public class PointCloudPositionEstimator {
                     robotAngleDegrees);
             double score = 0;
             for (int j = 0; j < measuredPointCloud.length; j++) {
-                //if it is very high and one of the measurements is 0 thn it was out of range
+                //if it is very high and one of the measurements is 0 then it was out of range
                 // so we need to measure its difference from the range limit
                 if(measuredPointCloud[j] == 0 && expectedMeasurementAtParticle[j] >= 290 || measuredPointCloud[j] >= 290 && expectedMeasurementAtParticle[j] == 0){
                     score += (measuredPointCloud[j] + expectedMeasurementAtParticle[j] - 300)
