@@ -33,6 +33,23 @@ public class LidarSimulator {
         }
         return MessyPointCloud;
     }
+    // another simulation assuming better data
+    public static double[] getLessMessySimData(MapPoint robotPose, double angle){
+        double[] lessMessyPointCloud = new double[167];
+        for(int i = 0; i < 167; i++){
+            lessMessyPointCloud[i] = getSmallestRayDistance(LidarMap.getMap()[0],LidarMap.getMap()[1], robotPose, angle + i*.6 -50 + Math.random()*3 -1.5);
+            if(lessMessyPointCloud[i] <0.025|| lessMessyPointCloud[i] > 0.3){
+                lessMessyPointCloud[i] = 0;// simulate no return for too close or too far objects
+            }else if(lessMessyPointCloud[i] <0.1){
+                lessMessyPointCloud[i] += Math.random()*0.002 - 0.001; //simulate distance noise of up to 2mm
+            }else if(lessMessyPointCloud[i] <0.2){
+                lessMessyPointCloud[i] += lessMessyPointCloud[i] * Math.random()*0.02 - lessMessyPointCloud[i]*0.01; //simulate distance noise of up to 2%
+            }else if(lessMessyPointCloud[i] <0.3){
+                lessMessyPointCloud[i] += lessMessyPointCloud[i] * Math.random()*0.04 - lessMessyPointCloud[i]*0.02; //simulate distance noise of up to 4%
+            }
+        }
+        return lessMessyPointCloud;
+    }
 
 
 

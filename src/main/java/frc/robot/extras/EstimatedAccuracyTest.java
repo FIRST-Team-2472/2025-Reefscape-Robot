@@ -8,7 +8,9 @@ public class EstimatedAccuracyTest {
         // This class is currently a placeholder for future implementation
     }
     public static void main(String[] args) {
-        for(int i = 0; i < 10; i++) {
+        int iterations = 100;
+        double totalImprovement = 0;
+        for(int i = 0; i < iterations; i++) {
             double trueX = Math.random() * 10;
             double trueY = Math.random() * 10;
             double trueRotation = Math.random() * 360;
@@ -20,13 +22,17 @@ public class EstimatedAccuracyTest {
             double innacurateY = trueY + (Math.random() * 2 - 1) * maxTranslationalInaccuracy;
             double innacurateRotation = trueRotation + (Math.random() * 2 - 1) * maxAngleInaccuracy;
 
+            //currently set to our lidars innacuracy
             double[] SimulatedScan = LidarSimulator.getMessySimData(
                 new frc.robot.extras.LidarMapComponents.MapPoint(trueX, trueY),
                 trueRotation
             );
             FieldPoint calculatedPose = PointCloudPositionEstimator.estimatePose(new FieldPose2d(innacurateX, innacurateY, new Rotation2d().fromDegrees(innacurateRotation)), SimulatedScan);
-            double accuracyImprovement = Math.hypot(trueX - calculatedPose.getX(), trueY - calculatedPose.getY()) - Math.hypot(trueX - innacurateX, trueY - innacurateY);
-            System.out.println("accuracy Imporvement = " + accuracyImprovement);
+            double lidarInnacuracy = Math.hypot(trueX - calculatedPose.getX(), trueY - calculatedPose.getY());
+            double inputInnacuracy = Math.hypot(trueX - innacurateX, trueY - innacurateY);
+            System.out.println("accuracy Imporvement = " + (inputInnacuracy - lidarInnacuracy) + " lidar innac = " + lidarInnacuracy + " previous innac = " + inputInnacuracy);
+            totalImprovement += (inputInnacuracy - lidarInnacuracy);
         }
+        System.out.println("Average accuracy improvement over " + iterations + " iterations: " + (totalImprovement / iterations) + " meters.");
     }
 }

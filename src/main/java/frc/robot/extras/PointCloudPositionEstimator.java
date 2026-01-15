@@ -11,12 +11,12 @@ import frc.robot.extras.LidarMapComponents.MapPoint;
 public class PointCloudPositionEstimator {
     public static FieldPoint estimatePose(FieldPose2d roughPose, double[] measuredPointCloud) {
         MapPoint robotPose = new MapPoint(roughPose.getX(), roughPose.getY());
-        MapPoint[] roughParticles = generateParticles(robotPose, 10, 0.05, 0.01);
+        MapPoint[] roughParticles = generateParticles(robotPose, 20, 0.05, 0.01);
         double[] particleScores = scoreParticles(roughParticles, measuredPointCloud,
                 roughPose.getRotation().getDegrees());// lower is better
         MapPoint bestParticle = getBestParticle(roughParticles, particleScores);
         // we have the 1st estimate now we need to refine this
-        MapPoint[] moderateParticles = generateParticles(bestParticle, 10, 0.02, 0.003);
+        MapPoint[] moderateParticles = generateParticles(bestParticle, 20, 0.02, 0.002);
         double[] moderateParticleScores = scoreParticles(moderateParticles, measuredPointCloud,
                 roughPose.getRotation().getDegrees());
         MapPoint bestModerateParticle = getBestParticle(moderateParticles, moderateParticleScores);
@@ -45,6 +45,12 @@ public class PointCloudPositionEstimator {
                     robotAngleDegrees);
             double score = 0;
             for (int j = 0; j < measuredPointCloud.length; j++) {
+                //if it is very high and one of the measurements is 0 thn it was out of range
+                // so we need to measure its difference from the range limit
+                if(measuredPointCloud[j] == 0 && expectedMeasurementAtParticle[j] >= 290 || measuredPointCloud[j] >= 290 && expectedMeasurementAtParticle[j] == 0){
+                    score += (measuredPointCloud[j] + expectedMeasurementAtParticle[j] - 300)
+                            * (measuredPointCloud[j] + expectedMeasurementAtParticle[j] - 300);
+                }
                 score += (measuredPointCloud[j] - expectedMeasurementAtParticle[j])
                         * (measuredPointCloud[j] - expectedMeasurementAtParticle[j]);
             }
@@ -60,7 +66,7 @@ public class PointCloudPositionEstimator {
         for (int i = 0; i < roughParticles.length - 1; i++) {
             roughParticles[i] = new MapPoint(
                     estimatedPose.x + Math.random() * maxSpread - maxSpread / 2,
-                    estimatedPose.x + Math.random() * maxSpread - maxSpread / 2);
+                    estimatedPose.y + Math.random() * maxSpread - maxSpread / 2);
             int tooCloseCount = 0;
             while (isTooClose(roughParticles[i], roughParticles, (short) i, minSpread) && tooCloseCount < 4) {// regenerarte
                                                                                                               // if too
@@ -71,7 +77,7 @@ public class PointCloudPositionEstimator {
                 tooCloseCount++;
                 roughParticles[i] = new MapPoint(
                         estimatedPose.x + Math.random() * maxSpread - maxSpread / 2,
-                        estimatedPose.x + Math.random() * maxSpread - maxSpread / 2);
+                        estimatedPose.y + Math.random() * maxSpread - maxSpread / 2);
             }
         }
         return roughParticles;
@@ -83,7 +89,7 @@ public class PointCloudPositionEstimator {
             double distance = Math.sqrt(
                     (pointToCheck.x - PreviousPoints[i].x) * (pointToCheck.x - PreviousPoints[i].x) +
                             (pointToCheck.y - PreviousPoints[i].y) * (pointToCheck.y - PreviousPoints[i].y));
-            if (distance < minDistance) { // 1mm tolerance for duplicate points
+            if (distance < minDistance) {
                 return true;
             }
         }
