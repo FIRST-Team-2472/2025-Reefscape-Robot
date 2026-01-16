@@ -8,8 +8,9 @@ public class EstimatedAccuracyTest {
         // This class is currently a placeholder for future implementation
     }
     public static void main(String[] args) {
-        int iterations = 100;
-        double totalImprovement = 0;
+        int iterations = 300;
+        int interationsWhereUsed = 0;
+        double totalImprovement = 1;
         for(int i = 0; i < iterations; i++) {
             double trueX = Math.random() * 10;
             double trueY = Math.random() * 10;
@@ -30,9 +31,12 @@ public class EstimatedAccuracyTest {
             FieldPoint calculatedPose = PointCloudPositionEstimator.estimatePose(new FieldPose2d(innacurateX, innacurateY, new Rotation2d().fromDegrees(innacurateRotation)), SimulatedScan);
             double lidarInnacuracy = Math.hypot(trueX - calculatedPose.getX(), trueY - calculatedPose.getY());
             double inputInnacuracy = Math.hypot(trueX - innacurateX, trueY - innacurateY);
-            System.out.println("accuracy Imporvement = " + (inputInnacuracy - lidarInnacuracy) + " lidar innac = " + lidarInnacuracy + " previous innac = " + inputInnacuracy);
+            if((inputInnacuracy - lidarInnacuracy) != 0)
+                System.out.println("accuracy Imporvement = " + (inputInnacuracy - lidarInnacuracy) + " lidar innac = " + lidarInnacuracy + " previous innac = " + inputInnacuracy);
             totalImprovement += (inputInnacuracy - lidarInnacuracy);
+            if((inputInnacuracy - lidarInnacuracy) != 0)
+                interationsWhereUsed++;
         }
-        System.out.println("Average accuracy improvement over " + iterations + " iterations: " + (totalImprovement / iterations) + " meters.");
+        System.out.println("Average improvement over " + interationsWhereUsed + " useful iterations: " + (totalImprovement / interationsWhereUsed) + " meters. & total = " + totalImprovement);
     }
 }

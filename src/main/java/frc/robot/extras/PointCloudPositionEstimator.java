@@ -10,6 +10,9 @@ import frc.robot.extras.LidarMapComponents.MapPoint;
 
 public class PointCloudPositionEstimator {
     public static FieldPoint estimatePose(FieldPose2d roughPose, double[] measuredPointCloud) {
+        if(areAllZeros(measuredPointCloud)){
+            return new FieldPoint(roughPose.getX(), roughPose.getY());
+        }
         MapPoint robotPose = new MapPoint(roughPose.getX(), roughPose.getY());
         MapPoint[] roughParticles = generateParticles(robotPose, 20, 0.05, 0.01);
         double[] particleScores = scoreParticles(roughParticles, measuredPointCloud,
@@ -23,12 +26,18 @@ public class PointCloudPositionEstimator {
 
         return new FieldPoint(bestModerateParticle.x, bestModerateParticle.y);
     }
+    public static boolean areAllZeros(double[] measuredPointCloud){
+        for(int i = 0; i < measuredPointCloud.length; i++){
+            if (measuredPointCloud[i] != 0)
+            return false;
+        }
+        return true;
+    }
 
     public static MapPoint getBestParticle(MapPoint[] particles, double[] particleScores) {
         double bestScore = Double.MAX_VALUE;
         int bestIndex = -1;
         for (int i = 0; i < particleScores.length; i++) {
-            System.out.println("Particle " + i + " score: " + particleScores[i]);
             if (particleScores[i] < bestScore) {
                 bestScore = particleScores[i];
                 bestIndex = i;
@@ -51,9 +60,10 @@ public class PointCloudPositionEstimator {
                 if(measuredPointCloud[j] == 0 && expectedMeasurementAtParticle[j] >= 290 || measuredPointCloud[j] >= 290 && expectedMeasurementAtParticle[j] == 0){
                     score += (measuredPointCloud[j] + expectedMeasurementAtParticle[j] - 300)
                             * (measuredPointCloud[j] + expectedMeasurementAtParticle[j] - 300);
-                }
-                score += (measuredPointCloud[j] - expectedMeasurementAtParticle[j])
+                }else{
+                    score += (measuredPointCloud[j] - expectedMeasurementAtParticle[j])
                         * (measuredPointCloud[j] - expectedMeasurementAtParticle[j]);
+                }
             }
             particleScores[i] = score;
         }
