@@ -1,13 +1,13 @@
 package frc.robot.extras;
 
+import org.junit.jupiter.api.Test;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.extras.LidarMapComponents.LidarSimulator;
 
 public class EstimatedAccuracyTest {
-    public EstimatedAccuracyTest() {
-        // This class is currently a placeholder for future implementation
-    }
-    public static void main(String[] args) {
+
+    @Test
+    public void estimateTest() {
         int iterations = 300;
         int interationsWhereUsed = 0;
         double totalImprovement = 1;

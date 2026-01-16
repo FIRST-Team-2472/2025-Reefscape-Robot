@@ -36,7 +36,6 @@ import frc.robot.commands.defaultCommands.CoralDispenserCommand;
 
 import frc.robot.commands.defaultCommands.ElevatorCommand;
 import frc.robot.commands.defaultCommands.SwerveJoystickCmd;
-import frc.robot.extras.EstimatedAccuracyTest;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Limelight;
@@ -180,7 +179,7 @@ public class RobotContainer {
       }
       @Override
       public void initialize(){
-        EstimatedAccuracyTest.main(new String[0]);
+        //EstimatedAccuracyTest.main(new String[0]);
       }
       @Override
       public boolean isFinished() {
